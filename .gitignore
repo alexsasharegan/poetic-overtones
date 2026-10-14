@@ -1,0 +1,8 @@
+.DS_Store
+.tmp/
+.wip/
+__pycache__/
+.venv/
+node_modules/
+# Community sources: Alex may use them privately, but publishing them here needs the owner's agreement (ADR-0002).
+sources/community/

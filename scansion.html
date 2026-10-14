@@ -1,0 +1,482 @@
+<title>Shavian Scansion Score</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Shavian&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<style>
+/* Layout: a score. One row per verse line, one cell per syllable; arcs ride above the rows. */
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --fg: #16181d;
+  --muted: #5d6370;
+  --faint: #8a909c;
+  --line: #dde0e6;
+  --stress-fill: #e7e9ee;
+  --accent: #6250d6;        /* arcs, focus, selection: violet is kept out of the vowel palette */
+  --v1: #2a78d6; --v2: #eb6834; --v3: #1baf7a; --v4: #eda100; --v5: #e87ba4; --v6: #008300;
+  --font-shav: "Bernie Sans Beta", "Noto Sans Shavian", sans-serif;
+  --font-ui: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: "Source Serif 4", Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171b; --surface: #1d2025; --fg: #eceef2; --muted: #a7adb9; --faint: #7a808c;
+    --line: #333740; --stress-fill: #2b2f37; --accent: #9085e9;
+    --v1: #3987e5; --v2: #d95926; --v3: #199e70; --v4: #c98500; --v5: #d55181; --v6: #008300;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171b; --surface: #1d2025; --fg: #eceef2; --muted: #a7adb9; --faint: #7a808c;
+  --line: #333740; --stress-fill: #2b2f37; --accent: #9085e9;
+  --v1: #3987e5; --v2: #d95926; --v3: #199e70; --v4: #c98500; --v5: #d55181; --v6: #008300;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--font-ui); }
+.wrap { max-width: 72rem; margin: 0 auto; padding-inline: 16px; padding-block: 1.5rem 4rem; display: grid; gap: 1.25rem; }
+header { display: grid; gap: .25rem; }
+h1 { font: 600 1.6rem/1.2 var(--font-display); margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); margin: 0; max-width: 62ch; }
+h2 { font: 600 .78rem/1 var(--font-ui); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0; }
+
+.input { display: grid; gap: .6rem; grid-template-columns: minmax(0, 1fr) minmax(0, 17rem); align-items: start; }
+@media (max-width: 760px) { .input { grid-template-columns: minmax(0, 1fr); } }
+textarea { width: 100%; min-height: 11rem; resize: vertical; padding: .75rem .85rem; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--surface); color: var(--fg); font: 1.15rem/1.7 var(--font-shav); }
+textarea:focus-visible, button:focus-visible, input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.key { font-size: .85rem; color: var(--muted); display: grid; gap: .35rem; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: .75rem .85rem; }
+.key b { color: var(--fg); font-family: var(--font-mono); font-weight: 600; display: inline-block; min-width: 1.6em; }
+.row-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+button { font: 500 .85rem var(--font-ui); padding: .4rem .75rem; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+button:hover { border-color: var(--muted); }
+.note { font-size: .8rem; color: var(--faint); }
+
+.controls { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; align-items: center; padding-block: .5rem; border-block: 1px solid var(--line); }
+.toggle { display: inline-flex; gap: .4rem; align-items: center; font-size: .88rem; cursor: pointer; }
+.toggle input { accent-color: var(--accent); }
+select { font: .85rem var(--font-ui); padding: .2rem .4rem; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
+.chips .lab { font-size: .75rem; color: var(--muted); margin-right: .25rem; text-transform: uppercase; letter-spacing: .06em; }
+.chip { display: inline-flex; align-items: center; gap: .35rem; font: 500 .82rem var(--font-ui); padding: .2rem .55rem; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; }
+.chip .s { font: 1rem var(--font-shav); }
+.chip .ipa { font-family: var(--font-mono); color: var(--muted); font-size: .78rem; }
+.chip .n { font-family: var(--font-mono); color: var(--faint); font-size: .75rem; font-variant-numeric: tabular-nums; }
+.chip .sw { width: .7rem; height: .7rem; border-radius: 2px; }
+.chip[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+
+.score { display: grid; gap: 1.75rem; }
+.stanza-scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.stanza { position: relative; display: grid; gap: .25rem; padding: .5rem 1rem 1rem; width: max-content; min-width: 100%; }
+.stanza svg.arcs { position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 0; }
+.vline, .stanza-label { position: relative; z-index: 1; }   /* cells sit over the arcs, so lines pass behind them */
+.vline { display: flex; align-items: flex-end; gap: 1.25rem; padding-top: 2.75rem; }
+.vline .num { font: .72rem var(--font-mono); color: var(--faint); width: 1.4rem; text-align: right; align-self: center; font-variant-numeric: tabular-nums; }
+.words { display: flex; gap: .9rem; align-items: flex-end; }
+.word { display: flex; gap: 2px; }
+.syl { background: var(--surface); display: grid; justify-items: center; gap: .1rem; min-width: 2.3rem; padding: .3rem .35rem .25rem; border-radius: 4px; cursor: default; position: relative; }
+.syl .t { font: 1.35rem/1.3 var(--font-shav); color: var(--muted); white-space: nowrap; }
+.syl .p { font: .7rem/1 var(--font-mono); color: var(--faint); white-space: nowrap; }
+.syl .m { font: 600 .8rem/1 var(--font-mono); color: var(--faint); }
+.syl.S { background: var(--stress-fill); }
+.syl.S .t { color: var(--fg); font-weight: 600; }
+.syl.S .m { color: var(--fg); }
+.syl.S.v { background: color-mix(in srgb, var(--vc) 20%, var(--surface)); box-shadow: inset 0 -3px 0 var(--vc); }
+.syl.dim { opacity: .28; }
+.syl.hit { outline: 2px solid var(--accent); outline-offset: 1px; }
+.metrics { font: .75rem/1.3 var(--font-mono); color: var(--muted); align-self: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.metrics { background: var(--surface); padding: .1rem .3rem; border-radius: 4px; }
+.metrics .rh { display: inline-block; width: 1.4em; font-weight: 600; color: var(--accent); }
+.metrics .pat { color: var(--faint); display: block; letter-spacing: .08em; }
+.stanza-label { font: 600 .72rem var(--font-ui); text-transform: uppercase; letter-spacing: .08em; color: var(--faint); margin: .25rem 0 0; }
+
+path.arc { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; }
+path.arc.echo { stroke-dasharray: 3 4; stroke-width: 1.5; opacity: .75; }
+.arc-label { }
+.arc-label rect { fill: var(--surface); stroke: var(--accent); stroke-width: 1; }
+.arc-label text { fill: var(--fg); font: 13px var(--font-shav); }
+g.faded { opacity: .12; }
+
+.tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--fg); border: 1px solid var(--line);
+  border-radius: 6px; padding: .5rem .65rem; font-size: .8rem; box-shadow: 0 4px 16px rgb(0 0 0 / .15); display: grid; gap: .15rem; min-width: 10rem; }
+.tip[hidden] { display: none; }
+.tip .big { font: 1.4rem var(--font-shav); }
+.tip dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .1rem .6rem; }
+.tip dt { color: var(--muted); } .tip dd { margin: 0; font-family: var(--font-mono); }
+.tip dd .s { font-family: var(--font-shav); }
+
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: .6rem .9rem; }
+summary { cursor: pointer; font-weight: 500; }
+.tablewrap { overflow-x: auto; margin-top: .6rem; }
+table { border-collapse: collapse; font-size: .82rem; width: 100%; }
+th, td { text-align: left; padding: .25rem .6rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--muted); font-weight: 500; }
+td.s { font: 1rem var(--font-shav); }
+td.m { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.empty { color: var(--muted); padding: 1rem; }
+@media (prefers-reduced-motion: no-preference) { .syl { transition: opacity .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Shavian Scansion Score</h1>
+    <p class="lede">Mark the stresses you hear in a Shavian poem. The score lines up each syllable, colours the vowels that repeat under stress, and draws arcs between stressed syllables that start with the same consonant.</p>
+  </header>
+
+  <section class="input" aria-label="Poem input">
+    <div style="display:grid;gap:.5rem;min-width:0">
+      <textarea id="src" spellcheck="false" aria-label="Marked-up Shavian poem"></textarea>
+      <div class="row-actions">
+        <button id="ex" type="button">Load the Sonnet 18 example</button>
+        <button id="clear" type="button">Clear</button>
+        <span class="note" id="saved">Your text stays in this browser.</span>
+      </div>
+    </div>
+    <div class="key" aria-label="Markup key">
+      <h2>Markup</h2>
+      <div><b>*</b>before a stressed syllable, mid-word too: 𐑩𐑐*𐑪𐑯</div>
+      <div><b>.</b>split syllables by hand where the automatic split is wrong</div>
+      <div><b>-</b>compound words stay one word: *·𐑧𐑤𐑝𐑩𐑯-*𐑥𐑱𐑛</div>
+      <div><b>·</b>namer dot, shown but ignored for sound</div>
+      <div>Blank line between stanzas. Punctuation is kept for display.</div>
+    </div>
+  </section>
+
+  <section class="controls" aria-label="Views">
+    <label class="toggle"><input type="checkbox" id="vAll" checked><span>Alliteration arcs</span></label>
+    <label class="toggle"><input type="checkbox" id="vEcho"><span>Unstressed echoes</span></label>
+    <label class="toggle"><input type="checkbox" id="vVow" checked><span>Vowel colour</span></label>
+    <label class="toggle"><input type="checkbox" id="vIpa" checked><span>IPA</span></label>
+    <label class="toggle">Arcs reach
+      <select id="reach" aria-label="How far an arc may reach">
+        <option value="0">within a line</option>
+        <option value="1">to the next line</option>
+        <option value="99" selected>across the stanza</option>
+      </select></label>
+  </section>
+
+  <section class="chips" id="cchips" aria-label="Consonants that alliterate"></section>
+  <section class="chips" id="vchips" aria-label="Vowels repeated under stress"></section>
+
+  <section class="score" id="score" aria-label="Score"></section>
+
+  <details id="tbl"><summary>Syllable table</summary><div class="tablewrap" id="tblbody"></div></details>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+// ---------- phonology ----------
+const IPA = {"𐑐":"p","𐑑":"t","𐑒":"k","𐑓":"f","𐑔":"θ","𐑕":"s","𐑖":"ʃ","𐑗":"tʃ","𐑘":"j","𐑙":"ŋ","𐑚":"b","𐑛":"d","𐑜":"ɡ","𐑝":"v","𐑞":"ð","𐑟":"z","𐑠":"ʒ","𐑡":"dʒ","𐑢":"w","𐑣":"h","𐑤":"l","𐑥":"m","𐑦":"ɪ","𐑧":"ɛ","𐑨":"æ","𐑩":"ə","𐑪":"ɒ","𐑫":"ʊ","𐑬":"aʊ","𐑭":"ɑː","𐑮":"r","𐑯":"n","𐑰":"iː","𐑱":"eɪ","𐑲":"aɪ","𐑳":"ʌ","𐑴":"oʊ","𐑵":"uː","𐑶":"ɔɪ","𐑷":"ɔː","𐑻":"ɜː","𐑾":"ɪə"};
+// Vowel letters. Ligatures carry an r (or a y-glide) that counts as a consonant for sound patterns.
+// key = the vowel quality used for assonance; pre/post = consonants hidden inside the letter.
+const VOWEL = {};
+for (const v of "𐑦𐑧𐑨𐑩𐑪𐑫𐑬𐑭𐑰𐑱𐑲𐑳𐑴𐑵𐑶𐑷𐑻𐑾") VOWEL[v] = {key: v, pre: "", post: ""};
+Object.assign(VOWEL, {
+  "𐑸": {key: "𐑭", pre: "", post: "𐑮"}, "𐑹": {key: "𐑷", pre: "", post: "𐑮"}, "𐑺": {key: "𐑧", pre: "", post: "𐑮"},
+  "𐑽": {key: "𐑦", pre: "", post: "𐑮"}, "𐑼": {key: "𐑩", pre: "", post: "𐑮"}, "𐑻": {key: "𐑻", pre: "", post: "𐑮"},
+  "𐑿": {key: "𐑵", pre: "𐑘", post: ""},
+});
+const isShav = c => c >= "\u{10450}" && c <= "\u{1047F}";
+const ONSETS = new Set(("𐑐𐑮 𐑐𐑤 𐑚𐑮 𐑚𐑤 𐑑𐑮 𐑑𐑢 𐑛𐑮 𐑛𐑢 𐑒𐑮 𐑒𐑤 𐑒𐑢 𐑜𐑮 𐑜𐑤 𐑜𐑢 𐑓𐑮 𐑓𐑤 𐑔𐑮 𐑔𐑢 𐑖𐑮 𐑕𐑥 𐑕𐑯 𐑕𐑐 𐑕𐑑 𐑕𐑒 𐑕𐑤 𐑕𐑢 " +
+  "𐑕𐑓 𐑣𐑢 𐑕𐑐𐑮 𐑕𐑐𐑤 𐑕𐑑𐑮 𐑕𐑒𐑮 𐑕𐑒𐑢").split(" "));
+
+// Split a run of Shavian letters into syllables by maximal onset. Returns letter-index ranges.
+function autoSplit(letters) {
+  const vi = [];
+  letters.forEach((c, i) => { if (VOWEL[c]) vi.push(i); });
+  if (vi.length < 2) return [[0, letters.length]];
+  const cuts = [];
+  for (let k = 0; k < vi.length - 1; k++) {
+    const a = vi[k] + 1, b = vi[k + 1];             // consonants letters[a..b)
+    let cut = b;                                      // two vowels side by side: cut between them
+    for (let s = a; s < b; s++) {
+      const cand = letters.slice(s, b).join("");
+      if (b - s === 1 || ONSETS.has(cand)) { cut = s; break; }
+    }
+    cuts.push(cut);
+  }
+  const out = []; let start = 0;
+  for (const c of cuts) { out.push([start, c]); start = c; }
+  out.push([start, letters.length]);
+  return out;
+}
+
+function analyse(letters) {
+  // phonemes with the hidden consonants of ligatures made explicit
+  let onset = [], nucleus = null, coda = [];
+  for (const c of letters) {
+    const v = VOWEL[c];
+    if (v && !nucleus) { if (v.pre) onset.push(v.pre); nucleus = c; if (v.post) coda.push(v.post); }
+    else if (v) { coda.push(c); }           // a second vowel letter cannot happen after splitting; kept safe
+    else (nucleus ? coda : onset).push(c);
+  }
+  const key = nucleus ? VOWEL[nucleus].key : null;
+  return { onset, nucleus, key, coda, ipa: letters.map(c => IPA[c] || ({"𐑸":"ɑːr","𐑹":"ɔːr","𐑺":"ɛr","𐑽":"ɪr","𐑼":"ər","𐑿":"juː"})[c] || "").join("") };
+}
+
+// Shavian writes five common words as one consonant. Sound them as their weak forms.
+// Unstressed they take the weak form; marked with * they take the strong one.
+const WORD_SIGNS = {"𐑞": "𐑞𐑩", "𐑝": "𐑩𐑝", "𐑯": "𐑩𐑯𐑛", "𐑑": "𐑑𐑩", "𐑓": "𐑓𐑼"};
+const WORD_SIGNS_STRONG = {"𐑞": "𐑞𐑰", "𐑝": "𐑪𐑝", "𐑯": "𐑨𐑯𐑛", "𐑑": "𐑑𐑵", "𐑓": "𐑓𐑹"};
+
+// ---------- markup parser ----------
+function parseWord(tok) {
+  const chars = [...tok];
+  let i = 0, j = chars.length;
+  const isMark = c => isShav(c) || c === "*" || c === "." || c === "-" || c === "·";
+  // leading/trailing punctuation (but a leading * or · belongs to the word)
+  while (i < j && !isMark(chars[i])) i++;
+  while (j > i && !isShav(chars[j - 1]) && chars[j - 1] !== "·") j--;
+  const prefix = chars.slice(0, i).join(""), suffix = chars.slice(j).join("");
+  // segments separated by * . -
+  const segs = [];
+  let cur = { letters: [], before: [], stressed: false, hyphenBefore: false }, pend = "";
+  for (const c of chars.slice(i, j)) {
+    if (c === "*" || c === "." || c === "-") {
+      const empty = cur.letters.length === 0;
+      if (!empty) segs.push(cur);
+      cur = { letters: [], before: [],
+              stressed: c === "*" || (empty && cur.stressed),
+              hyphenBefore: c === "-" || (empty && cur.hyphenBefore) };
+    } else if (isShav(c)) { cur.letters.push(c); cur.before.push(pend); pend = ""; }
+    else pend += c;                          // · and apostrophes: shown, not sounded
+  }
+  if (cur.letters.length) segs.push(cur);
+  const sylls = [];
+  if (segs.length === 1 && segs[0].letters.length === 1 && WORD_SIGNS[segs[0].letters[0]]) {
+    const seg = segs[0], letters = [...(seg.stressed ? WORD_SIGNS_STRONG : WORD_SIGNS)[seg.letters[0]]];
+    sylls.push({ letters, disp: seg.before[0] + seg.letters[0], stressed: seg.stressed, ...analyse(letters) });
+    sylls[0].disp = prefix + sylls[0].disp + pend + suffix;
+    return sylls;
+  }
+  segs.forEach(seg => {
+    autoSplit(seg.letters).forEach(([a, b], k) => {
+      const letters = seg.letters.slice(a, b);
+      let disp = ""; for (let x = a; x < b; x++) disp += seg.before[x] + seg.letters[x];
+      if (k === 0 && seg.hyphenBefore) disp = "-" + disp;
+      sylls.push({ letters, disp, stressed: seg.stressed && k === 0, ...analyse(letters) });
+    });
+  });
+  if (sylls.length) { sylls[0].disp = prefix + sylls[0].disp; sylls[sylls.length - 1].disp += pend + suffix; }
+  return sylls;
+}
+
+function parsePoem(text) {
+  const stanzas = text.replace(/\r/g, "").split(/\n\s*\n/).map(s => s.split("\n").filter(l => l.trim()))
+    .filter(s => s.length);
+  let n = 0;
+  return stanzas.map((lines, si) => lines.map((line, li) => {
+    const words = line.trim().split(/\s+/).map(parseWord).filter(w => w.length);
+    const flat = [];
+    words.forEach((w, wi) => w.forEach((s, k) => { s.id = `s${n++}`; s.si = si; s.li = li; s.wi = wi; flat.push(s); }));
+    return { words, flat };
+  }));
+}
+
+// ---------- links ----------
+function links(poem, echoes, reach) {
+  const out = [];
+  poem.forEach(stanza => {
+    const seq = stanza.flatMap(l => l.flat);
+    seq.forEach((s, i) => {
+      const lineLimit = s.li + reach;
+      if (s.stressed && s.onset.length) {
+        const c = s.onset[0];
+        for (let k = i + 1; k < seq.length && seq[k].li <= lineLimit; k++) {
+          const t = seq[k];
+          if (t.stressed && t.onset[0] === c) { out.push({ a: s, b: t, c, echo: false }); break; }
+        }
+      }
+      if (echoes && !s.stressed) {
+        for (const c of new Set([...s.onset, ...s.coda])) {
+          for (let k = i + 1; k < seq.length && seq[k].li <= lineLimit; k++) {
+            const t = seq[k];
+            if (t.stressed && t.onset[0] === c) { out.push({ a: s, b: t, c, echo: true }); break; }
+          }
+        }
+      }
+    });
+  });
+  return out;
+}
+
+// ---------- rendering ----------
+const $ = id => document.getElementById(id);
+const state = { focus: null };
+let poem = [], arcs = [], vslot = {};
+
+function vowelSlots(poem) {
+  const count = {}, order = [];
+  poem.flat().flatMap(l => l.flat).forEach(s => {
+    if (!s.stressed || !s.key) return;
+    if (!(s.key in count)) { count[s.key] = 0; order.push(s.key); }
+    count[s.key]++;
+  });
+  const slots = {}; let n = 0;
+  for (const k of order) if (count[k] >= 2 && n < 6) slots[k] = { slot: ++n, count: count[k] };
+  return { slots, count };
+}
+
+// End rhyme: the last stressed vowel and everything after it, as sounds.
+function rhymeKey(line) {
+  const f = line.flat; let k = f.length - 1;
+  while (k >= 0 && !f[k].stressed) k--;
+  if (k < 0) return null;
+  const tail = [f[k].key, ...f[k].coda];
+  for (let x = k + 1; x < f.length; x++) tail.push(...f[x].onset, f[x].key || "", ...f[x].coda);
+  return tail.join("");
+}
+
+function render() {
+  const text = $("src").value;
+  try { localStorage.setItem("scansion.text", text); } catch (e) {}
+  poem = parsePoem(text);
+  const vs = vowelSlots(poem); vslot = vs.slots;
+  arcs = links(poem, $("vEcho").checked, +$("reach").value);
+  const showV = $("vVow").checked, showIpa = $("vIpa").checked;
+  const score = $("score"); score.innerHTML = "";
+  if (!poem.length) { score.innerHTML = '<div class="empty">Type or paste a poem above, with * before each stressed syllable.</div>'; }
+  poem.forEach((stanza, si) => {
+    const rk = stanza.map(rhymeKey), letters = {}; let next = 0;
+    rk.forEach(k => { if (k && !(k in letters) && rk.filter(x => x === k).length > 1) letters[k] = "ABCDEFGHIJKLMNOP"[next++]; });
+    const scroll = document.createElement("div"); scroll.className = "stanza-scroll";
+    const st = document.createElement("div"); st.className = "stanza"; st.dataset.si = si;
+    st.innerHTML = `<p class="stanza-label">Stanza ${si + 1}</p>`;
+    stanza.forEach((line, li) => {
+      const row = document.createElement("div"); row.className = "vline";
+      const pat = line.flat.map(s => s.stressed ? "/" : "×").join("");
+      const beats = line.flat.filter(s => s.stressed).length;
+      row.innerHTML = `<span class="num">${li + 1}</span>`;
+      const words = document.createElement("div"); words.className = "words";
+      line.words.forEach(w => {
+        const wd = document.createElement("div"); wd.className = "word";
+        w.forEach(s => {
+          const c = document.createElement("div");
+          const slot = showV && s.stressed && vslot[s.key];
+          c.className = "syl" + (s.stressed ? " S" : "") + (slot ? " v" : "");
+          if (slot) c.style.setProperty("--vc", `var(--v${slot.slot})`);
+          c.id = s.id; c.tabIndex = 0;
+          c.innerHTML = `<span class="t">${esc(s.disp)}</span>${showIpa ? `<span class="p">${esc(s.ipa)}</span>` : ""}<span class="m">${s.stressed ? "/" : "×"}</span>`;
+          c.addEventListener("pointerenter", e => tip(s, c));
+          c.addEventListener("focus", e => tip(s, c));
+          c.addEventListener("pointerleave", hideTip); c.addEventListener("blur", hideTip);
+          wd.appendChild(c);
+        });
+        words.appendChild(wd);
+      });
+      row.appendChild(words);
+      const m = document.createElement("span"); m.className = "metrics";
+      const rl = letters[rk[li]];
+      m.innerHTML = `<span class="rh" title="End rhyme">${rl || "·"}</span>${line.flat.length} syl · ${beats} beats<span class="pat">${pat}</span>`;
+      row.appendChild(m);
+      st.appendChild(row);
+    });
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.classList.add("arcs");
+    st.appendChild(svg); scroll.appendChild(st); score.appendChild(scroll);
+  });
+  chips(vs.count);
+  table();
+  requestAnimationFrame(drawArcs);
+  applyFocus();
+}
+
+function drawArcs() {
+  const show = $("vAll").checked, showEcho = $("vEcho").checked;
+  document.querySelectorAll(".stanza").forEach(st => {
+    const svg = st.querySelector("svg.arcs"); svg.innerHTML = "";
+    const box = st.getBoundingClientRect();
+    svg.setAttribute("width", st.scrollWidth); svg.setAttribute("height", st.scrollHeight);
+    svg.setAttribute("viewBox", `0 0 ${st.scrollWidth} ${st.scrollHeight}`);
+    const si = +st.dataset.si;
+    arcs.filter(l => l.a.si === si && (l.echo ? showEcho : show)).forEach(l => {
+      const A = $(l.a.id).getBoundingClientRect(), B = $(l.b.id).getBoundingClientRect();
+      const ax = A.left + A.width / 2 - box.left, bx = B.left + B.width / 2 - box.left;
+      const ay = A.top - box.top, by = B.top - box.top;
+      let d, lx, ly;
+      if (l.a.li === l.b.li) {
+        const h = Math.min(40, 14 + Math.abs(bx - ax) * 0.12);
+        d = `M${ax},${ay} C${ax},${ay - h} ${bx},${by - h} ${bx},${by}`;
+        lx = (ax + bx) / 2; ly = ay - h * 0.75;
+      } else {
+        const ay2 = A.bottom - box.top;          // leave from the bottom, land on the top of the next line
+        d = `M${ax},${ay2} C${ax},${ay2 + 26} ${bx},${by - 30} ${bx},${by}`;
+        lx = bx; ly = by - 14;                    // label just above the syllable it lands on, in the gap between rows
+      }
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.dataset.c = l.c;
+      g.innerHTML = `<path class="arc${l.echo ? " echo" : ""}" d="${d}"/>` +
+        (l.echo ? "" : `<g class="arc-label"><rect x="${lx - 9}" y="${ly - 10}" width="18" height="19" rx="9"/><text x="${lx}" y="${ly + 5}" text-anchor="middle">${l.c}</text></g>`);
+      svg.appendChild(g);
+    });
+  });
+  applyFocus();
+}
+
+function chips(count) {
+  const cc = {};
+  arcs.filter(l => !l.echo).forEach(l => cc[l.c] = (cc[l.c] || 0) + 1);
+  const ck = Object.keys(cc).sort((a, b) => cc[b] - cc[a]);
+  $("cchips").innerHTML = ck.length ? `<span class="lab">Alliteration</span>` + ck.map(c =>
+    `<button class="chip" data-t="c" data-k="${c}" aria-pressed="false"><span class="s">${c}</span><span class="ipa">/${IPA[c]}/</span><span class="n">${cc[c]}</span></button>`).join("")
+    : `<span class="lab">Alliteration</span><span class="note">No stressed syllables share an opening consonant within a line or the next.</span>`;
+  const vk = Object.keys(vslot);
+  $("vchips").innerHTML = vk.length ? `<span class="lab">Stressed vowels</span>` + vk.map(k =>
+    `<button class="chip" data-t="v" data-k="${k}" aria-pressed="false"><span class="sw" style="background:var(--v${vslot[k].slot})"></span><span class="s">${k}</span><span class="ipa">/${IPA[k]}/</span><span class="n">${vslot[k].count}</span></button>`).join("") : "";
+  document.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
+    const f = { t: b.dataset.t, k: b.dataset.k };
+    state.focus = state.focus && state.focus.t === f.t && state.focus.k === f.k ? null : f;
+    applyFocus();
+  }));
+}
+
+function applyFocus() {
+  const f = state.focus;
+  document.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", f && b.dataset.t === f.t && b.dataset.k === f.k ? "true" : "false"));
+  const all = poem.flat().flatMap(l => l.flat);
+  all.forEach(s => {
+    const el = $(s.id); if (!el) return;
+    let on = true;
+    if (f && f.t === "c") on = s.onset[0] === f.k || ($("vEcho").checked && !s.stressed && (s.onset.includes(f.k) || s.coda.includes(f.k)));
+    if (f && f.t === "v") on = s.stressed && s.key === f.k;
+    el.classList.toggle("dim", !!f && !on);
+  });
+  document.querySelectorAll("svg.arcs > g").forEach(g => g.classList.toggle("faded", !!f && (f.t !== "c" || g.dataset.c !== f.k)));
+}
+
+function table() {
+  const rows = poem.flatMap((st, si) => st.flatMap((l, li) => l.flat.map(s =>
+    `<tr><td class="m">${si + 1}.${li + 1}</td><td class="s">${esc(s.disp)}</td><td class="m">${s.ipa}</td><td>${s.stressed ? "stressed" : "unstressed"}</td><td class="s">${s.onset.join("")}</td><td class="s">${s.key || ""}</td><td class="s">${s.coda.join("")}</td></tr>`)));
+  $("tblbody").innerHTML = `<table><thead><tr><th>Line</th><th>Syllable</th><th>IPA</th><th>Stress</th><th>Onset</th><th>Vowel</th><th>Coda</th></tr></thead><tbody>${rows.join("")}</tbody></table>`;
+}
+
+function tip(s, el) {
+  const t = $("tip");
+  const vname = s.key ? `<span class="s">${s.key}</span> /${IPA[s.key] || ""}/` : "none";
+  t.innerHTML = `<div class="big">${esc(s.disp)}</div><dl><dt>Sound</dt><dd>/${s.ipa}/</dd><dt>Stress</dt><dd>${s.stressed ? "stressed" : "unstressed"}</dd>
+    <dt>Onset</dt><dd class="s">${s.onset.join("") || "–"}</dd><dt>Vowel</dt><dd>${vname}</dd><dt>Coda</dt><dd class="s">${s.coda.join("") || "–"}</dd></dl>`;
+  t.hidden = false;
+  const r = el.getBoundingClientRect(), tw = t.offsetWidth, th = t.offsetHeight;
+  let x = Math.min(window.innerWidth - tw - 8, Math.max(8, r.left + r.width / 2 - tw / 2));
+  let y = r.top - th - 8; if (y < 8) y = r.bottom + 8;
+  t.style.left = x + "px"; t.style.top = y + "px";
+}
+function hideTip() { $("tip").hidden = true; }
+function esc(s) { return s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
+
+// ---------- wiring ----------
+const EXAMPLE = `𐑖𐑨𐑤 *𐑲 𐑒𐑩𐑥*𐑐𐑺 𐑞𐑰 *𐑑 𐑩 *𐑕𐑳𐑥𐑼’𐑟 *𐑛𐑱?
+𐑞𐑬 *𐑸𐑑 𐑥𐑹 *𐑤𐑳𐑝𐑤𐑦 *𐑯 𐑥𐑹 *𐑑𐑧𐑥𐑐𐑼*𐑩𐑑:
+𐑮𐑳𐑓 *𐑢𐑦𐑯𐑛𐑟 𐑛𐑵 *𐑖𐑱𐑒 𐑞 *𐑛𐑸𐑤𐑦𐑙 *𐑚𐑳𐑛𐑟 𐑝 *·𐑥𐑱,
+𐑯 *𐑕𐑳𐑥𐑼’𐑟 *𐑤𐑰𐑕 𐑣𐑨𐑔 *𐑷𐑤 𐑑𐑵 *𐑖𐑹𐑑 𐑩 *𐑛𐑱𐑑;`;
+let saved = null; try { saved = localStorage.getItem("scansion.text"); } catch (e) {}
+$("src").value = saved && saved.trim() ? saved : EXAMPLE;
+let timer; $("src").addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(render, 200); });
+$("ex").addEventListener("click", () => { $("src").value = EXAMPLE; state.focus = null; render(); });
+$("clear").addEventListener("click", () => { $("src").value = ""; state.focus = null; render(); $("src").focus(); });
+["vAll", "vEcho", "vVow", "vIpa", "reach"].forEach(id => $(id).addEventListener("change", render));
+new ResizeObserver(() => requestAnimationFrame(drawArcs)).observe($("score"));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(drawArcs));
+render();
+</script>

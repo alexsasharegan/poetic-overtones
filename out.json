@@ -1,0 +1,1077 @@
+{
+  "document_id": "shavian_poem_parsed",
+  "global_metadata": {
+    "total_stanzas": 1
+  },
+  "body": [
+    {
+      "type": "stanza",
+      "index": 1,
+      "lines": [
+        {
+          "index": 1,
+          "text_shavian": "𐑖𐑨𐑤 𐑲 𐑒𐑩𐑥𐑐𐑺 𐑞𐑰 𐑑 𐑩 𐑕𐑳𐑥𐑼’𐑟 𐑛𐑱?",
+          "metadata": {},
+          "words": [
+            {
+              "shavian": "𐑖𐑨𐑤",
+              "ipa": "ʃæl",
+              "x_sampa": "S{l",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑖𐑨𐑤"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L1_W1_Syl1",
+                  "shavian": "𐑖𐑨𐑤",
+                  "ipa": "ʃæl",
+                  "x_sampa": "S{l",
+                  "onset": "𐑖",
+                  "nucleus": "𐑨",
+                  "coda": "𐑤",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑲",
+              "ipa": "aɪ",
+              "x_sampa": "aI",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑲"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L1_W2_Syl1",
+                  "shavian": "𐑲",
+                  "ipa": "aɪ",
+                  "x_sampa": "aI",
+                  "onset": "",
+                  "nucleus": "𐑲",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑒𐑩𐑥𐑐𐑺",
+              "ipa": "kəmpɛəɹ",
+              "x_sampa": "k@mpE@r",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑒𐑩𐑥𐑐𐑺"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L1_W3_Syl1",
+                  "shavian": "𐑒𐑩𐑥",
+                  "ipa": "kəm",
+                  "x_sampa": "k@m",
+                  "onset": "𐑒",
+                  "nucleus": "𐑩",
+                  "coda": "𐑥",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [
+                      {
+                        "consonant": "𐑥",
+                        "ipa": "m",
+                        "to_node": "S1_L1_W7_Syl2"
+                      },
+                      {
+                        "consonant": "𐑥",
+                        "ipa": "m",
+                        "to_node": "S1_L2_W3_Syl1"
+                      },
+                      {
+                        "consonant": "𐑥",
+                        "ipa": "m",
+                        "to_node": "S1_L2_W6_Syl1"
+                      },
+                      {
+                        "consonant": "𐑥",
+                        "ipa": "m",
+                        "to_node": "S1_L2_W7_Syl1"
+                      }
+                    ],
+                    "foreshadowed_by": []
+                  }
+                },
+                {
+                  "id": "S1_L1_W3_Syl2",
+                  "shavian": "𐑐𐑺",
+                  "ipa": "pɛəɹ",
+                  "x_sampa": "pE@r",
+                  "onset": "𐑐",
+                  "nucleus": "𐑺",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑞𐑰",
+              "ipa": "ðiː",
+              "x_sampa": "Di:",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑞𐑰"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L1_W4_Syl1",
+                  "shavian": "𐑞𐑰",
+                  "ipa": "ðiː",
+                  "x_sampa": "Di:",
+                  "onset": "𐑞",
+                  "nucleus": "𐑰",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑑",
+              "ipa": "t",
+              "x_sampa": "t",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑑"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L1_W5_Syl1",
+                  "shavian": "𐑑",
+                  "ipa": "t",
+                  "x_sampa": "t",
+                  "onset": "𐑑",
+                  "nucleus": "",
+                  "coda": "",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [
+                      {
+                        "consonant": "𐑑",
+                        "ipa": "t",
+                        "to_node": "S1_L2_W2_Syl1"
+                      },
+                      {
+                        "consonant": "𐑑",
+                        "ipa": "t",
+                        "to_node": "S1_L2_W7_Syl1"
+                      }
+                    ],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑩",
+              "ipa": "ə",
+              "x_sampa": "@",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑩"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L1_W6_Syl1",
+                  "shavian": "𐑩",
+                  "ipa": "ə",
+                  "x_sampa": "@",
+                  "onset": "",
+                  "nucleus": "𐑩",
+                  "coda": "",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑕𐑳𐑥𐑼𐑟",
+              "ipa": "sʌməɹz",
+              "x_sampa": "sVm@rz",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑕𐑳𐑥𐑼’𐑟"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L1_W7_Syl1",
+                  "shavian": "𐑕𐑳",
+                  "ipa": "sʌ",
+                  "x_sampa": "sV",
+                  "onset": "𐑕",
+                  "nucleus": "𐑳",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                },
+                {
+                  "id": "S1_L1_W7_Syl2",
+                  "shavian": "𐑥𐑼𐑟",
+                  "ipa": "məɹz",
+                  "x_sampa": "m@rz",
+                  "onset": "𐑥",
+                  "nucleus": "𐑼",
+                  "coda": "𐑟",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": [
+                      {
+                        "consonant": "𐑥",
+                        "ipa": "m",
+                        "from_node": "S1_L1_W3_Syl1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑛𐑱",
+              "ipa": "deɪ",
+              "x_sampa": "deI",
+              "metadata": {
+                "prefix": "",
+                "suffix": "?",
+                "raw_word": "𐑛𐑱?"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L1_W8_Syl1",
+                  "shavian": "𐑛𐑱",
+                  "ipa": "deɪ",
+                  "x_sampa": "deI",
+                  "onset": "𐑛",
+                  "nucleus": "𐑱",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "text_shavian": "𐑞𐑬 𐑸𐑑 𐑥𐑹 𐑤𐑳𐑝𐑤𐑦 𐑯 𐑥𐑹 𐑑𐑧𐑥𐑐𐑼𐑩𐑑:",
+          "metadata": {},
+          "words": [
+            {
+              "shavian": "𐑞𐑬",
+              "ipa": "ð𐑬",
+              "x_sampa": "D𐑬",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑞𐑬"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L2_W1_Syl1",
+                  "shavian": "𐑞𐑬",
+                  "ipa": "ð𐑬",
+                  "x_sampa": "D𐑬",
+                  "onset": "𐑞𐑬",
+                  "nucleus": "",
+                  "coda": "",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑸𐑑",
+              "ipa": "ɑːɹt",
+              "x_sampa": "A:rt",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑸𐑑"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L2_W2_Syl1",
+                  "shavian": "𐑸𐑑",
+                  "ipa": "ɑːɹt",
+                  "x_sampa": "A:rt",
+                  "onset": "",
+                  "nucleus": "𐑸",
+                  "coda": "𐑑",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": [
+                      {
+                        "consonant": "𐑑",
+                        "ipa": "t",
+                        "from_node": "S1_L1_W5_Syl1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑥𐑹",
+              "ipa": "mɔːɹ",
+              "x_sampa": "mO:r",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑥𐑹"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L2_W3_Syl1",
+                  "shavian": "𐑥𐑹",
+                  "ipa": "mɔːɹ",
+                  "x_sampa": "mO:r",
+                  "onset": "𐑥",
+                  "nucleus": "𐑹",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": [
+                      {
+                        "consonant": "𐑥",
+                        "ipa": "m",
+                        "from_node": "S1_L1_W3_Syl1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑤𐑳𐑝𐑤𐑦",
+              "ipa": "lʌvlɪ",
+              "x_sampa": "lVvlI",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑤𐑳𐑝𐑤𐑦"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L2_W4_Syl1",
+                  "shavian": "𐑤𐑳𐑝",
+                  "ipa": "lʌv",
+                  "x_sampa": "lVv",
+                  "onset": "𐑤",
+                  "nucleus": "𐑳",
+                  "coda": "𐑝",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                },
+                {
+                  "id": "S1_L2_W4_Syl2",
+                  "shavian": "𐑤𐑦",
+                  "ipa": "lɪ",
+                  "x_sampa": "lI",
+                  "onset": "𐑤",
+                  "nucleus": "𐑦",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑯",
+              "ipa": "n",
+              "x_sampa": "n",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑯"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L2_W5_Syl1",
+                  "shavian": "𐑯",
+                  "ipa": "n",
+                  "x_sampa": "n",
+                  "onset": "𐑯",
+                  "nucleus": "",
+                  "coda": "",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [
+                      {
+                        "consonant": "𐑯",
+                        "ipa": "n",
+                        "to_node": "S1_L3_W2_Syl1"
+                      }
+                    ],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑥𐑹",
+              "ipa": "mɔːɹ",
+              "x_sampa": "mO:r",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑥𐑹"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L2_W6_Syl1",
+                  "shavian": "𐑥𐑹",
+                  "ipa": "mɔːɹ",
+                  "x_sampa": "mO:r",
+                  "onset": "𐑥",
+                  "nucleus": "𐑹",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": [
+                      {
+                        "consonant": "𐑥",
+                        "ipa": "m",
+                        "from_node": "S1_L1_W3_Syl1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑑𐑧𐑥𐑐𐑼𐑩𐑑",
+              "ipa": "tɛmpəɹət",
+              "x_sampa": "tEmp@r@t",
+              "metadata": {
+                "prefix": "",
+                "suffix": ":",
+                "raw_word": "𐑑𐑧𐑥𐑐𐑼𐑩𐑑:"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L2_W7_Syl1",
+                  "shavian": "𐑑𐑧𐑥",
+                  "ipa": "tɛm",
+                  "x_sampa": "tEm",
+                  "onset": "𐑑",
+                  "nucleus": "𐑧",
+                  "coda": "𐑥",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": [
+                      {
+                        "consonant": "𐑥",
+                        "ipa": "m",
+                        "from_node": "S1_L1_W3_Syl1"
+                      },
+                      {
+                        "consonant": "𐑑",
+                        "ipa": "t",
+                        "from_node": "S1_L1_W5_Syl1"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "S1_L2_W7_Syl2",
+                  "shavian": "𐑐𐑼",
+                  "ipa": "pəɹ",
+                  "x_sampa": "p@r",
+                  "onset": "𐑐",
+                  "nucleus": "𐑼",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                },
+                {
+                  "id": "S1_L2_W7_Syl3",
+                  "shavian": "𐑩𐑑",
+                  "ipa": "ət",
+                  "x_sampa": "@t",
+                  "onset": "",
+                  "nucleus": "𐑩",
+                  "coda": "𐑑",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "text_shavian": "𐑮𐑳𐑓 𐑢𐑦𐑯𐑛𐑟 𐑛𐑵 𐑖𐑱𐑒 𐑞 𐑛𐑸𐑤𐑦𐑙 𐑚𐑳𐑛𐑟 𐑝 ·𐑥𐑱,",
+          "metadata": {},
+          "words": [
+            {
+              "shavian": "𐑮𐑳𐑓",
+              "ipa": "ɹʌf",
+              "x_sampa": "rVf",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑮𐑳𐑓"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W1_Syl1",
+                  "shavian": "𐑮𐑳𐑓",
+                  "ipa": "ɹʌf",
+                  "x_sampa": "rVf",
+                  "onset": "𐑮",
+                  "nucleus": "𐑳",
+                  "coda": "𐑓",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑢𐑦𐑯𐑛𐑟",
+              "ipa": "wɪndz",
+              "x_sampa": "wIndz",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑢𐑦𐑯𐑛𐑟"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W2_Syl1",
+                  "shavian": "𐑢𐑦𐑯𐑛𐑟",
+                  "ipa": "wɪndz",
+                  "x_sampa": "wIndz",
+                  "onset": "𐑢",
+                  "nucleus": "𐑦",
+                  "coda": "𐑯𐑛𐑟",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": [
+                      {
+                        "consonant": "𐑯",
+                        "ipa": "n",
+                        "from_node": "S1_L2_W5_Syl1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑛𐑵",
+              "ipa": "duː",
+              "x_sampa": "du:",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑛𐑵"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W3_Syl1",
+                  "shavian": "𐑛𐑵",
+                  "ipa": "duː",
+                  "x_sampa": "du:",
+                  "onset": "𐑛",
+                  "nucleus": "𐑵",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑖𐑱𐑒",
+              "ipa": "ʃeɪk",
+              "x_sampa": "SeIk",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑖𐑱𐑒"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W4_Syl1",
+                  "shavian": "𐑖𐑱𐑒",
+                  "ipa": "ʃeɪk",
+                  "x_sampa": "SeIk",
+                  "onset": "𐑖",
+                  "nucleus": "𐑱",
+                  "coda": "𐑒",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑞",
+              "ipa": "ð",
+              "x_sampa": "D",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑞"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W5_Syl1",
+                  "shavian": "𐑞",
+                  "ipa": "ð",
+                  "x_sampa": "D",
+                  "onset": "𐑞",
+                  "nucleus": "",
+                  "coda": "",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑛𐑸𐑤𐑦𐑙",
+              "ipa": "dɑːɹlɪŋ",
+              "x_sampa": "dA:rlIN",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑛𐑸𐑤𐑦𐑙"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W6_Syl1",
+                  "shavian": "𐑛𐑸",
+                  "ipa": "dɑːɹ",
+                  "x_sampa": "dA:r",
+                  "onset": "𐑛",
+                  "nucleus": "𐑸",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                },
+                {
+                  "id": "S1_L3_W6_Syl2",
+                  "shavian": "𐑤𐑦𐑙",
+                  "ipa": "lɪŋ",
+                  "x_sampa": "lIN",
+                  "onset": "𐑤",
+                  "nucleus": "𐑦",
+                  "coda": "𐑙",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑚𐑳𐑛𐑟",
+              "ipa": "bʌdz",
+              "x_sampa": "bVdz",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑚𐑳𐑛𐑟"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W7_Syl1",
+                  "shavian": "𐑚𐑳𐑛𐑟",
+                  "ipa": "bʌdz",
+                  "x_sampa": "bVdz",
+                  "onset": "𐑚",
+                  "nucleus": "𐑳",
+                  "coda": "𐑛𐑟",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑝",
+              "ipa": "v",
+              "x_sampa": "v",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑝"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W8_Syl1",
+                  "shavian": "𐑝",
+                  "ipa": "v",
+                  "x_sampa": "v",
+                  "onset": "𐑝",
+                  "nucleus": "",
+                  "coda": "",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑥𐑱",
+              "ipa": "meɪ",
+              "x_sampa": "meI",
+              "metadata": {
+                "prefix": "·",
+                "suffix": ",",
+                "raw_word": "·𐑥𐑱,"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L3_W9_Syl1",
+                  "shavian": "𐑥𐑱",
+                  "ipa": "meɪ",
+                  "x_sampa": "meI",
+                  "onset": "𐑥",
+                  "nucleus": "𐑱",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "text_shavian": "𐑯 𐑕𐑳𐑥𐑼’𐑟 𐑤𐑰𐑕 𐑣𐑨𐑔 𐑷𐑤 𐑑𐑵 𐑖𐑹𐑑 𐑩 𐑛𐑱𐑑;",
+          "metadata": {},
+          "words": [
+            {
+              "shavian": "𐑯",
+              "ipa": "n",
+              "x_sampa": "n",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑯"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W1_Syl1",
+                  "shavian": "𐑯",
+                  "ipa": "n",
+                  "x_sampa": "n",
+                  "onset": "𐑯",
+                  "nucleus": "",
+                  "coda": "",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑕𐑳𐑥𐑼𐑟",
+              "ipa": "sʌməɹz",
+              "x_sampa": "sVm@rz",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑕𐑳𐑥𐑼’𐑟"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W2_Syl1",
+                  "shavian": "𐑕𐑳",
+                  "ipa": "sʌ",
+                  "x_sampa": "sV",
+                  "onset": "𐑕",
+                  "nucleus": "𐑳",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                },
+                {
+                  "id": "S1_L4_W2_Syl2",
+                  "shavian": "𐑥𐑼𐑟",
+                  "ipa": "məɹz",
+                  "x_sampa": "m@rz",
+                  "onset": "𐑥",
+                  "nucleus": "𐑼",
+                  "coda": "𐑟",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑤𐑰𐑕",
+              "ipa": "liːs",
+              "x_sampa": "li:s",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑤𐑰𐑕"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W3_Syl1",
+                  "shavian": "𐑤𐑰𐑕",
+                  "ipa": "liːs",
+                  "x_sampa": "li:s",
+                  "onset": "𐑤",
+                  "nucleus": "𐑰",
+                  "coda": "𐑕",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑣𐑨𐑔",
+              "ipa": "hæθ",
+              "x_sampa": "h{T",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑣𐑨𐑔"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W4_Syl1",
+                  "shavian": "𐑣𐑨𐑔",
+                  "ipa": "hæθ",
+                  "x_sampa": "h{T",
+                  "onset": "𐑣",
+                  "nucleus": "𐑨",
+                  "coda": "𐑔",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑷𐑤",
+              "ipa": "ɔːl",
+              "x_sampa": "O:l",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑷𐑤"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W5_Syl1",
+                  "shavian": "𐑷𐑤",
+                  "ipa": "ɔːl",
+                  "x_sampa": "O:l",
+                  "onset": "",
+                  "nucleus": "𐑷",
+                  "coda": "𐑤",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑑𐑵",
+              "ipa": "tuː",
+              "x_sampa": "tu:",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑑𐑵"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W6_Syl1",
+                  "shavian": "𐑑𐑵",
+                  "ipa": "tuː",
+                  "x_sampa": "tu:",
+                  "onset": "𐑑",
+                  "nucleus": "𐑵",
+                  "coda": "",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑖𐑹𐑑",
+              "ipa": "ʃɔːɹt",
+              "x_sampa": "SO:rt",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑖𐑹𐑑"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W7_Syl1",
+                  "shavian": "𐑖𐑹𐑑",
+                  "ipa": "ʃɔːɹt",
+                  "x_sampa": "SO:rt",
+                  "onset": "𐑖",
+                  "nucleus": "𐑹",
+                  "coda": "𐑑",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑩",
+              "ipa": "ə",
+              "x_sampa": "@",
+              "metadata": {
+                "prefix": "",
+                "suffix": "",
+                "raw_word": "𐑩"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W8_Syl1",
+                  "shavian": "𐑩",
+                  "ipa": "ə",
+                  "x_sampa": "@",
+                  "onset": "",
+                  "nucleus": "𐑩",
+                  "coda": "",
+                  "stress_weight": "U",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            },
+            {
+              "shavian": "𐑛𐑱𐑑",
+              "ipa": "deɪt",
+              "x_sampa": "deIt",
+              "metadata": {
+                "prefix": "",
+                "suffix": ";",
+                "raw_word": "𐑛𐑱𐑑;"
+              },
+              "syllables": [
+                {
+                  "id": "S1_L4_W9_Syl1",
+                  "shavian": "𐑛𐑱𐑑",
+                  "ipa": "deɪt",
+                  "x_sampa": "deIt",
+                  "onset": "𐑛",
+                  "nucleus": "𐑱",
+                  "coda": "𐑑",
+                  "stress_weight": "S",
+                  "metadata": {
+                    "foreshadows": [],
+                    "foreshadowed_by": []
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
