@@ -115,8 +115,8 @@ Like a diamond in the sky.
     <set id="s8" name="trochee" members="f1,f2,f3"/>
     <set id="s9" name="catalectic" members="f4"/>
   </tier>
-  <tier id="t7" name="Stress" role="stress">
-    <set id="s10" name="stressed" members="u1,u2,u3,u4"/>
+  <tier id="t7" name="Stress" role="stress" provider="english.stress@1">
+    <set id="s10" name="stressed" key="primary" members="u1,u2,u3,u4" confirmed="u1,u2"/>
   </tier>
   <tier id="t3" name="Repetition" kind="relation" role="repetition">
     <set id="s4" members="9"/>
@@ -142,6 +142,7 @@ Like a diamond in the sky.
   tier[role="assonance"] > set { outline: 1.5px dashed #1f8a5b; border-radius: 8px; padding: 0 3px; }
   tier[role="rhyme"] > set:nth-child(1) { color: #b3261e; font-weight: 700; }
   tier[role="rhyme"] > set:nth-child(2) { color: #1b5fa8; font-weight: 700; font-style: italic; }
+  member[inferred] { outline: 1px dashed #b07a2a; border-radius: 3px; }
 </style>
 
 <style name="Ink" disabled="true">
@@ -154,6 +155,7 @@ Like a diamond in the sky.
   tier[role="repetition"] > set { background: rgb(160 0 200 / .15); box-shadow: 0 2px 0 rgb(160 0 200 / .5); }
   tier[role="assonance"] > set { background: rgb(255 80 120 / .30); border-radius: 999px; padding: 0 4px; }
   tier[role="rhyme"] > set { color: #c2185b; font-style: italic; }
+  member[inferred] { text-decoration: underline dotted #c0600a 2px; }
 </style>
 </script>
 
@@ -193,6 +195,8 @@ function load(src) {
     sets: [...t.querySelectorAll(':scope > set')].map((s) => ({
       attrs: attrs(s), members: (s.getAttribute('members') || '').split(/[\s,]+/).filter(Boolean) })),
   }));
+  for (const t of tiers) if (!(t.attrs.kind === 'relation' && t.attrs.directed === 'true'))   // A-05
+    for (const s of t.sets) s.members.sort((x, y) => Math.min(...spans[x].pieces.map((p) => p[0])) - Math.min(...spans[y].pieces.map((p) => p[0])));
   const styles = [...root.querySelectorAll(':scope > style')].map((s) => ({
     name: s.getAttribute('name'), disabled: s.getAttribute('disabled') === 'true', css: s.textContent }));
   return { text, spans, tiers, styles };
@@ -220,7 +224,13 @@ function buildMirror(doc) {
     const ses = t.sets.map((s) => {
       const se = document.createElement('set');
       for (const k of ['id', 'key', 'tags']) if (k in s.attrs) se.setAttribute(k, s.attrs[k]);
-      te.append(se); return se;
+      const confirmed = (s.attrs.confirmed || '').split(/[\s,]+/);
+      const mes = s.members.map((id) => {
+        const me = document.createElement('member'); me.setAttribute('id', id);
+        if (t.attrs.provider && !confirmed.includes(id)) me.setAttribute('inferred', '');   // format.md S-04
+        se.append(me); return me;
+      });
+      te.append(se); return { se, mes };
     });
     box.append(te);
     return { te, ses };
@@ -248,28 +258,28 @@ function quoted(content) {   // computed `content` of ::before / ::after
   return m ? m[1].replace(/\\(.)/g, '$1') : null;
 }
 
-function wants(se, te) {
-  const cs = getComputedStyle(se), ct = getComputedStyle(te);
+function wants(chain) {   // [member, set, tier]: the nearest rule wins (format.md S-08)
+  const cs = chain.map((el) => getComputedStyle(el)), me = cs[0];
   const text = {}, box = {}, notes = [];
-  if (cs.color !== SENTINEL) text.color = cs.color;
-  if (cs.fontWeight !== '400') text['font-weight'] = cs.fontWeight;
-  if (cs.fontStyle !== 'normal') text['font-style'] = cs.fontStyle;
-  if (cs.textShadow !== 'none') text['text-shadow'] = cs.textShadow;
-  const px = parseFloat(cs.fontSize);
+  if (me.color !== SENTINEL) text.color = me.color;               // inherited properties already flow down
+  if (me.fontWeight !== '400') text['font-weight'] = me.fontWeight;
+  if (me.fontStyle !== 'normal') text['font-style'] = me.fontStyle;
+  if (me.textShadow !== 'none') text['text-shadow'] = me.textShadow;
+  const px = parseFloat(me.fontSize);
   if (px !== BASE_PX) {
     const f = px / BASE_PX, c = Math.min(SIZE_MAX, Math.max(SIZE_MIN, f));
     text['font-size'] = +c.toFixed(3) + 'em';
     if (c !== f) notes.push(`font-size ${+f.toFixed(2)}em clamped to ${+c.toFixed(2)}em`);
   }
-  const before = quoted(getComputedStyle(se, '::before').content);
-  const after = quoted(getComputedStyle(se, '::after').content);
-  const decoFrom = cs.textDecorationLine !== 'none' ? cs : ct.textDecorationLine !== 'none' ? ct : null;
+  const pseudo = (which) => { for (const el of chain.slice(0, 2)) { const q = quoted(getComputedStyle(el, which).content); if (q !== null) return q; } return null; };
+  const before = pseudo('::before'), after = pseudo('::after');
+  const decoFrom = cs.find((c) => c.textDecorationLine !== 'none');
   const deco = decoFrom ? Object.fromEntries(DECO.map((p) => [p, decoFrom.getPropertyValue(p)])) : null;
   for (const g of Object.values(BOX_GROUPS)) {
-    const from = g.on(cs) ? cs : g.on(ct) ? ct : null;
+    const from = cs.find((c) => g.on(c));
     if (from) for (const p of g.props) box[p] = from.getPropertyValue(p);
   }
-  const hasBox = ['fill', 'border', 'outline', 'shadow'].some((k) => BOX_GROUPS[k].on(cs) || BOX_GROUPS[k].on(ct));
+  const hasBox = ['fill', 'border', 'outline', 'shadow'].some((k) => cs.some((c) => BOX_GROUPS[k].on(c)));
   return { text, deco, box: hasBox ? box : null, before, after, notes };
 }
 
@@ -282,9 +292,10 @@ function paint(doc) {
   doc.tiers.forEach((t, ti) => {
     if (!mirror[ti]) return;
     t.sets.forEach((s, si) => {
-      const w = wants(mirror[ti].ses[si], mirror[ti].te);
+      const m = mirror[ti], { se, mes } = m.ses[si];
+      const ws = mes.map((me) => wants([me, se, m.te]));   // one reading per member
       const members = s.members.map((id) => doc.spans[id].pieces.slice().sort((a, b) => a[0] - b[0]));
-      entries.push({ ti, si, tier: t, set: s, w, members, layer: entries.length });
+      entries.push({ ti, si, tier: t, set: s, ws, members, layer: entries.length });
     });
   });
 
@@ -303,18 +314,18 @@ function paint(doc) {
       if (m.some(([p, q]) => p <= a && b <= q)) cover.push({ e, mi, first: m[0][0] === a, last: m[m.length - 1][1] === b });
     });
     // opening characters: lower layer outside
-    for (const c of cover) if (c.first && c.e.w.before) {
-      const g = document.createElement('span'); g.textContent = c.e.w.before; g.setAttribute('aria-hidden', 'true');
-      g.style.cssText = css(c.e.w.text); textEl.append(g); atoms.push(g);
+    for (const c of cover) if (c.first && c.e.ws[c.mi].before) {
+      const g = document.createElement('span'); g.textContent = c.e.ws[c.mi].before; g.setAttribute('aria-hidden', 'true');
+      g.style.cssText = css(c.e.ws[c.mi].text); g.layer = c.e.layer; textEl.append(g); atoms.push(g);
     }
     // the piece: text styles, top layer wins per property; every layer's underline nests inside
     const seg = document.createElement('span');
     const style = {};
-    for (const c of cover) Object.assign(style, c.e.w.text);   // later (higher) layers overwrite
+    for (const c of cover) Object.assign(style, c.e.ws[c.mi].text);   // later (higher) layers overwrite
     seg.style.cssText = css(style);
     let inner = seg;
-    for (const c of cover) if (c.e.w.deco) {
-      const d = document.createElement('span'); d.style.cssText = css(c.e.w.deco);
+    for (const c of cover) if (c.e.ws[c.mi].deco) {
+      const d = document.createElement('span'); d.style.cssText = css(c.e.ws[c.mi].deco);
       inner.append(d); inner = d;
     }
     inner.append(doc.text.slice(a, b));
@@ -322,9 +333,9 @@ function paint(doc) {
     const self = { a, b, el: seg };
     segs.push(self);
     // closing characters: higher layer inside, so it closes first
-    for (const c of cover.slice().reverse()) if (c.last && c.e.w.after) {
-      const g = document.createElement('span'); g.textContent = c.e.w.after; g.setAttribute('aria-hidden', 'true');
-      g.style.cssText = css(c.e.w.text); textEl.append(g); atoms.push(g);
+    for (const c of cover.slice().reverse()) if (c.last && c.e.ws[c.mi].after) {
+      const g = document.createElement('span'); g.textContent = c.e.ws[c.mi].after; g.setAttribute('aria-hidden', 'true');
+      g.style.cssText = css(c.e.ws[c.mi].text); g.layer = c.e.layer; textEl.append(g); atoms.push(g);
     }
     // a box at this piece's edge takes in the characters generated there
     self.firstAtom = firstAtom; self.lastAtom = atoms.length - 1;
@@ -339,31 +350,36 @@ function paintBoxes(entries, segs, atoms) {
   const layer = document.querySelector('#poem .boxes');
   layer.replaceChildren();
   for (const e of entries) {
-    if (!e.w.box) continue;
     // each member's touching pieces become one run of atoms, brackets at its edges included
     const runs = [];
-    for (const m of e.members) {
+    e.members.forEach((m, mi) => {
+      const b = e.ws[mi].box;
+      if (!b) return;
+      const px = (k) => parseFloat(b[k] || 0);
+      const look = { ...b,
+        'margin-left': -(px('padding-left') + px('border-left-width')) + 'px',     // padding and border take no room,
+        'margin-right': -(px('padding-right') + px('border-right-width')) + 'px' }; // so the letters stay put
       let cur = null, end = null;
       for (const [p, q] of m) {
-        const a = segs.find((s) => s.a === p).firstAtom, z = segs.find((s) => s.b === q).lastAtom;
-        if (cur && end === p) cur[1] = z; else runs.push(cur = [a, z]);
+        let a = segs.find((s) => s.a === p).firstAtom, z = segs.find((s) => s.b === q).lastAtom;
+        // characters added by lower layers nest outside this box, so leave them out
+        while (atoms[a].layer < e.layer) a++;
+        while (atoms[z].layer < e.layer) z--;
+        if (cur && end === p) cur[1] = z; else runs.push(cur = [a, z, look]);
         end = q;
       }
-    }
+    });
+    if (!runs.length) continue;
     // runs of one set that overlap go to separate copies
     const copies = [];
     for (const r of runs.sort((x, y) => x[0] - y[0])) {
       const c = copies.find((c) => c[c.length - 1][1] < r[0]);
       if (c) c.push(r); else copies.push([r]);
     }
-    const b = e.w.box, px = (k) => parseFloat(b[k] || 0);
-    const look = { ...b,
-      'margin-left': -(px('padding-left') + px('border-left-width')) + 'px',     // padding and border take no room,
-      'margin-right': -(px('padding-right') + px('border-right-width')) + 'px' }; // so the letters stay put
     for (const c of copies) {
       const copy = document.createElement('div'); copy.className = 'copy'; copy.setAttribute('aria-hidden', 'true');
       let k = 0;
-      for (const [a, z] of c) {
+      for (const [a, z, look] of c) {
         for (; k < a; k++) copy.append(atoms[k].cloneNode(true));
         const box = document.createElement('span'); box.className = 'box'; box.style.cssText = css(look);
         for (; k <= z; k++) box.append(atoms[k].cloneNode(true));
@@ -376,13 +392,19 @@ function paintBoxes(entries, segs, atoms) {
 }
 
 function report(entries) {
-  const rows = ['<tr><th>Layer</th><th>Tier · set</th><th>Text painter</th><th>Box painter</th></tr>'];
+  const rows = ['<tr><th>Layer</th><th>Tier · set · member</th><th>Text painter</th><th>Box painter</th></tr>'];
+  const cell = (w) => {
+    const t = [css(w.text), w.deco && css(w.deco), w.before && `before "${w.before}"`, w.after && `after "${w.after}"`].filter(Boolean).join('<br>');
+    const b = w.box ? css(Object.fromEntries(Object.entries(w.box).filter(([, v]) => v && v !== '0px' && v !== 'none'))).replace(/; /g, '<br>') : '';
+    return `<td><code>${t || '—'}</code>${w.notes.map((n) => `<br><span class="clamped">${n}</span>`).join('')}</td><td><code>${b || '—'}</code></td>`;
+  };
   for (const e of entries) {
-    const t = [css(e.w.text), e.w.deco && css(e.w.deco), e.w.before && `before "${e.w.before}"`, e.w.after && `after "${e.w.after}"`]
-      .filter(Boolean).join('<br>');
-    const b = e.w.box ? css(Object.fromEntries(Object.entries(e.w.box).filter(([, v]) => v && v !== '0px' && v !== 'none'))).replace(/; /g, '<br>') : '';
-    rows.push(`<tr><td>${e.ti + 1}</td><td>${e.tier.attrs.name} · ${e.set.attrs.name || '#' + (e.si + 1)}</td><td><code>${t || '—'}</code>${
-      e.w.notes.map((n) => `<br><span class="clamped">${n}</span>`).join('')}</td><td><code>${b || '—'}</code></td></tr>`);
+    const first = JSON.stringify(e.ws[0]);
+    rows.push(`<tr><td>${e.ti + 1}</td><td>${e.tier.attrs.name} · ${e.set.attrs.name || '#' + (e.si + 1)}</td>${cell(e.ws[0] || { text: {}, notes: [] })}</tr>`);
+    e.ws.forEach((w, mi) => {
+      if (mi && JSON.stringify(w) !== first)
+        rows.push(`<tr><td></td><td>&nbsp;&nbsp;member ${e.set.members[mi]}</td>${cell(w)}</tr>`);
+    });
   }
   $('report').innerHTML = rows.join('');
 }
