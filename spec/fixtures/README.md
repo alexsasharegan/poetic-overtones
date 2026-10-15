@@ -15,20 +15,23 @@ Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning
 
 | Case | What it pins down |
 |---|---|
-| 01 basic | blocks, bare id'd spans, sub-word spans, tiers as sets, channel as class, tab indentation |
+| 01 basic | blocks; bare id'd spans, sub-word spans; tiers hold sets of span ids; ids opaque and unique; names free; CSS on stamped `data-tier` / `data-set`; tab indentation |
 | 02 dedent | common indentation removed from text and markup; stray short whitespace line |
-| 03 crossing | spans that cross, written as fragments sharing an id |
-| 04 discontinuous | split digraph (a_e) as one span in two fragments |
-| 05 enjambment | directed relation across lines; one tier = one relation; `group` |
-| 06 provider | provider-filled tiers, `reads`, `confirmed`, a hand-made tier, one span in many tiers, ranges |
-| 07 relations | alliteration and repeated rime over the same words |
-| 08 group | `group` for dimensions made of several tiers; default channel from the name |
+| 03 crossing | spans that cross: a head span plus a continuation (`cont="head-id"`) |
+| 04 discontinuous | split digraph (a_e) as a head and a continuation |
+| 05 enjambment | a directed relation tier, one set per enjambment |
+| 06 provider | provider-filled tiers, `reads`, `confirmed`, a hand-made tier, one span in many sets, ranges |
+| 07 relations | alliteration and a repeated rime over the same words |
+| 08 names | ids opaque; names in any script, repeated or absent |
 | 09 entities | XML escapes and numeric references; no CDATA |
-| 10 text-src | `<text src="..."/>`, self-closing, relative only |
+| 10 text-src | `<text src="..."/>`, self-closing, relative only, nothing escaped |
 | 11 unicode | code-point offsets (astral Shavian), combining mark alone, Private Use |
 | 12 explicit root | the `<pxml>` root form, with an XML declaration |
-| e01-e15 | files that must be rejected, each for one reason |
-| w01-w04 | files that load but are reported: control character, `url()` in CSS, unknown tier attribute, lossy slug |
+| e01-e20 | files that must be rejected, each for one reason (e15 is CDATA) |
+| w01-w03 | files that load but are reported: control character, `url()` in CSS, unknown attribute |
+
+Model in one line: a **tier** (a dimension) holds **sets**; a **set** lists **spans** by id;
+a **span** is a stretch of the text. Every id is unique in the whole file.
 
 Poems used are in the public domain (Jane Taylor, Milton, nursery rhymes). Do not add
 copyrighted verse.

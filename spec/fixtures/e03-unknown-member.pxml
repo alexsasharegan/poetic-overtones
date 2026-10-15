@@ -1,6 +1,6 @@
-<!-- E03: a tier names a span that does not exist
+<!-- E03: a set names a span that does not exist
      Every member must be a span id present in the markup. -->
-<!-- expect {"outcome": "error", "errors": ["tier-unknown-member"]} -->
+<!-- expect {"outcome": "error", "errors": ["set-unknown-member"]} -->
 
 <text>
 one two
@@ -11,6 +11,7 @@ one two
 </markup>
 
 <analysis>
-  <tier name="T" channel="t" members="1,9"/>
+  <tier id="t1" name="T">
+    <set id="s1" members="1,9"/>
+  </tier>
 </analysis>
-

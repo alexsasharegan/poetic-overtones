@@ -11,6 +11,7 @@ one two
 </markup>
 
 <analysis>
-  <tier name="T" channel="t" members="2-1"/>
+  <tier id="t1" name="T">
+    <set id="s1" members="2-1"/>
+  </tier>
 </analysis>
-

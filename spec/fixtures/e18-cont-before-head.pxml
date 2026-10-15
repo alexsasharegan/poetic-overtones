@@ -1,0 +1,12 @@
+<!-- E18: a continuation that comes before its head
+     Pieces are in document order: the head first. -->
+<!-- expect {"outcome": "error", "errors": ["cont-before-head"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span cont="2">one</span> <span id="2">two</span>
+</markup>
+

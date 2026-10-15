@@ -1,0 +1,17 @@
+<!-- E04: a tier and a set with the same id
+     Ids are unique across the whole file: spans, tiers and sets share one namespace. -->
+<!-- expect {"outcome": "error", "errors": ["id-duplicate"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="x" name="T">
+    <set id="x" members="1"/>
+  </tier>
+</analysis>

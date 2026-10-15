@@ -1,6 +1,6 @@
-<!-- W03: an unknown attribute on a tier
+<!-- W03: an unknown attribute on a tier or set
      Unknown attributes are kept and reported; x- prefixed ones are the extension space and are silent. -->
-<!-- expect {"warnings": ["tier-unknown-attribute"], "tiers": {"t": ["one"], "u": ["two"]}} -->
+<!-- expect {"warnings": ["unknown-attribute"], "sets": {"s1": ["one"], "s2": ["two"]}} -->
 
 <text>
 one two
@@ -11,7 +11,10 @@ one two
 </markup>
 
 <analysis>
-  <tier name="T" channel="t" colour="red" members="1"/>
-  <tier name="U" channel="u" x-note="fine" members="2"/>
+  <tier id="t1" name="T" colour="red">
+    <set id="s1" members="1"/>
+  </tier>
+  <tier id="t2" name="U" x-note="fine">
+    <set id="s2" x-weight="3" members="2"/>
+  </tier>
 </analysis>
-

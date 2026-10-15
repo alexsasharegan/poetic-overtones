@@ -1,9 +1,9 @@
 <!-- Case 02: dedent.
      The common indentation of the non-blank lines is removed from text and markup alike;
      relative indentation survives. The end tag may be indented. A blank line in the
-     markup may hold stray whitespace shorter than the common indent (the second blank
-     line below holds two spaces). -->
-<!-- expect {"tiers": {"w": ["Down", "the", "stair", "up"]}} -->
+     markup may hold stray whitespace shorter than the common indent (the blank line in
+     the markup below holds two spaces). -->
+<!-- expect {"sets": {"s1": ["Down", "the", "stair", "up"]}} -->
 
 <text>
     Down
@@ -22,5 +22,7 @@
     </markup>
 
 <analysis>
-  <tier name="Words" channel="w" members="1-4"/>
+  <tier id="t1" name="Words">
+    <set id="s1" name="Word" members="1-4"/>
+  </tier>
 </analysis>

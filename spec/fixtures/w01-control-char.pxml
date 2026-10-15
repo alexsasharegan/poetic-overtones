@@ -1,7 +1,7 @@
 <!-- Case W01: a forbidden control character in the input.
      U+0007 cannot appear in XML 1.0. The loader replaces it with U+FFFD and warns; the
      file still loads. -->
-<!-- expect {"warnings": ["control-char"], "tiers": {"w": ["bell"]}} -->
+<!-- expect {"warnings": ["control-char"], "sets": {"s1": ["bell"]}} -->
 <text>
 bell here
 </text>
@@ -9,5 +9,7 @@ bell here
 <span id="1">bell</span> here
 </markup>
 <analysis>
-  <tier name="W" channel="w" members="1"/>
+  <tier id="t1" name="W">
+    <set id="s1" members="1"/>
+  </tier>
 </analysis>

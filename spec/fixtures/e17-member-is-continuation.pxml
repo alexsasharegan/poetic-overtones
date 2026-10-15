@@ -1,0 +1,17 @@
+<!-- E17: a set lists a continuation
+     Sets name the head span only; its continuations come with it. -->
+<!-- expect {"outcome": "error", "errors": ["member-is-continuation"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2" cont="1">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="T">
+    <set id="s1" members="2"/>
+  </tier>
+</analysis>

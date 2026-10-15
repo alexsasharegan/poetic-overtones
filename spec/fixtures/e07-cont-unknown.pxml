@@ -1,0 +1,12 @@
+<!-- E07: a continuation whose head does not exist
+     cont must name the id of a span in the same markup. -->
+<!-- expect {"outcome": "error", "errors": ["cont-unknown"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span cont="9">two</span>
+</markup>
+

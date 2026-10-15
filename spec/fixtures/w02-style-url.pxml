@@ -1,6 +1,6 @@
 <!-- W02: a style block that can fetch things
      url() and @import are ignored by the loader (offline-first, no tracking) and reported. The file still loads. -->
-<!-- expect {"warnings": ["style-url"], "tiers": {"t": ["one"]}} -->
+<!-- expect {"warnings": ["style-url"], "sets": {"s1": ["one"]}} -->
 
 <text>
 one two
@@ -11,10 +11,12 @@ one two
 </markup>
 
 <analysis>
-  <tier name="T" channel="t" members="1"/>
+  <tier id="t1" name="T">
+    <set id="s1" members="1"/>
+  </tier>
 </analysis>
 
 <style>
-  .t { background: url("https://example.com/x.png"); }
+  [data-tier="t1"] { background: url("https://example.com/x.png"); }
   @import "https://example.com/y.css";
 </style>

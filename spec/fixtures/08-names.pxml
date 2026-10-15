@@ -1,0 +1,25 @@
+<!-- Case 08: ids are opaque, names are free.
+     Ids only have to be unique tokens; nothing in the format derives one from a name, or
+     the reverse. Names may be in any script, may repeat, and may be absent. Here two sets
+     are both called "A", one tier is named in Shavian and one has no name at all. -->
+<!-- expect {"sets": {"q81z": ["one"], "b7c4": ["two"], "x9": ["one", "two"]}} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="k3f9" name="𐑮𐑲𐑥">
+    <set id="q81z" name="A" members="1"/>
+  </tier>
+  <tier id="m02x" name="Écho">
+    <set id="b7c4" name="A" members="2"/>
+  </tier>
+  <tier id="n5">
+    <set id="x9" members="1,2"/>
+  </tier>
+</analysis>

@@ -4,7 +4,7 @@
      format (case e15). The two blocks need not escape the same way, only produce the
      same text. Text that is full of such characters is easier to keep in a file and
      reference with <text src="..."/> (case 10), where nothing is escaped. -->
-<!-- expect {"tiers": {"sym": ["Tom & Jerry", "<"]}} -->
+<!-- expect {"sets": {"s1": ["Tom & Jerry", "<"]}} -->
 
 <text>
 Tom &amp; Jerry &lt;3 it&#x2019;s fine
@@ -17,5 +17,7 @@ a <span id="2">&lt;</span> b &amp;&amp; c &gt; d
 </markup>
 
 <analysis>
-  <tier name="Symbols" channel="sym" members="1,2"/>
+  <tier id="t1" name="Symbols">
+    <set id="s1" name="Symbol" members="1,2"/>
+  </tier>
 </analysis>

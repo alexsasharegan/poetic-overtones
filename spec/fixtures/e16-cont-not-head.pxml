@@ -1,0 +1,12 @@
+<!-- E16: a continuation of a continuation
+     cont always points at the head span, never at another continuation. -->
+<!-- expect {"outcome": "error", "errors": ["cont-not-head"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2" cont="1">tw</span><span cont="2">o</span>
+</markup>
+

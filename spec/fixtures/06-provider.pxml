@@ -1,14 +1,14 @@
 <!-- Case 06: providers, confirmation and several tiers on one span.
-     The syllable tier and the two stress tiers are filled by providers (inferred), so a
-     whole-tier reset can restore them. confirmed lists the members a human has accepted.
-     "Hand-marked" has no provider: reset never touches it. Span 3 sits in three tiers at
-     once, which is fine because a tier is just a set. reads names the tier a provider
-     worked from. -->
-<!-- expect {"tiers": {
-  "syll": ["Up", "a", "bove", "the", "world", "so", "high"],
-  "stressed": ["Up", "bove", "world", "high"],
-  "unstressed": ["a", "the", "so"],
-  "mine": ["bove"]}} -->
+     The syllable and stress tiers are filled by providers (inferred), so a whole-tier
+     reset can restore them. confirmed lists the members a human has accepted. "Hand-marked"
+     has no provider: reset never touches it. Span 3 is in three sets at once, which is
+     fine because a set is just a list of ids. reads names the tier a provider worked from.
+     Members use a range (1-7). -->
+<!-- expect {"sets": {
+  "s_syll": ["Up", "a", "bove", "the", "world", "so", "high"],
+  "s_stressed": ["Up", "bove", "world", "high"],
+  "s_unstressed": ["a", "the", "so"],
+  "s_mine": ["bove"]}} -->
 
 <text>
 Up above the world so high,
@@ -19,8 +19,14 @@ Up above the world so high,
 </markup>
 
 <analysis>
-  <tier name="Syllables" channel="syll" provider="english.syllable@1" members="1-7"/>
-  <tier name="Stressed" channel="stressed" provider="english.stress@1" reads="syll" members="1,3,5,7" confirmed="1,7"/>
-  <tier name="Unstressed" channel="unstressed" provider="english.stress@1" reads="syll" members="2,4,6"/>
-  <tier name="Hand-marked" channel="mine" members="3"/>
+  <tier id="t_syll" name="Syllables" provider="english.syllable@1">
+    <set id="s_syll" name="Syllable" members="1-7"/>
+  </tier>
+  <tier id="t_stress" name="Stress" provider="english.stress@1" reads="t_syll">
+    <set id="s_stressed" name="stressed" members="1,3,5,7" confirmed="1,7"/>
+    <set id="s_unstressed" name="unstressed" members="2,4,6"/>
+  </tier>
+  <tier id="t_mine" name="Hand-marked">
+    <set id="s_mine" name="Mine" members="3"/>
+  </tier>
 </analysis>

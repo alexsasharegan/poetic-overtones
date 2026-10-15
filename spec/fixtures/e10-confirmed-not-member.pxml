@@ -1,5 +1,5 @@
 <!-- E10: confirmed names a span that is not a member
-     confirmed must be a subset of members. -->
+     confirmed must be a subset of the set members. -->
 <!-- expect {"outcome": "error", "errors": ["confirmed-not-member"]} -->
 
 <text>
@@ -11,6 +11,7 @@ one two
 </markup>
 
 <analysis>
-  <tier name="T" channel="t" provider="english.word@1" members="1" confirmed="2"/>
+  <tier id="t1" name="T" provider="english.word@1">
+    <set id="s1" members="1" confirmed="2"/>
+  </tier>
 </analysis>
-

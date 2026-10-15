@@ -1,5 +1,5 @@
 <!-- E13: reads names a tier that does not exist
-     reads must name another tier of the same file by channel. -->
+     reads must name another tier of the same file, by id. -->
 <!-- expect {"outcome": "error", "errors": ["reads-unknown"]} -->
 
 <text>
@@ -11,6 +11,7 @@ one two
 </markup>
 
 <analysis>
-  <tier name="T" channel="t" provider="english.stress@1" reads="nope" members="1"/>
+  <tier id="t1" name="T" provider="english.stress@1" reads="nope">
+    <set id="s1" members="1"/>
+  </tier>
 </analysis>
-

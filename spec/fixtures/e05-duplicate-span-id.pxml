@@ -1,0 +1,12 @@
+<!-- E05: two spans with the same id
+     Every span id is unique. To make one span out of several pieces, give the later pieces cont="..." instead of reusing the id (case 03). -->
+<!-- expect {"outcome": "error", "errors": ["id-duplicate"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="1">two</span>
+</markup>
+

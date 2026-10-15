@@ -1,19 +1,23 @@
 <!-- Case 04: a discontinuous span.
-     The split digraph a_e (make, cake) is one span in two fragments with a consonant
-     between them. The word spans around it nest normally. -->
-<!-- expect {"tiers": {
-  "words": ["make", "cake"],
-  "a-e": ["ae", "ae"]}} -->
+     The split digraph a_e (make, cake) is one span in two pieces with a consonant
+     between them: a head and a continuation. The word spans around them nest normally. -->
+<!-- expect {"sets": {
+  "s1": ["make", "cake"],
+  "s2": ["ae", "ae"]}} -->
 
 <text>
 make the cake
 </text>
 
 <markup>
-<span id="w1">m<span id="d1">a</span>k<span id="d1">e</span></span> the <span id="w2">c<span id="d2">a</span>k<span id="d2">e</span></span>
+<span id="w1">m<span id="d1">a</span>k<span cont="d1">e</span></span> the <span id="w2">c<span id="d2">a</span>k<span cont="d2">e</span></span>
 </markup>
 
 <analysis>
-  <tier name="Words" channel="words" members="w1,w2"/>
-  <tier name="Split digraph a_e" channel="a-e" members="d1,d2"/>
+  <tier id="t1" name="Words">
+    <set id="s1" name="Word" members="w1,w2"/>
+  </tier>
+  <tier id="t2" name="Split digraph">
+    <set id="s2" name="a_e" members="d1,d2"/>
+  </tier>
 </analysis>

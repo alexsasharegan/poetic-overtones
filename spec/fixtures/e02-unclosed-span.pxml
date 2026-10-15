@@ -1,5 +1,5 @@
 <!-- E02: a span that is never closed
-     Not well-formed XML. This is also what an attempt to write crossing spans with plain nesting runs into: use fragments sharing an id (case 03). -->
+     Not well-formed XML. -->
 <!-- expect {"outcome": "error", "errors": ["xml-not-wellformed"]} -->
 
 <text>

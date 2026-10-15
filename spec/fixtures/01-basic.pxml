@@ -1,12 +1,14 @@
 <!-- Case 01: the basic idea.
-     Plain text; markup with bare id'd spans (sub-word spans allowed); tiers are named
-     sets of span ids; the channel is the stable id and the CSS class; plain CSS.
-     Blocks are siblings, Vue style. Markup is tab-indented, text is not: dedent applies. -->
-<!-- expect {"tiers": {
-  "A": ["Twinkle, twinkle, little star,", "How I wonder what you are!"],
-  "B": ["Up above the world so high,", "Like a diamond in the sky."],
-  "r1": ["ar", "are"],
-  "r2": ["igh", "y"]}} -->
+     Plain text; markup with bare id'd spans (sub-word spans allowed); an analysis block of
+     tiers, each holding sets of span ids; plain CSS. Ids are opaque and unique across the
+     whole file; names are free text for people. The renderer stamps member spans with
+     data-tier and data-set, and the CSS selects on those. Blocks are siblings, Vue style.
+     Markup is tab-indented, text is not: dedent applies. -->
+<!-- expect {"sets": {
+  "s1": ["Twinkle, twinkle, little star,", "How I wonder what you are!"],
+  "s2": ["Up above the world so high,", "Like a diamond in the sky."],
+  "s3": ["ar", "are"],
+  "s4": ["igh", "y"]}} -->
 
 <meta title="Twinkle, Twinkle, Little Star" author="Jane Taylor" year="1806" language="en"/>
 
@@ -25,16 +27,19 @@ Like a diamond in the sky.
 </markup>
 
 <analysis>
-	<!-- name is user input; channel is the stable id and the CSS class -->
-	<tier name="A" channel="A" members="1,2"/>
-	<tier name="B" channel="B" members="3,4"/>
-	<tier name="Rhyme A" channel="r1" members="5,6"/>
-	<tier name="Rhyme B" channel="r2" members="7,8"/>
+	<tier id="t1" name="Rhyme scheme">
+		<set id="s1" name="A" members="1,2"/>
+		<set id="s2" name="B" members="3,4"/>
+	</tier>
+	<tier id="t2" name="Rhyme" kind="relation">
+		<set id="s3" name="A" members="5,6"/>
+		<set id="s4" name="B" members="7,8"/>
+	</tier>
 </analysis>
 
 <style>
-	  .A  { background: #fdebd0; }
-	  .B  { background: #d6e9ff; }
-	  .r1 { color: #b3261e; font-weight: 700; }
-	  .r2 { color: #1b5fa8; font-weight: 700; }
+	[data-set="s1"] { background: #fdebd0; }
+	[data-set="s2"] { background: #d6e9ff; }
+	[data-set="s3"] { color: #b3261e; font-weight: 700; }
+	[data-set="s4"] { color: #1b5fa8; font-weight: 700; }
 </style>

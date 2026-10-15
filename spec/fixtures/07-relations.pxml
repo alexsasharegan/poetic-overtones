@@ -2,9 +2,9 @@
      Alliteration (the six /p/ onsets) and a repeated rime (ick, in "picked" and
      "pickled") are both relation tiers over the same words. The onset span and the rime
      span are adjacent siblings, so nothing crosses. -->
-<!-- expect {"tiers": {
-  "allit-p": ["P", "P", "p", "p", "p", "p"],
-  "ick": ["ick", "ick"]}} -->
+<!-- expect {"sets": {
+  "s1": ["P", "P", "p", "p", "p", "p"],
+  "s2": ["ick", "ick"]}} -->
 
 <text>
 Peter Piper picked a peck of pickled peppers
@@ -15,6 +15,10 @@ Peter Piper picked a peck of pickled peppers
 </markup>
 
 <analysis>
-  <tier name="Alliteration /p/" channel="allit-p" kind="relation" members="1-6"/>
-  <tier name="Repeated rime: ick" channel="ick" kind="relation" members="7,8"/>
+  <tier id="t1" name="Alliteration" kind="relation">
+    <set id="s1" name="p" members="1-6"/>
+  </tier>
+  <tier id="t2" name="Repeated rime" kind="relation">
+    <set id="s2" name="ick" members="7,8"/>
+  </tier>
 </analysis>

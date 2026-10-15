@@ -7,7 +7,7 @@ Each fixture carries its own expectation in a comment:  <!-- expect {json} -->
   outcome   "ok" | "error"                    (default "ok")
   errors    [code]                            (default [])
   warnings  [code, ...]                       (default [])
-  tiers     {channel: [text of each member]}  (only the tiers listed are compared)
+  sets      {set id: [text of each member]}   (only the sets listed are compared)
 
 This is a reference for the draft rules in spec/format.md, not the implementation.
 """
@@ -15,11 +15,10 @@ import json, os, re, sys
 import xml.etree.ElementTree as ET
 
 ID_RE = re.compile(r'[A-Za-z0-9_.]+')
-CHANNEL_RE = re.compile(r'[A-Za-z][A-Za-z0-9_-]*')
 PROVIDER_RE = re.compile(r'[a-z][a-z0-9.-]*@[0-9]+')
 BLOCKS = ('meta', 'text', 'markup', 'analysis', 'style')
-TIER_ATTRS = {'name', 'channel', 'members', 'kind', 'directed', 'group',
-              'provider', 'reads', 'confirmed'}
+TIER_ATTRS = {'id', 'name', 'kind', 'directed', 'provider', 'reads'}
+SET_ATTRS = {'id', 'name', 'members', 'confirmed'}
 
 
 class Fail(Exception):
@@ -45,13 +44,6 @@ def sanitize(s, warnings):
     if bad:
         warnings.append('control-char')
     return ''.join(out)
-
-
-def slug(name):
-    s = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')
-    if not s or not s[0].isalpha():
-        s = 't-' + s
-    return s.rstrip('-')
 
 
 def keep_mask(raw):
@@ -99,12 +91,12 @@ def apply_mask(raw, keep):
 
 
 def flatten(markup, warnings):
-    """Concatenate the markup's text nodes; record every span fragment's raw offsets."""
+    """Concatenate the markup's text nodes; record every span element's raw offsets."""
     parts, frags, pos = [], [], [0]
 
-    def add(s):
-        parts.append(s)
-        pos[0] += len(s)
+    def add(t):
+        parts.append(t)
+        pos[0] += len(t)
 
     def walk(e):
         if e.text:
@@ -112,16 +104,17 @@ def flatten(markup, warnings):
         for ch in e:
             if ch.tag != 'span':
                 raise Fail('markup-unknown-element', ch.tag)
-            sid = ch.get('id')
-            if sid is None:
+            sid, cont = ch.get('id'), ch.get('cont')
+            if sid is None and cont is None:
                 raise Fail('span-no-id')
-            if not ID_RE.fullmatch(sid):
-                raise Fail('span-bad-id', sid)
-            if set(ch.attrib) - {'id'}:
+            for v in (sid, cont):
+                if v is not None and not ID_RE.fullmatch(v):
+                    raise Fail('id-bad', v)
+            if set(ch.attrib) - {'id', 'cont'}:
                 warnings.append('span-extra-attribute')
             start = pos[0]
             walk(ch)
-            frags.append((sid, start, pos[0]))
+            frags.append((sid, cont, start, pos[0]))
             if ch.tail:
                 add(ch.tail)
 
@@ -214,81 +207,110 @@ def check(path, warnings):
         i = next((k for k in range(min(len(mtext), len(text))) if mtext[k] != text[k]),
                  min(len(mtext), len(text)))
         raise Fail('strip-mismatch', 'at %d: markup %r vs text %r' % (i, mtext[i:i + 12], text[i:i + 12]))
-    spans = {}
-    for sid, a, b in frags:
-        spans.setdefault(sid, []).append((newidx[a], newidx[b]))
-    for sid, fr in spans.items():
+    all_ids = {}
+
+    def claim(i, what):
+        if i in all_ids:
+            raise Fail('id-duplicate', i)
+        all_ids[i] = what
+
+    heads, conts = {}, []
+    for sid, cont, a0, b0 in sorted(frags, key=lambda f: (f[2], -f[3])):
+        a1, b1 = newidx[a0], newidx[b0]
+        if sid is not None:
+            claim(sid, 'span')
+        if cont is None:
+            heads[sid] = [(a1, b1)]
+        else:
+            conts.append((cont, sid, a1, b1))
+    cont_ids = {sid for _, sid, _, _ in conts if sid is not None}
+    for cont, sid, a1, b1 in conts:
+        if cont in cont_ids:
+            raise Fail('cont-not-head', cont)
+        if cont not in heads:
+            raise Fail('cont-unknown', cont)
+        if heads[cont][0][0] > a1:
+            raise Fail('cont-before-head', cont)
+        heads[cont].append((a1, b1))
+    for sid, fr in heads.items():
         fr.sort()
         for (a1, b1), (a2, b2) in zip(fr, fr[1:]):
             if a2 < b1:
                 raise Fail('span-self-overlap', sid)
-        if any(a == b for a, b in fr):
+        if any(a1 == b1 for a1, b1 in fr):
             warnings.append('span-empty')
 
     def span_text(sid):
-        return ''.join(text[a:b] for a, b in spans[sid])
+        return ''.join(text[a1:b1] for a1, b1 in heads[sid])
 
-    # ---- analysis
-    tiers = {}
+    # ---- analysis: tiers contain sets; sets list span ids
+    tiers, sets = {}, {}
     if 'analysis' in blocks:
         for tr in blocks['analysis']:
             if tr.tag != 'tier':
                 raise Fail('analysis-unknown-element', tr.tag)
-            if any(a not in TIER_ATTRS and not a.startswith('x-') for a in tr.attrib):
-                warnings.append('tier-unknown-attribute')
-            name = tr.get('name')
-            if not name:
-                raise Fail('tier-no-name')
-            explicit = tr.get('channel') is not None
-            channel = tr.get('channel') if explicit else slug(name)
-            if not explicit and re.search(r'[^\x00-\x7f]', name):
-                warnings.append('tier-slug-lossy')
-            if not CHANNEL_RE.fullmatch(channel):
-                raise Fail('tier-bad-channel', channel)
-            if channel in tiers:
-                both = explicit and tiers[channel]['explicit']
-                raise Fail('tier-duplicate-channel' if both else 'tier-slug-collision', channel)
-            kind = tr.get('kind', 'set')
-            if kind not in ('set', 'relation'):
+            if any(k not in TIER_ATTRS and not k.startswith('x-') for k in tr.attrib):
+                warnings.append('unknown-attribute')
+            tid = tr.get('id')
+            if tid is None:
+                raise Fail('tier-no-id')
+            if not ID_RE.fullmatch(tid):
+                raise Fail('id-bad', tid)
+            claim(tid, 'tier')
+            kind = tr.get('kind', 'label')
+            if kind not in ('label', 'relation'):
                 raise Fail('tier-bad-kind', kind)
             directed = tr.get('directed')
             if directed is not None:
                 if directed not in ('true', 'false'):
                     raise Fail('tier-bad-directed', directed)
                 if directed == 'true' and kind != 'relation':
-                    raise Fail('directed-without-relation', channel)
+                    raise Fail('directed-without-relation', tid)
             prov = tr.get('provider')
             if prov is not None and not PROVIDER_RE.fullmatch(prov):
                 raise Fail('provider-bad', prov)
-            members = parse_ids(tr.get('members', ''))
-            for m in members:
-                if m not in spans:
-                    raise Fail('tier-unknown-member', m)
-            if len(set(members)) != len(members):
-                warnings.append('tier-duplicate-member')
-            for c in parse_ids(tr.get('confirmed', '')):
-                if c not in members:
-                    raise Fail('confirmed-not-member', c)
-            tiers[channel] = {'explicit': explicit, 'reads': tr.get('reads', ''),
-                              'texts': [span_text(m) for m in members]}
-        for ch, info in tiers.items():
+            tiers[tid] = {'reads': tr.get('reads', '')}
+            for st in tr:
+                if st.tag != 'set':
+                    raise Fail('analysis-unknown-element', st.tag)
+                if any(k not in SET_ATTRS and not k.startswith('x-') for k in st.attrib):
+                    warnings.append('unknown-attribute')
+                setid = st.get('id')
+                if setid is None:
+                    raise Fail('set-no-id')
+                if not ID_RE.fullmatch(setid):
+                    raise Fail('id-bad', setid)
+                claim(setid, 'set')
+                members = parse_ids(st.get('members', ''))
+                for m in members:
+                    if m in cont_ids:
+                        raise Fail('member-is-continuation', m)
+                    if m not in heads:
+                        raise Fail('set-unknown-member', m)
+                if len(set(members)) != len(members):
+                    warnings.append('set-duplicate-member')
+                for c in parse_ids(st.get('confirmed', '')):
+                    if c not in members:
+                        raise Fail('confirmed-not-member', c)
+                sets[setid] = [span_text(m) for m in members]
+        for tid, info in tiers.items():
             for r in re.split(r'[,\s]+', info['reads'].strip()):
                 if r and r not in tiers:
                     raise Fail('reads-unknown', r)
 
     if re.search(r'url\s*\(|@import', '\n'.join(css), re.I):
         warnings.append('style-url')
-    return {ch: info['texts'] for ch, info in tiers.items()}
+    return sets
 
 
 def run(path):
     warnings = []
     try:
         tiers = check(path, warnings)
-        return {'outcome': 'ok', 'errors': [], 'warnings': sorted(set(warnings)), 'tiers': tiers}
+        return {'outcome': 'ok', 'errors': [], 'warnings': sorted(set(warnings)), 'sets': tiers}
     except Fail as e:
         return {'outcome': 'error', 'errors': [e.code], 'warnings': sorted(set(warnings)),
-                'tiers': {}, 'detail': e.detail}
+                'sets': {}, 'detail': e.detail}
 
 
 def expectation(path):
@@ -306,9 +328,9 @@ def compare(exp, got):
         probs.append('errors %r, expected %r (%s)' % (got['errors'], exp.get('errors', []), got.get('detail', '')))
     if got['warnings'] != sorted(exp.get('warnings', [])):
         probs.append('warnings %r, expected %r' % (got['warnings'], sorted(exp.get('warnings', []))))
-    for ch, texts in exp.get('tiers', {}).items():
-        if got['tiers'].get(ch) != texts:
-            probs.append('tier %s: got %r, expected %r' % (ch, got['tiers'].get(ch), texts))
+    for sid, texts in exp.get('sets', {}).items():
+        if got['sets'].get(sid) != texts:
+            probs.append('set %s: got %r, expected %r' % (sid, got['sets'].get(sid), texts))
     return probs
 
 

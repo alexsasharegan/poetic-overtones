@@ -1,0 +1,17 @@
+<!-- E20: a set without an id
+     Tiers and sets must have ids. -->
+<!-- expect {"outcome": "error", "errors": ["set-no-id"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="T">
+    <set members="1"/>
+  </tier>
+</analysis>

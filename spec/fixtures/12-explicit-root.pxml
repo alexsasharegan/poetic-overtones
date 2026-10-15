@@ -2,7 +2,7 @@
 <!-- Case 12: an explicit root element.
      The same file shape wrapped in <pxml>...</pxml>, which is what a stock XML tool
      expects. Meaning is identical to the bare form. Block content is still dedented. -->
-<!-- expect {"tiers": {"w": ["Hello", "world"]}} -->
+<!-- expect {"sets": {"s1": ["Hello", "world"]}} -->
 <pxml version="1">
   <text>
     Hello world
@@ -11,6 +11,8 @@
     <span id="1">Hello</span> <span id="2">world</span>
   </markup>
   <analysis>
-    <tier name="Words" channel="w" members="1,2"/>
+    <tier id="t1" name="Words">
+      <set id="s1" name="Word" members="1,2"/>
+    </tier>
   </analysis>
 </pxml>

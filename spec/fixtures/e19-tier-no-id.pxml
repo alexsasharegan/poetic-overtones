@@ -1,0 +1,17 @@
+<!-- E19: a tier without an id
+     Tiers and sets must have ids (apps generate them; the format does not care how). -->
+<!-- expect {"outcome": "error", "errors": ["tier-no-id"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier name="T">
+    <set id="s1" members="1"/>
+  </tier>
+</analysis>

@@ -1,20 +1,26 @@
 <!-- Case 03: crossing spans.
      Trochaic feet: UP a | BOVE the | WORLD so | HIGH. Foot 1 ends inside the word "above",
-     so feet and word cross. XML cannot express crossing, so the word is written as two
-     fragments that share an id (w2); its text is the fragments joined. -->
-<!-- expect {"tiers": {
-  "feet": ["Up a", "bove the", "world so", "high"],
-  "word-above": ["above"]}} -->
+     so feet and word cross. XML cannot express crossing, and ids must be unique, so the
+     word is a head span (id="w2") plus a continuation (cont="w2") that points back at it.
+     The logical span's text is the head and its continuations, in document order. Sets
+     name the head's id. -->
+<!-- expect {"sets": {
+  "s1": ["Up a", "bove the", "world so", "high"],
+  "s2": ["above"]}} -->
 
 <text>
 Up above the world so high,
 </text>
 
 <markup>
-<span id="f1">Up <span id="w2">a</span></span><span id="f2"><span id="w2">bove</span> the</span> <span id="f3">world so</span> <span id="f4">high</span>,
+<span id="f1">Up <span id="w2">a</span></span><span id="f2"><span cont="w2">bove</span> the</span> <span id="f3">world so</span> <span id="f4">high</span>,
 </markup>
 
 <analysis>
-  <tier name="Feet" channel="feet" members="f1,f2,f3,f4"/>
-  <tier name="Word: above" channel="word-above" members="w2"/>
+  <tier id="t1" name="Feet">
+    <set id="s1" name="Foot" members="f1,f2,f3,f4"/>
+  </tier>
+  <tier id="t2" name="Words">
+    <set id="s2" name="above" members="w2"/>
+  </tier>
 </analysis>
