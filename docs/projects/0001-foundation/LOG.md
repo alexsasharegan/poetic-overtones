@@ -1,7 +1,7 @@
 # 0001 Foundation: log
 
-Every commit of the foundation work, oldest first (times UTC, as git records them). Phases are in
-`docs/HISTORY.md`.
+Every commit of the foundation work, oldest first (times UTC, as git records them), up to the commit
+that last updated this file. Phases are in `docs/HISTORY.md`.
 
 | Commit | When (UTC) | What |
 |---|---|---|
@@ -46,3 +46,5 @@ Every commit of the foundation work, oldest first (times UTC, as git records the
 | 445eb0d | 2026-10-15 07:06 | Add the community theme, a demo document, and samples in the app |
 | 5af6ff2 | 2026-10-15 07:08 | App: edit tier and set details, confirm inferred members (ui-plan step 3) |
 | f1cd064 | 2026-10-15 07:09 | Add the review note for 2026-10-15 with a decision ledger |
+| 0f1ac71 | 2026-10-15 07:24 | Spec audit: explicit cross-references, layer wording, export, new questions |
+| 18cb838 | 2026-10-15 07:24 | Docs: roadmap as a board, history, project record, start-here |
