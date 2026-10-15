@@ -27,3 +27,4 @@ Number ADRs sequentially and never reuse a number. The pattern is the one in Ale
 | [ADR-0008](./0008-offline-first-text-form-and-extensions.md) | Offline First, a Text Form, Artifacts and Extensions | Active | 2026-10-14 |
 | [ADR-0009](./0009-text-form-tiers-sets-spans-xml.md) | Text Form: Tiers Hold Sets of Spans, in XML-Based Blocks | Active | 2026-10-14 |
 | [ADR-0010](./0010-provider-contract-and-lexicon-as-data.md) | Providers Are Pure Functions Over Lexicon Data, Tested by Reset Equality | Active | 2026-10-14 |
+| [ADR-0011](./0011-themes-style-the-analysis.md) | Themes Style the Analysis; Tiers Have a Role; Tier Order Is Layer Order | Active | 2026-10-14 |

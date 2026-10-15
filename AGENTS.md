@@ -73,6 +73,7 @@ Decided by Alex; do not relax them on your own judgment.
 - Ids are unique across the whole file and opaque. Never derive an id from a name or the reverse. Every span has an id; a span in pieces uses `cont`, never a repeated id.
 - Members are listed one by one (no ranges). Styles are plain CSS.
 - The fixtures in `spec/fixtures/` are part of the spec. Run `python3 -I spec/fixtures/check.py` before and after any format change.
+- Themes style the analysis (tiers by `role`, sets by position, key and tags), never the text and never by id; tier order is layer order (ADR-0011).
 - Provider fixtures are in `spec/providers/fixtures/`. Run `python3 -I spec/providers/run.py` before and after any provider change. Never hand-edit a fixture to make it pass; fix the spec first.
 
 ### Inference

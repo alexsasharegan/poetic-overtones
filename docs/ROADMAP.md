@@ -4,13 +4,14 @@
 
 ## 🟢 Now (In Progress)
 
-* **Text form (`spec/format.md`, ADR-0009):** rewritten around 47 fixtures (`spec/fixtures/`, checker `check.py`); `spec/app.md` reconciled to tiers, sets and spans. Questions FQ1 to FQ6 settled; awaiting Alex's review of the PROVISIONAL rules and FQ7 to FQ9.
+* **Text form (`spec/format.md`, ADR-0009):** rewritten around 52 fixtures (`spec/fixtures/`, checker `check.py`); `spec/app.md` reconciled to tiers, sets and spans. Questions FQ1 to FQ6 settled; awaiting Alex's review of the PROVISIONAL rules and FQ7 to FQ9.
 
 ## 🟡 Next (Queued)
 
 * **Review `spec/app.md` and `spec/format.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions.
-* **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 47).
-* **Community scheme as data:** encode the built-in scheme as a CSS style sheet over tags, settling the deck's hex inconsistencies (ADR-0005).
+* **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 52).
+* **Layering prototype:** a standalone page that paints a theme from the analysis mirror onto the text as layers (ADR-0011); settles FQ7.
+* **Community theme as data:** encode the built-in community scheme as a theme over roles and tags, settling the deck's hex inconsistencies (ADR-0005, ADR-0011).
 * **English baseline POC:** client-side JavaScript (ADR-0006).
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.
 
