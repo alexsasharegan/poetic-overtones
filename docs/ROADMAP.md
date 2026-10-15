@@ -9,7 +9,8 @@
 ## 🟡 Next (Queued)
 
 * **Review `spec/app.md` and `spec/format.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions.
-* **Provider spec for English:** word, syllable and sound tiers, in `spec/providers/` (ADR-0007).
+* **English sound tier:** needs a grapheme-aligned lexicon; the word, syllable and stress providers are specified in `spec/providers/` (ADR-0010).
+* **Lexicon builder:** offline step to turn CMUdict into the lexicon format with syllable letters.
 * **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 47).
 * **Community scheme as data:** encode the built-in scheme as a CSS style sheet over tags, settling the deck's hex inconsistencies (ADR-0005).
 * **English baseline POC:** client-side JavaScript (ADR-0006).
