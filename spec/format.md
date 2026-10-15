@@ -6,7 +6,8 @@ a document. It is the share layer. It names no programming language. The working
 
 **The fixtures in `spec/fixtures/` are part of this spec.** Each rule below cites the cases that pin it
 down. If a rule and a fixture disagree, one of them is wrong and must be fixed, not ignored. Run
-`python3 -I spec/fixtures/check.py`. The checker there is a reference, not the implementation.
+`python3 -I spec/fixtures/check.py` (the reference checker) or `npm test`, which also runs every fixture
+through the JavaScript core in `src/core/` and checks round trips (ADR-0012).
 
 ## 0. Conventions
 
@@ -97,8 +98,8 @@ Like a diamond in the sky.
 | T-01 | `<text>` holds the input text. Only `<` and `&` need escaping (B-06). | ADOPTED | 01, 09 |
 | T-02 | **Slice.** One newline right after the start tag is dropped, and the final newline together with any spaces or tabs before the end tag is dropped. This lets a block start and end on lines of its own. | ADOPTED | 01, 02 |
 | T-03 | **Dedent.** After slicing, the indentation shared by all non-blank lines is removed. Relative indentation stays. A blank line holding less whitespace than the shared indentation becomes empty. T-02 and T-03 apply to `text` and `markup`, and to text read from a file (T-04), in the same way. Exporters write both blocks flush left. | ADOPTED | 01, 02, 12, 18 |
-| T-04 | **File reference.** `<text src="poem.txt"/>`, self-closing, may stand in for the body. The path is relative to the document file, written with `/`, and has no `..`, no leading `/` or `~`, no backslash and no scheme such as `http:`. The file is not itself a document, so there is no chaining. The element must have no body. The file is UTF-8, a BOM is ignored, line ends become LF, and nothing in it is escaped. Its contents are then treated like an inline block: the final line end is dropped and the shared indentation removed (T-02, T-03), so the markup can always match it. A leading blank line stays, because no start tag precedes it. Support is optional in the first version (F-08). | ADOPTED (relative only, same rule for styles); PROVISIONAL (the rest) | 10, 18, e06 |
-| T-05 | The size limit on input text is an application rule (W-04), not a rule of the format. | ADOPTED | |
+| T-04 | **File reference.** `<text src="poem.txt"/>`, self-closing, may stand in for the body. The path is relative to the document file, written with `/`, and has no `..`, no leading `/` or `~`, no backslash and no scheme such as `http:`. The file is not itself a document, so there is no chaining. The element must have no body. The file is UTF-8, a BOM is ignored, line ends become LF, and nothing in it is escaped. Its contents are then treated like an inline block: the final line end is dropped and the shared indentation removed (T-02, T-03), so the markup can always match it. A leading blank line stays, because no start tag precedes it. Support is optional in the first version (`spec/app.md` F-08). | ADOPTED (relative only, same rule for styles); PROVISIONAL (the rest) | 10, 18, e06 |
+| T-05 | The size limit on input text is an application rule (`spec/app.md` W-04), not a rule of the format. | ADOPTED | |
 | T-06 | The input text stays out of the document block for a reason: it is never changed by markup. Whatever happens in the other blocks, the text is the text. | PROVISIONAL | e01 |
 
 ## 4. The markup block (M)
@@ -149,9 +150,9 @@ Like a diamond in the sky.
 
 | ID | Rule | Status | Cases |
 |---|---|---|---|
-| I-01 | Importing an export gives back the same document: text, spans, tiers, sets, `confirmed` lists, names, ids and order. | PROVISIONAL | |
-| I-02 | Export is canonical: blocks in the order `meta`, `text`, `markup`, `analysis`, `style`; tiers and sets in their order (tier order is layer order, A-01); undirected members in document order (A-05); spans that no set lists dropped (A-12); `text` and `markup` flush left with `xml:space="preserve"` (T-03, M-07). | PROVISIONAL | 01, 13, 15 |
-| I-03 | Import reports every problem with the line number and the rule that was broken, and never drops content silently. Warnings (B-07, B-09, S-02, empty spans, duplicate members) do not stop a load. | PROVISIONAL | e01-e23, w01-w03 |
+| I-01 | Importing an export gives back the same document: text, spans, tiers, sets, `confirmed` lists, names, ids and order. | PROVISIONAL | all valid cases, by `npm test` |
+| I-02 | Export is canonical: blocks in the order `meta`, `text`, `markup`, `analysis`, `style`; tiers and sets in their order (tier order is layer order, A-01); undirected members in document order (A-05); spans that no set lists dropped (A-12); `text` and `markup` flush left with `xml:space="preserve"` (T-03, M-07); styles written inline, a `src` replaced by the CSS it pointed to (`spec/app.md` Q19); extension and unknown blocks last, as parsed; pieces that cross written as heads and continuations, cutting the newer of two crossing spans so older ids stay (M-05). | PROVISIONAL | 01, 13, 15 |
+| I-03 | Import reports every problem with the line number and the rule that was broken, and never drops content silently. Warnings (B-07, B-09, S-02, empty spans, duplicate members) do not stop a load. | PROVISIONAL | e01-e30, w01-w03 |
 | I-04 | Import and export are the only ways a document enters or leaves the application's working copy (`spec/app.md` O-04). | ADOPTED | |
 
 ## 8. Questions

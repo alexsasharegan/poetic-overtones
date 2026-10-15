@@ -7,10 +7,13 @@ shavian2tengwar.
 
 Run them all: `python3 -I check.py` (Python 3, stdlib only). `check.py --show FILE`
 prints what the checker computed. `check.py` is a reference for the draft rules, not the
-implementation; a JavaScript loader must produce the same results.
+implementation. The JavaScript core (`src/core/`) must produce the same results: `npm test` at
+the repository root runs every fixture through both, and checks that each valid one survives
+load, save and load again unchanged.
 
 Each fixture says what it should do in a comment: `<!-- expect {json} -->` with
-`outcome`, `errors`, `warnings` and `tiers` (the text each tier member resolves to).
+`outcome`, `errors`, `warnings`, `sets` (set id to the text of each member, in order) and
+optionally `tiers` (every tier id with its role, in layer order).
 Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning.
 
 | Case | What it pins down |

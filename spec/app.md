@@ -34,7 +34,8 @@ An agent never promotes a status on its own judgment.
 | X | Extensions and platform |
 
 **Words.** "Tier" is the name for what has also been called a dimension or a layer (decided 2026-10-14).
-Earlier ADRs say "layer"; read it as "tier". A tier holds **sets**; a set lists **spans**.
+Earlier ADRs say "layer"; read it as "tier". Since ADR-0011 **layer** has one narrow meaning again: a
+visible tier as painted, in tier order. A tier holds **sets**; a set lists **spans**.
 
 ## 1. Vocabulary
 
@@ -119,6 +120,8 @@ its own style (ADR-0003, `docs/synthesis/comparison.md` section 5).
 | T-08 | The user defines tiers and sets in the application. Nothing about them is fixed by the core. | ADOPTED |
 | T-09 | Names are free text in any script and need not be unique. Ids are opaque. Nothing refers to a name, and no id is derived from one. | ADOPTED |
 | T-10 | The order of sets in a tier is kept, and a set's **position** in its tier is available to styles (`spec/format.md` A-06, S-04), so a tier can cycle styles as the user adds sets. | ADOPTED (exposed); PROVISIONAL (form) |
+| T-11 | Deleting a tier also removes it from the `reads` of other tiers, so the document stays valid (`src/core/edit.js`). | PROVISIONAL |
+| T-12 | An edit either applies completely or not at all. A refused edit changes nothing and reports the same error code a loader would (`spec/format.md`, for example `role-bad`, `key-duplicate`). | PROVISIONAL |
 
 Typical flow (not a rule): the user creates a tier "Rhyme" of kind relation, starts a set, selects the line
 ends that rhyme, and ends it; the next set takes the next position and so the next style in the tier's cycle.
@@ -166,7 +169,7 @@ Relations are first-class (P-05). They are the sets of a tier of kind `relation`
 | Y-07 | The application has a visual style editor for any set, tag or tier. It writes CSS. | ADOPTED |
 | Y-08 | A built-in theme records its credit in its own file. The community theme (the community scheme of ADR-0005) is a first-class built-in. | PROVISIONAL |
 | Y-09 | A loader never fetches anything a style names (`url(...)`, `@import`). Opening a file stays offline (F-07, `spec/format.md` S-02). | PROVISIONAL |
-| Y-10 | **Roles.** The built-in roles are `line`, `stanza`, `word`, `syllable`, `stress`, `rhyme`, `rhyme-scheme`, `alliteration`, `assonance`, `consonance` and `meter`. Any other word is allowed. A theme without a part for a tier's role styles it with its fallback. One role per tier; for a second meaning, make a second tier (`spec/format.md` A-13). | ADOPTED (one role); PROVISIONAL (the list) |
+| Y-10 | **Roles.** The built-in roles are `line`, `stanza`, `word`, `syllable`, `stress`, `foot`, `meter`, `rhyme`, `rhyme-scheme`, `repetition`, `alliteration`, `assonance`, `consonance`, `consonant` and `vowel` (the last two are what the community theme styles, `themes/README.md`). Any other word is allowed. A theme without a part for a tier's role styles it with its fallback. One role per tier; for a second meaning, make a second tier (`spec/format.md` A-13). | ADOPTED (one role); PROVISIONAL (the list) |
 | Y-11 | **Layer order is the user's.** Dragging a tier in the tier list restacks it, and the new order is saved as the order of tiers in the file (`spec/format.md` A-01, S-07). A theme does not reorder tiers. A new tier goes on top. | ADOPTED (order is the user's, saved in the file); PROVISIONAL (new tier on top) |
 | Y-12 | **Size within reason.** A theme may scale text between 0.75 and 1.5 times the base size; a larger or smaller value is clamped and the editor says so. | ADOPTED |
 
@@ -241,7 +244,7 @@ Initial channels (Y-03). Each is a CSS property a theme sets on a `set` (or on i
 | ID | Question | Current default |
 |---|---|---|
 | Q1 | When the input text changes, can annotations be kept? | They are discarded after a warning (W-03). Re-anchoring by text diff is a later option |
-| Q2 | What is a tier called? | Decided 2026-10-14: tier, with set and span. ("Dimension" and "layer" are retired) |
+| Q2 | What is a tier called? | Decided 2026-10-14: tier, with set and span. ("Dimension" is retired; "layer" now means only a painted tier, ADR-0011) |
 | Q3 | May a span be in several sets of one tier? | Yes (T-04). Nothing is exclusive |
 | Q4 | Can a set list raw character ranges, not spans? | No: sets list span ids. A span is the thing with an identity (S-02) |
 | Q5 | Should reset ever be narrower than a whole tier? | No (E-03). A scope such as a line or a selection can come later |
@@ -255,3 +258,8 @@ Initial channels (Y-03). Each is a CSS property a theme sets on a `set` (or on i
 | Q13 | How are extensions found, installed and trusted, and what is the transport between the application and an extension? | Not decided (X-04, X-05, X-07) |
 | Q14 | What is the input size limit, and in what unit? | Input text, in code points, 1,000,000 as a first guess; not a concern for the first version (W-04) |
 | Q15 | Should file references ever allow absolute paths? | No (`spec/format.md` B-11) |
+| Q16 | What names do sound tags use (`sound:ng`)? | ASCII names, mostly ARPAbet, listed in `themes/README.md`; Shavian letter names are the alternative (OPEN) |
+| Q17 | Are ids "never reused" across sessions (S-04)? A deleted id is not in the saved file, so a later session could reuse it | Within a session only, for now; either soften S-04 to "unique in the document" or record retired ids (OPEN) |
+| Q18 | How are **marks** drawn: text or a badge above or below a span, a strip per line (the community meter strip), arcs between members (R-05)? | Box-family channels still to design (Y-03, "Box (later)") (OPEN) |
+| Q19 | Should export keep a `<style src>` reference instead of writing the CSS inline? | Inline, so an exported file stands alone (`spec/format.md` I-02) (OPEN) |
+| Q20 | How is the painted text made accessible? Added characters are hidden from screen readers, and marking needs a pointer | Not designed yet (OPEN) |

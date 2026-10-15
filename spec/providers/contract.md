@@ -5,7 +5,7 @@ Authority: `spec/app.md` E-01..E-09, `spec/format.md` section on tiers, sets and
 Fixtures: `spec/providers/fixtures/`. Reference code: `reference.py`. Runner: `run.py`.
 
 A **provider** produces the contents of a tier. It is how "standard" tiers (words, syllables, stress)
-get filled in, and it follows the same contract as a provider written by a user or an extension (X-05).
+get filled in, and it follows the same contract as a provider written by a user or an extension (`spec/app.md` X-05).
 
 ## 1. Rules
 

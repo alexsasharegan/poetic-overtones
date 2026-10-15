@@ -62,4 +62,4 @@ It waits for a lexicon-builder step and is OPEN. A syllable's IPA is in the lexi
 
 * Leading-apostrophe words (`'tis`) lose the apostrophe (E-12).
 * No heteronym disambiguation: the first variant wins, and `check` flags the disagreement (E-31).
-* Capitalised proper nouns not in the lexicon are unknown, deliberately (C-06).
+* Capitalised proper nouns not in the lexicon are unknown, deliberately (`contract.md` C-06).
