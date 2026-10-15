@@ -11,7 +11,7 @@
 
 Standard tiers (lines, stanzas, words, syllables, stress) are filled by providers (app.md E-02). We need a contract that
 a user or an extension can meet too, a way to test it in any language, and a decision about where word data comes from,
-given that the good dictionaries have different licences (CMUdict BSD 2-clause, ReadLex CC BY-SA 4.0).
+given that the candidate dictionaries have different licences (ReadLex MIT, CMUdict BSD 2-clause, Wiktionary-derived data CC BY-SA).
 
 ## Decision
 
@@ -24,6 +24,6 @@ given that the good dictionaries have different licences (CMUdict BSD 2-clause, 
 ## Consequences
 
 * Tests are small, hand-written and licence-free. Packaging a real lexicon is separate offline work (a builder that adds syllable alignment to CMUdict).
-* Share-alike data (ReadLex) would infect whatever it is merged into, so it stays a separate, optional data file.
+* Share-alike data (Wiktionary-derived) would carry its licence into whatever it is merged into, so it stays a separate, optional data file. ReadLex and CMUdict are permissive.
 * A hand-edited tier can feed a later provider (`x-as`), so people's corrections are respected.
 * The provider id form is still open (format.md FQ8).

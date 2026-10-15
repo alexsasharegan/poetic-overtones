@@ -60,7 +60,8 @@ word<TAB>letters|ipa|stress letters|ipa|stress ...
 
 Real lexicons that could fill this format, and what they require:
 
-* CMUdict: BSD 2-clause. ARPAbet phones with stress digits 0/1/2, variants as `WORD(1)`. It has no letter-to-syllable alignment; building one is a separate, offline lexicon-builder step.
-* ReadLex (shavian.info): CC BY-SA 4.0, which is share-alike. Anything derived from it carries the same licence, so it cannot be mixed silently into a differently-licensed data file.
+* ReadLex (github.com/Shavian-info/readlex): MIT, per the `LICENSE` file in the repository. Rhotic Received Pronunciation IPA with stress marks, C5 part of speech and BNC frequency. No syllable boundaries and no Latin-letter alignment.
+* CMUdict: BSD 2-clause. ARPAbet phones with stress digits 0/1/2, variants as `WORD(1)`. No letter-to-syllable alignment.
+* Wiktionary-derived data (for example kaikki.org extracts): Wiktionary text is, to the best of our knowledge, CC BY-SA, which is share-alike. Check before merging it into a differently-licensed data file. IPA syllable dots are present in its pronunciations.
 
-Neither is bundled by this spec. Fixtures use small hand-written lexicons.
+The project's own repository is MIT (Alex). Neither lexicon is bundled by this spec. Fixtures use small hand-written lexicons.
