@@ -189,7 +189,7 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 | F-01 | There are three kinds of document: **documents**, **schemes** (style sheets) and **tier definitions** (reusable tiers with their sets, names and tags, but no spans). | PROVISIONAL |
 | F-02 | Every kind has a **text form**: plain text in UTF-8 that a person can read and edit in any text editor. Export writes it, import reads it. This is the share layer (P-09). | ADOPTED |
 | F-03 | A document holds the input text, the spans, the tiers with their sets (with origin), the styles and the view. | PROVISIONAL |
-| F-04 | Conformance is tested with fixtures. The text form has them in `spec/fixtures/` (35 cases and a reference checker); provider, reset and round-trip fixtures are not yet written. An implementation in any language can run them. | PROVISIONAL |
+| F-04 | Conformance is tested with fixtures. The text form has them in `spec/fixtures/` (40 cases and a reference checker); provider, reset and round-trip fixtures are not yet written. An implementation in any language can run them. | PROVISIONAL |
 | F-05 | Requirements on the text form: (a) a person can read it without a manual; (b) plain text with a stable order, one item per line where possible, so a diff or version-control history reads well; (c) comments are allowed; (d) it names its format and version; (e) import of an export gives back the same document, including origins, orphans and the view; (f) import reports errors with line numbers and never drops content silently. | PROVISIONAL |
 | F-06 | The grammar of the text form is `spec/format.md`: XML-based, sibling blocks, no CDATA (Q9 resolved). | PROVISIONAL |
 | F-07 | Opening a document never runs code. The text form holds data only. | PROVISIONAL |
