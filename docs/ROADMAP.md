@@ -9,14 +9,14 @@
 ## 🟡 Next (Queued)
 
 * **Review `spec/app.md` and `spec/format.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions.
-* **English sound tier:** needs a grapheme-aligned lexicon; the word, syllable and stress providers are specified in `spec/providers/` (ADR-0010).
-* **Lexicon builder:** offline step to turn CMUdict into the lexicon format with syllable letters.
 * **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 47).
 * **Community scheme as data:** encode the built-in scheme as a CSS style sheet over tags, settling the deck's hex inconsistencies (ADR-0005).
 * **English baseline POC:** client-side JavaScript (ADR-0006).
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.
 
 ## ⚪ Later
+
+* **Lexicon-based providers (extension territory, not MVP):** the English word, syllable and stress providers are specified (`spec/providers/`, ADR-0010) and stay parked. Still to do when wanted: a lexicon builder (ReadLex is MIT, syllabify its IPA; letter alignment unsolved), and an English sound tier. The MVP needs no lexicon: syllables and stress are marked by hand (ADR-0004), and line, stanza and word need no dictionary.
 
 * **Tengwar view:** per-glyph and per-mark styling through shavian2tengwar; test mark placement first.
 * **Stack beyond the POC, hosting and name:** see `docs/synthesis/stack-and-name-options.md`.
