@@ -1,0 +1,13 @@
+<!-- E30: a DOCTYPE
+     There is no DOCTYPE (B-03). A DOCTYPE could declare entities and defaults that change
+     the text without a trace, so a loader rejects it. -->
+<!-- expect {"outcome": "error", "errors": ["doctype-not-allowed"]} -->
+<!DOCTYPE pxml>
+
+<text>
+one
+</text>
+
+<markup>
+<span id="1">one</span>
+</markup>

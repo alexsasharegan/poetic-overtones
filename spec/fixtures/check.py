@@ -187,6 +187,8 @@ def load(path, warnings):
     wrapped = s if re.match(r'<pxml[\s>/]', probe) else '<pxml>' + s + '</pxml>'
     if '<![CDATA[' in re.sub(r'<!--.*?-->', '', wrapped, flags=re.S):
         raise Fail('cdata-not-allowed')
+    if re.search(r'<!DOCTYPE', re.sub(r'<!--.*?-->', '', wrapped, flags=re.S), re.I):
+        raise Fail('doctype-not-allowed')
     try:
         root = ET.fromstring(wrapped, parser=ET.XMLParser(
             target=ET.TreeBuilder(insert_comments=True, insert_pis=True)))

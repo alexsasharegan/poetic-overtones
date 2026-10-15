@@ -35,7 +35,7 @@ Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning
 | 18 indented-src | a text file is dedented like an inline block |
 | 19 key | the `key` of a set: the provider's own name for the sets it owns |
 | 20 roles and layers | `role` on tiers (one each, not unique, optional); tier order is layer order, later on top; a theme that names no ids |
-| e01-e29 | files that must be rejected, each for one reason (e15 is CDATA, e29 a bad role) |
+| e01-e30 | files that must be rejected, each for one reason (e15 is CDATA, e29 a bad role, e30 a DOCTYPE) |
 | w01-w03 | files that load but are reported: control character, `url()` in CSS, unknown attribute |
 
 Model in one line: a **tier** (a dimension) holds **sets**; a **set** lists **spans** by id;
