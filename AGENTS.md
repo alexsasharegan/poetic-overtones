@@ -37,7 +37,7 @@ Load Alex's user-level `project-docs` skill before starting any task. It sets ou
 ├── scansion.html          # prototype: Shavian scansion score, one self-contained page (the first preset)
 ├── README.md              # what the prototype shows, its markup, its sound rules
 ├── sources/community/     # the community PDF: GITIGNORED until Alex decides to commit it (ADR-0005)
-├── spec/                  # THE AUTHORITY on what the application is: spec/app.md
+├── spec/                  # THE AUTHORITY on what the application is: app.md; the text form: format.md
 ├── docs/
 │   ├── adr/               #   Architecture Decision Records + index
 │   ├── projects/          #   NNNN-title/ README.md, TASKS.md, LOG.md

@@ -9,7 +9,7 @@
 ## 🟡 Next (Queued)
 
 * **Review `spec/app.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions (section 13).
-* **Text form grammar:** `spec/format.md`, with overlapping tiers in mind (spec Q9, ADR-0008).
+* **Text form (`spec/format.md`):** first shape drafted (blocks, one marked copy of the text per tier); awaiting Alex's reaction. Then a formal grammar and conformance fixtures (spec Q9, ADR-0008).
 * **Provider spec for English:** word, syllable and sound tiers, in `spec/providers/` (ADR-0007).
 * **JSON fixtures** for providers, reset and editing (`spec/fixtures/`).
 * **Community scheme as data:** encode the built-in scheme, settling the deck's hex inconsistencies (ADR-0005).

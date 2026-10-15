@@ -61,3 +61,13 @@ The repo is `poetic-parser` for now. Ideas, none checked for existing projects o
 | Loom | Weaving layers together |
 | Lay | A nod to the Lay of Nimrodel and to layers |
 | poetic-parser | Keep the current name |
+
+## Browser POC: files and storage (Alex, 2026-10-14)
+
+- **Open and save through the text form.** The browser POC reads a chosen file with the browser's File API and
+  runs it through the import engine. It writes the text form back out as a download through the export engine
+  (`spec/app.md` O-04, `spec/format.md`).
+- **Working copy.** IndexedDB is the browser's built-in persistent store. It is not an SQL database; it is an
+  object store with indexes. SQLite compiled to WebAssembly is SQL, and can keep its data in the browser's
+  storage. Either way, keep a small storage interface of our own, so an implementation can be swapped later
+  (`spec/app.md` O-02 names no technology). Which library to use is not decided.
