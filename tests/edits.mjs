@@ -63,6 +63,19 @@ Twinkle, twinkle, little star,
   check('Shavian round trip', save(load(save(doc)).doc) === save(doc));
 }
 
+// 3b. two spans over exactly the same text keep their nesting through saves
+{
+  const src = `<text>
+high
+</text>
+<markup>
+<span id="f4"><span id="u4">high</span></span>
+</markup>
+<analysis><tier id="t"><set id="s" members="f4,u4"/></tier></analysis>`;
+  const once = save(load(src).doc);
+  check('identical spans: stable nesting', save(load(once).doc) === once && once.includes('<span id="f4"><span id="u4">'), once.split('\n')[5]);
+}
+
 // 4. errors carry a line number
 {
   let err = null;

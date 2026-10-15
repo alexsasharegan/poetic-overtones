@@ -175,7 +175,7 @@ export function load(source, { readFile = null } = {}) {
     ids.set(id, what);
   };
   const heads = new Map(), conts = [];
-  frags.sort((x, y) => x.start - y.start || y.end - x.end);
+  frags.sort((x, y) => x.start - y.start || y.end - x.end || x.seq - y.seq);
   for (const f of frags) {
     const a = newidx[f.start], b = newidx[f.end];
     claim(f.id, 'span', f.line);
@@ -284,9 +284,11 @@ function flatten(markup, warnings) {
       if (id === undefined) throw new PxmlError('span-no-id', '', ch.line);
       for (const v of [id, cont]) if (v !== undefined && !ID_RE.test(v)) throw new PxmlError('id-bad', v, ch.line);
       if (Object.keys(ch.attrs).some((k) => k !== 'id' && k !== 'cont')) warn(warnings, 'span-extra-attribute', ch.line);
-      const start = raw.length;
+      const start = raw.length, seq = frags.length;
+      const f = { id, cont, start, end: raw.length, line: ch.line, seq };
+      frags.push(f);                  // in document order: an outer span before the spans inside it
       walk(ch);
-      frags.push({ id, cont, start, end: raw.length, line: ch.line });
+      f.end = raw.length;
     }
   };
   walk(markup);

@@ -228,6 +228,19 @@ export class Editor {
       if (yes) set.confirmed.push(spanId);
     });
   }
+  // Switch the active theme: the named style block that is not disabled (format.md S-05).
+  // Pass null to turn every named theme off. Unnamed blocks (a document's own tweaks) stay as they are.
+  useTheme(name) {
+    this.change(() => {
+      const named = this.doc.styles.filter((st) => st.attrs.name !== undefined);
+      if (name !== null && !named.some((st) => st.attrs.name === name)) throw new PxmlError('edit-unknown-theme', name);
+      for (const st of named) {
+        if (st.attrs.name === name) delete st.attrs.disabled; else st.attrs.disabled = 'true';
+      }
+    });
+  }
+  get themes() { return this.doc.styles.filter((st) => st.attrs.name !== undefined).map((st) => ({ name: st.attrs.name, active: st.attrs.disabled !== 'true' })); }
+
   // Drop spans that no set lists (A-12 does this on export anyway).
   prune() {
     this.change(() => {

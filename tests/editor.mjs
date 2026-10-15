@@ -91,6 +91,17 @@ check(`undo all (${n} steps) restores the original`, save(doc) === original);
 while (ed.redo()) n--;
 check('redo all restores the end state', save(doc) === end && n === 0);
 
+// themes (S-05)
+{
+  const { doc: td } = load(readFileSync(new URL('../spec/fixtures/16-disabled.pxml', import.meta.url), 'utf8'));
+  const te = new Editor(td);
+  te.useTheme('dark');
+  check('useTheme switches the active theme', JSON.stringify(te.themes) === JSON.stringify([{ name: 'light', active: false }, { name: 'dark', active: true }]));
+  check('unknown theme rejected', throwsCode(() => te.useTheme('nope'), 'edit-unknown-theme'));
+  te.undo();
+  check('theme switch undoes', te.themes[0].active && !te.themes[1].active);
+}
+
 // code points and UTF-16
 const sh = '𐑑𐑢 star';
 check('cpIndex/utf16Index', cpIndex(sh, 4) === 2 && utf16Index(sh, 2) === 4 && cpIndex(sh, sh.length) === 7);
