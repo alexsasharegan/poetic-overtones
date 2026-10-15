@@ -1,0 +1,19 @@
+<!-- Provider fixture P02: words (english.word@1). Letters, marks and digits make words; an apostrophe (straight or curly) or a hyphen between two such characters stays inside the word; quotes, dashes, ellipses and other punctuation do not. A leading apostrophe is not part of the word (tis). Non-Latin letters count as letters. -->
+
+<text xml:space="preserve">
+"Don't go," said Mary-Ann; it’s 1806 — o'er the moon-lit hill... 'tis naïve.
+</text>
+
+<markup xml:space="preserve">
+"<span id="1">Don't</span> <span id="2">go</span>," <span id="3">said</span> <span id="4">Mary-Ann</span>; <span id="5">it’s</span> <span id="6">1806</span> — <span id="7">o'er</span> <span id="8">the</span> <span id="9">moon-lit</span> <span id="10">hill</span>... '<span id="11">tis</span> <span id="12">naïve</span>.
+</markup>
+
+<analysis>
+  <tier id="t1" name="Words" provider="english.word@1">
+    <set id="s1" name="Word" key="word" members="1,2,3,4,5,6,7,8,9,10,11,12"/>
+  </tier>
+</analysis>
+
+<x-lexicon>
+
+</x-lexicon>

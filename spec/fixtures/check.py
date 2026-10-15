@@ -299,7 +299,7 @@ def load(path, warnings):
                 raise Fail('provider-bad', prov)
             tiers[tid] = {'id': tid, 'name': tr.get('name'), 'kind': kind, 'directed': is_directed,
                           'provider': prov, 'reads': tr.get('reads', ''),
-                          'disabled': tr.get('disabled') == 'true', 'sets': []}
+                          'disabled': tr.get('disabled') == 'true', 'attrs': dict(tr.attrib), 'sets': []}
             keys = set()
             for st in (x for x in tr if isinstance(x.tag, str)):
                 if st.tag != 'set':

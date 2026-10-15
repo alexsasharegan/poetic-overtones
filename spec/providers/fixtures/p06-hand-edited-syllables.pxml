@@ -1,0 +1,31 @@
+<!-- Provider fixture P06: a person re-split "wonder" into won-d-er. The syllable tier is hand-made here (x-as says which provider it stands in for), and the stress tier reads it. The syllables of "wonder" no longer match the lexicon entry (three pieces, two syllables), so they are not labelled: they go in "Unmarked". "above" still matches and is labelled. -->
+
+<text xml:space="preserve">
+wonder above
+</text>
+
+<markup xml:space="preserve">
+<span id="1"><span id="2">won</span><span id="3">d</span><span id="4">er</span></span> <span id="5"><span id="6">a</span><span id="7">bove</span></span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Words" provider="english.word@1">
+    <set id="s1" name="Word" key="word" members="1,5"/>
+  </tier>
+  <tier id="t2" name="Syllables" x-as="english.syllable" reads="t1">
+    <set id="s2" name="Syllable" key="syllable" members="2,3,4,6,7"/>
+    <set id="s3" name="Unknown word" key="unknown" tags="status:unknown" members=""/>
+  </tier>
+  <tier id="t3" name="Stress" provider="english.stress@1" reads="t1 t2">
+    <set id="s4" name="primary" key="primary" tags="stress:primary" members="7"/>
+    <set id="s5" name="secondary" key="secondary" tags="stress:secondary" members=""/>
+    <set id="s6" name="unstressed" key="unstressed" tags="stress:unstressed" members="6"/>
+    <set id="s7" name="Check: other readings" key="check" tags="status:check" members=""/>
+    <set id="s8" name="Unmarked" key="unmarked" tags="status:unmarked" members="2,3,4"/>
+  </tier>
+</analysis>
+
+<x-lexicon>
+wonder	won|wʌn|1 der|dɚ|0
+above	a|ə|0 bove|bʌv|1
+</x-lexicon>

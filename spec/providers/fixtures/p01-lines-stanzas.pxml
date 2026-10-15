@@ -1,0 +1,36 @@
+<!-- Provider fixture P01: lines and stanzas (text.line@1, text.stanza@1). Language-neutral. A line is a run between line ends, trimmed of leading and trailing whitespace; a blank line makes no line; a stanza is a run of lines between blank lines (one blank line or several). -->
+
+<text xml:space="preserve">
+Roses are red,
+Violets are blue,
+
+Sugar is sweet,
+  and so are you.
+
+
+The end.
+</text>
+
+<markup xml:space="preserve">
+<span id="1"><span id="2">Roses are red,</span>
+<span id="3">Violets are blue,</span></span>
+
+<span id="4"><span id="5">Sugar is sweet,</span>
+  <span id="6">and so are you.</span></span>
+
+
+<span id="7">The end.</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Lines" provider="text.line@1">
+    <set id="s1" name="Line" key="line" members="2,3,5,6,7"/>
+  </tier>
+  <tier id="t2" name="Stanzas" provider="text.stanza@1">
+    <set id="s2" name="Stanza" key="stanza" members="1,4,7"/>
+  </tier>
+</analysis>
+
+<x-lexicon>
+
+</x-lexicon>

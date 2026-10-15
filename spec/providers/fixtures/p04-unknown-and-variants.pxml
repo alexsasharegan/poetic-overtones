@@ -1,0 +1,33 @@
+<!-- Provider fixture P04: honesty. A word that is not in the lexicon is not guessed: it goes in the "Unknown word" set and gets no syllables and no stress. A word with several readings whose stress differs ("present", verb or noun) uses the first reading and is listed in "Check: other readings". -->
+
+<text xml:space="preserve">
+Nimrodel, they present the present.
+</text>
+
+<markup xml:space="preserve">
+<span id="1">Nimrodel</span>, <span id="2">they</span> <span id="3"><span id="4">pre</span><span id="5">sent</span></span> <span id="6">the</span> <span id="7"><span id="8">pre</span><span id="9">sent</span></span>.
+</markup>
+
+<analysis>
+  <tier id="t1" name="Words" provider="english.word@1">
+    <set id="s1" name="Word" key="word" members="1,2,3,6,7"/>
+  </tier>
+  <tier id="t2" name="Syllables" provider="english.syllable@1" reads="t1">
+    <set id="s2" name="Syllable" key="syllable" members="2,4,5,6,8,9"/>
+    <set id="s3" name="Unknown word" key="unknown" tags="status:unknown" members="1"/>
+  </tier>
+  <tier id="t3" name="Stress" provider="english.stress@1" reads="t1 t2">
+    <set id="s4" name="primary" key="primary" tags="stress:primary" members="2,5,9"/>
+    <set id="s5" name="secondary" key="secondary" tags="stress:secondary" members=""/>
+    <set id="s6" name="unstressed" key="unstressed" tags="stress:unstressed" members="4,6,8"/>
+    <set id="s7" name="Check: other readings" key="check" tags="status:check" members="3,7"/>
+    <set id="s8" name="Unmarked" key="unmarked" tags="status:unmarked" members=""/>
+  </tier>
+</analysis>
+
+<x-lexicon>
+they	they|ðeɪ|1
+present	pre|prɪ|0 sent|zɛnt|1
+present	pres|prɛ|1 ent|zənt|0
+the	the|ðə|0
+</x-lexicon>
