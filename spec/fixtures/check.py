@@ -19,7 +19,8 @@ PROVIDER_RE = re.compile(r'[a-z][a-z0-9.-]*@[0-9]+')
 BLOCKS = ('meta', 'text', 'markup', 'analysis', 'style')
 TIER_ATTRS = {'id', 'name', 'kind', 'directed', 'provider', 'reads', 'disabled'}
 STYLE_ATTRS = {'name', 'disabled', 'src'}
-SET_ATTRS = {'id', 'name', 'members', 'confirmed', 'tags'}
+SET_ATTRS = {'id', 'name', 'key', 'members', 'confirmed', 'tags'}
+KEY_RE = re.compile(r'[a-z][a-z0-9_]*')
 TAG_RE = re.compile(r'[A-Za-z0-9_.:+-]+')
 
 
@@ -169,7 +170,8 @@ def parse_ids(value):
     return out
 
 
-def check(path, warnings):
+def load(path, warnings):
+    """Parse and validate one file. Returns the model: text, heads, tiers, sets, x-blocks."""
     base = os.path.dirname(os.path.abspath(path))
     with open(path, 'rb') as f:
         data = f.read()
@@ -189,7 +191,7 @@ def check(path, warnings):
     except ET.ParseError as e:
         raise Fail('xml-not-wellformed', str(e))
 
-    blocks, css = {}, []
+    blocks, css, xblocks = {}, [], {}
     for ch in root:
         if not isinstance(ch.tag, str):
             continue          # comments and processing instructions between blocks
@@ -200,7 +202,9 @@ def check(path, warnings):
                 raise Fail('block-duplicate', ch.tag)
             else:
                 blocks[ch.tag] = ch
-        elif not ch.tag.startswith('x-'):
+        elif ch.tag.startswith('x-'):
+            xblocks.setdefault(ch.tag, []).append(ch)
+        else:
             warnings.append('unknown-block')
     if 'text' not in blocks:
         raise Fail('block-missing-text')
@@ -293,7 +297,10 @@ def check(path, warnings):
             prov = tr.get('provider')
             if prov is not None and not PROVIDER_RE.fullmatch(prov):
                 raise Fail('provider-bad', prov)
-            tiers[tid] = {'reads': tr.get('reads', '')}
+            tiers[tid] = {'id': tid, 'name': tr.get('name'), 'kind': kind, 'directed': is_directed,
+                          'provider': prov, 'reads': tr.get('reads', ''),
+                          'disabled': tr.get('disabled') == 'true', 'sets': []}
+            keys = set()
             for st in (x for x in tr if isinstance(x.tag, str)):
                 if st.tag != 'set':
                     raise Fail('analysis-unknown-element', st.tag)
@@ -305,6 +312,13 @@ def check(path, warnings):
                 if not ID_RE.fullmatch(setid):
                     raise Fail('id-bad', setid)
                 claim(setid, 'set')
+                key = st.get('key')
+                if key is not None:
+                    if not KEY_RE.fullmatch(key):
+                        raise Fail('key-bad', key)
+                    if key in keys:
+                        raise Fail('key-duplicate', key)
+                    keys.add(key)
                 members = parse_ids(st.get('members', ''))
                 for m in members:
                     if m in cont_ids:
@@ -318,10 +332,13 @@ def check(path, warnings):
                         raise Fail('tag-bad', tg)
                 if not is_directed:      # an undirected set is unordered: report document order
                     members = sorted(members, key=lambda m: heads[m][0][0])
-                for c in parse_ids(st.get('confirmed', '')):
+                confirmed = parse_ids(st.get('confirmed', ''))
+                for c in confirmed:
                     if c not in members:
                         raise Fail('confirmed-not-member', c)
                 sets[setid] = [span_text(m) for m in members]
+                tiers[tid]['sets'].append({'id': setid, 'name': st.get('name'), 'key': key, 'members': members,
+                                           'confirmed': confirmed, 'tags': st.get('tags', '').split()})
         for tid, info in tiers.items():
             for r in re.split(r'[,\s]+', info['reads'].strip()):
                 if r and r not in tiers:
@@ -329,7 +346,11 @@ def check(path, warnings):
 
     if re.search(r'url\s*\(|@import', '\n'.join(css), re.I):
         warnings.append('style-url')
-    return sets
+    return {'text': text, 'heads': heads, 'tiers': list(tiers.values()), 'sets': sets, 'xblocks': xblocks}
+
+
+def check(path, warnings):
+    return load(path, warnings)['sets']
 
 
 def run(path):

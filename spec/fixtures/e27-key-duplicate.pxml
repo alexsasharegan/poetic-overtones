@@ -1,0 +1,18 @@
+<!-- E27: two sets with the same key in one tier
+     A key names one set of its tier. -->
+<!-- expect {"outcome": "error", "errors": ["key-duplicate"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="T">
+    <set id="s1" key="a" members="1"/>
+    <set id="s2" key="a" members="2"/>
+  </tier>
+</analysis>

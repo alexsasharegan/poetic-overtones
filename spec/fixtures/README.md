@@ -33,7 +33,8 @@ Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning
 | 16 disabled | saved view state: `disabled="true"` on tiers and style blocks |
 | 17 style-src | `<style src="..."/>`, same rules as `<text src>` |
 | 18 indented-src | a text file is dedented like an inline block |
-| e01-e26 | files that must be rejected, each for one reason (e15 is CDATA) |
+| 19 key | the `key` of a set: the provider's own name for the sets it owns |
+| e01-e28 | files that must be rejected, each for one reason (e15 is CDATA) |
 | w01-w03 | files that load but are reported: control character, `url()` in CSS, unknown attribute |
 
 Model in one line: a **tier** (a dimension) holds **sets**; a **set** lists **spans** by id;

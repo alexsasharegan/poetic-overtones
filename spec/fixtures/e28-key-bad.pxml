@@ -1,0 +1,17 @@
+<!-- E28: a key with capitals
+     Keys are lower-case letters, digits and underscore, starting with a letter. -->
+<!-- expect {"outcome": "error", "errors": ["key-bad"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="T">
+    <set id="s1" key="Primary" members="1"/>
+  </tier>
+</analysis>

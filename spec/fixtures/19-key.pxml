@@ -1,0 +1,21 @@
+<!-- Case 19: the key of a set.
+     A provider that resets a tier must know which of the tier's sets it owns, and names are
+     free text. So a set may carry a key: the provider's own name for that set (lower-case
+     letters, digits, underscore; unique within the tier). Sets without a key are the user's
+     and a reset never touches them. -->
+<!-- expect {"sets": {"s1": ["one"], "s2": ["two"]}} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Stress" provider="english.stress@1">
+    <set id="s1" name="primary" key="primary" members="1"/>
+    <set id="s2" name="Mine" members="2"/>
+  </tier>
+</analysis>
