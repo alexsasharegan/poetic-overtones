@@ -23,11 +23,11 @@ Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning
 | 06 provider | provider-filled tiers, `reads`, `confirmed`, a hand-made tier, one span in many tiers, ranges |
 | 07 relations | alliteration and repeated rime over the same words |
 | 08 group | `group` for dimensions made of several tiers; default channel from the name |
-| 09 entities | XML escapes, numeric references, CDATA |
+| 09 entities | XML escapes and numeric references; no CDATA |
 | 10 text-src | `<text src="..."/>`, self-closing, relative only |
 | 11 unicode | code-point offsets (astral Shavian), combining mark alone, Private Use |
 | 12 explicit root | the `<pxml>` root form, with an XML declaration |
-| e01-e14 | files that must be rejected, each for one reason |
+| e01-e15 | files that must be rejected, each for one reason |
 | w01-w04 | files that load but are reported: control character, `url()` in CSS, unknown tier attribute, lossy slug |
 
 Poems used are in the public domain (Jane Taylor, Milton, nursery rhymes). Do not add

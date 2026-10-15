@@ -1,0 +1,13 @@
+<!-- E15: a CDATA section
+     CDATA is not part of the format, anywhere. Escape with &lt; &amp; or numeric
+     references, or move the text into a file and reference it with <text src="..."/>.
+     A comment may still mention it; only a real section is rejected. -->
+<!-- expect {"outcome": "error", "errors": ["cdata-not-allowed"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <![CDATA[two]]>
+</markup>

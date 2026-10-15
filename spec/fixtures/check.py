@@ -163,6 +163,8 @@ def check(path, warnings):
     s = re.sub(r'\A\s*<\?xml[^>]*\?>', '', src)
     probe = re.sub(r'<!--.*?-->', '', s, flags=re.S).lstrip()
     wrapped = s if re.match(r'<pxml[\s>/]', probe) else '<pxml>' + s + '</pxml>'
+    if '<![CDATA[' in re.sub(r'<!--.*?-->', '', wrapped, flags=re.S):
+        raise Fail('cdata-not-allowed')
     try:
         root = ET.fromstring(wrapped)
     except ET.ParseError as e:

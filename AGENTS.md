@@ -64,6 +64,14 @@ Load Alex's user-level `project-docs` skill before starting any task. It sets ou
 
 Stand-off tiers over tokens (ADR-0003; ADR-0007 renames layers to tiers). A change to tokenization, the tier schema, how tiers depend on each other, or how schemes bind to labels needs an ADR. The prototype's text markup (`*` before a stressed syllable, `.` manual split, `-` compound, `·` namer dot) is defined in `README.md`; it stays as an import and export format.
 
+### File format invariants
+
+Decided by Alex; do not relax them on your own judgment.
+
+- **No CDATA, anywhere.** The text form is XML-based, but `<![CDATA[ ... ]]>` is not part of it and a loader rejects it. Escape with `&lt;` `&amp;` or numeric references, or keep the text in a file and reference it with a self-closing `<text src="..."/>` (fixtures `09`, `10`, `e15`).
+- Markup follows the XML spec, not HTML5 leniency, and uses JSX-style self-closing tags (`<tag ... />`).
+- The fixtures in `spec/fixtures/` are part of the spec. Run `python3 -I spec/fixtures/check.py` before and after any format change.
+
 ### Inference
 
 Tools may suggest labels. Each label records who set it (inferred, with its source, or human). Views must show the difference. Never present an inferred label as confirmed (ADR-0004). The first prototype's rule (any full vowel is stressed) is known to be wrong; do not reuse it.

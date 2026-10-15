@@ -32,9 +32,9 @@ Like a diamond in the sky.
 	<tier name="Rhyme B" channel="r2" members="7,8"/>
 </analysis>
 
-<style><![CDATA[
+<style>
 	  .A  { background: #fdebd0; }
 	  .B  { background: #d6e9ff; }
 	  .r1 { color: #b3261e; font-weight: 700; }
 	  .r2 { color: #1b5fa8; font-weight: 700; }
-]]></style>
+</style>

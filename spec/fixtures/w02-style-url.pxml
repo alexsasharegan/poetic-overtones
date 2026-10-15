@@ -14,7 +14,7 @@ one two
   <tier name="T" channel="t" members="1"/>
 </analysis>
 
-<style><![CDATA[
+<style>
   .t { background: url("https://example.com/x.png"); }
   @import "https://example.com/y.css";
-]]></style>
+</style>
