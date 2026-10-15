@@ -5,7 +5,7 @@
 ## 🟢 Now (In Progress)
 
 * **Core library (`src/core/`, ADR-0012):** loader, model and canonical export in plain ES modules; passes all 53 fixtures and 23 round trips. Editing operations with undo and redo are in `edit.js` (`tests/editor.mjs`).
-* **App (`app/`, `docs/ui-plan.md`):** steps 1 and 2 done: open, render with `src/render/paint.js`, restack and toggle tiers, switch themes, add tiers and sets, mark selected text, undo, save. Next: step 3, tier and set details.
+* **App (`app/`, `docs/ui-plan.md`):** steps 1 and 2 done: open, render with `src/render/paint.js`, restack and toggle tiers, switch themes, add tiers and sets, mark selected text, undo, save. Step 3 (tier and set details, one-click confirm) done too. Next: step 4, selection helpers.
 
 ## 🟡 Next (Queued)
 

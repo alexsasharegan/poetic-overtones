@@ -43,7 +43,7 @@ function open(source, name, readFile = null) {
 // Run an edit; report a refusal instead of throwing.
 function act(fn, done) {
   try { const out = fn(); render(); if (done) status(done); return out; }
-  catch (e) { if (!(e instanceof PxmlError)) throw e; status(`Not done: ${e.message}`, true); }
+  catch (e) { if (!(e instanceof PxmlError)) throw e; render(); status(`Not done: ${e.message}`, true); }   // re-render so fields show the real values
 }
 
 function render() {
@@ -75,45 +75,90 @@ function render() {
   const box = $('sets');
   box.replaceChildren();
   const tier = doc.tiers.find((t) => t.id === selTier);
-  if (!tier) { box.innerHTML = '<p class="hint">Select a tier to see its sets.</p>'; return; }
-  const h = document.createElement('h3');
-  h.textContent = `Sets in ${tier.attrs.name ?? tier.id}`;
-  box.append(h);
+  if (!tier) { box.innerHTML = '<p class="hint">Select a tier to see its details and sets.</p>'; return; }
+  box.append(tierDetails(tier));
   if (selSet && !tier.sets.some((s) => s.id === selSet)) selSet = null;
-  for (const s of tier.sets) {
-    const div = document.createElement('div');
-    div.className = 'set' + (s.id === selSet ? ' selected' : '');
-    div.innerHTML = `<header><strong>${esc(s.attrs.name ?? s.id)}</strong>${s.attrs.tags ? ` <span class="hint">${esc(s.attrs.tags)}</span>` : ''}<span class="count">${s.members.length}</span></header>`;
-    div.querySelector('header').onclick = () => { selSet = s.id; render(); };
-    const ul = document.createElement('ul');
-    for (const m of s.members) {
-      const li = document.createElement('li');
-      if (tier.attrs.provider && !s.confirmed.includes(m)) li.className = 'inferred';
-      li.innerHTML = `<span>${esc(spanText(doc, m))}</span><button title="Remove from set">×</button>`;
-      li.querySelector('button').onclick = () => act(() => ed.removeMember(s.id, m));
-      ul.append(li);
-    }
-    div.append(ul);
-    box.append(div);
-  }
+  tier.sets.forEach((s, k) => box.append(setCard(tier, s, k)));
   const form = document.createElement('form');
   form.className = 'inline';
   form.innerHTML = '<input name="name" placeholder="New set name"><button>Add set</button>';
   form.onsubmit = (ev) => {
     ev.preventDefault();
     const name = form.elements.name.value.trim();
-    selSet = act(() => ed.addSet(tier.id, { name: name || undefined })) ?? selSet;
-    render();
+    const id = act(() => ed.addSet(tier.id, { name: name || undefined }));
+    if (id) { selSet = id; render(); }
   };
   box.append(form);
-  const hint = document.createElement('p');
-  hint.className = 'hint';
-  hint.textContent = selSet ? 'Select text in the poem and press M (or Mark) to add it to the selected set.' : 'Select a set, then select text and press M to mark it.';
   const mark = document.createElement('button');
   mark.textContent = 'Mark selection';
   mark.disabled = !selSet;
   mark.onclick = markSelection;
+  const hint = document.createElement('p');
+  hint.className = 'hint';
+  hint.textContent = selSet ? 'Select text in the poem and press M (or Mark) to add it to the selected set.' : 'Select a set, then select text and press M to mark it.';
   box.append(mark, hint);
+}
+
+// Tier details (ui-plan step 3): name, role, kind, direction, delete. Changes apply on change.
+function tierDetails(tier) {
+  const f = document.createElement('form');
+  f.className = 'details';
+  const a = tier.attrs;
+  f.innerHTML = `<h3>Tier</h3>
+    <label>Name <input name="name" value="${esc(a.name ?? '')}"></label>
+    <label>Role <input name="role" value="${esc(a.role ?? '')}" size="10" title="What the tier is about; themes find tiers by role"></label>
+    <label>Kind <select name="kind"><option value="label">label</option><option value="relation" ${a.kind === 'relation' ? 'selected' : ''}>relation</option></select></label>
+    <label><input type="checkbox" name="directed" ${a.directed === 'true' ? 'checked' : ''} ${a.kind === 'relation' ? '' : 'disabled'}> directed</label>
+    ${a.provider ? `<span class="hint">filled by ${esc(a.provider)}</span>` : ''}
+    <button type="button" name="delete" class="danger">Delete tier</button>`;
+  const el = f.elements;
+  el.name.onchange = () => act(() => ed.setTier(tier.id, { name: el.name.value.trim() }));
+  el.role.onchange = () => act(() => ed.setTier(tier.id, { role: el.role.value.trim() }));
+  el.kind.onchange = () => act(() => ed.setTier(tier.id, { kind: el.kind.value, directed: el.kind.value === 'relation' ? a.directed : undefined }));
+  el.directed.onchange = () => act(() => ed.setTier(tier.id, { directed: el.directed.checked ? 'true' : undefined }));
+  el.delete.onclick = () => act(() => ed.removeTier(tier.id), `Deleted tier ${a.name ?? tier.id}. Undo brings it back.`);
+  f.onsubmit = (ev) => ev.preventDefault();
+  return f;
+}
+
+// One set: select, rename, tags, reorder, delete; its members, with confirm for inferred ones.
+function setCard(tier, s, k) {
+  const doc = ed.doc;
+  const div = document.createElement('div');
+  div.className = 'set' + (s.id === selSet ? ' selected' : '');
+  const head = document.createElement('header');
+  head.innerHTML = `<strong>${esc(s.attrs.name ?? s.id)}</strong>${s.attrs.key ? ` <span class="hint">key ${esc(s.attrs.key)}</span>` : ''}${s.attrs.tags ? ` <span class="hint">${esc(s.attrs.tags)}</span>` : ''}<span class="count">${s.members.length}</span>`;
+  head.onclick = () => { selSet = s.id; render(); };
+  div.append(head);
+  if (s.id === selSet) {
+    const f = document.createElement('form');
+    f.className = 'details';
+    f.innerHTML = `<label>Name <input name="name" value="${esc(s.attrs.name ?? '')}"></label>
+      <label>Tags <input name="tags" value="${esc(s.attrs.tags ?? '')}" placeholder="place:labial voiced:true"></label>
+      <span class="moves"><button type="button" name="up" title="Earlier in the tier" ${k === 0 ? 'disabled' : ''}>↑</button><button type="button" name="down" title="Later in the tier" ${k === tier.sets.length - 1 ? 'disabled' : ''}>↓</button></span>
+      <button type="button" name="delete" class="danger">Delete set</button>`;
+    const el = f.elements;
+    el.name.onchange = () => act(() => ed.setSet(s.id, { name: el.name.value.trim() }));
+    el.tags.onchange = () => act(() => ed.setSet(s.id, { tags: el.tags.value.trim() }));
+    el.up.onclick = () => act(() => ed.moveSet(s.id, k - 1));
+    el.down.onclick = () => act(() => ed.moveSet(s.id, k + 1));
+    el.delete.onclick = () => act(() => ed.removeSet(s.id), `Deleted set ${s.attrs.name ?? s.id}. Undo brings it back.`);
+    f.onsubmit = (ev) => ev.preventDefault();
+    div.append(f);
+  }
+  const ul = document.createElement('ul');
+  for (const m of s.members) {
+    const li = document.createElement('li');
+    const inferred = tier.attrs.provider && !s.confirmed.includes(m);
+    if (inferred) li.className = 'inferred';
+    li.innerHTML = `<span>${esc(spanText(doc, m))}</span>${inferred ? '<button name="ok" title="Confirm (a person accepted it)">✓</button>' : ''}<button name="rm" title="Remove from set">×</button>`;
+    li.querySelector('[name=rm]').onclick = () => act(() => ed.removeMember(s.id, m));
+    const ok = li.querySelector('[name=ok]');
+    if (ok) ok.onclick = () => act(() => ed.confirm(s.id, m), `Confirmed “${spanText(doc, m)}”.`);
+    ul.append(li);
+  }
+  div.append(ul);
+  return div;
 }
 
 function markSelection() {

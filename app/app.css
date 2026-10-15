@@ -37,3 +37,8 @@ form.inline input[name="name"] { flex: 1 1 120px; min-width: 0; }
 .set li.inferred { border-style: dashed; }
 .set li button { border: 0; padding: 0 4px; background: transparent; }
 .hint { color: var(--muted); font-size: 12px; }
+form.details { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 4px 0 10px; }
+form.details h3 { flex-basis: 100%; margin: 4px 0 0; }
+form.details label { display: flex; gap: 4px; align-items: center; font-size: 13px; }
+form.details input[name="name"], form.details input[name="tags"] { width: 150px; }
+button.danger { color: #b3261e; }

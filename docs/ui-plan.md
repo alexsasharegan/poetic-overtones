@@ -10,7 +10,7 @@ Run it with `npm run serve` and open <http://localhost:8000/app/>. (Modules do n
 |---|---|---|
 | 1 | **Shell.** Open a `.pxml` file, render it with the layer painter (`src/render/paint.js`), show and hide tiers, restack them, switch themes, undo and redo, save. | Done |
 | 2 | **Marking.** Select text, mark it into the selected set (key M), remove members, add tiers and sets. | Done (basic) |
-| 3 | **Tier and set details.** Rename, set role, kind and direction, tags and keys; delete with undo; drag to reorder instead of buttons. Show the "inferred" state and confirm with one click (A-08). | Next |
+| 3 | **Tier and set details.** Rename, set role, kind and direction, tags and keys; delete with undo; drag to reorder instead of buttons. Show the "inferred" state and confirm with one click (A-08). | Done, except drag to reorder (buttons for now) and keys |
 | 4 | **Selection helpers.** Snap a selection to word or grapheme boundaries (S-03 is a helper, not a rule); mark several pieces as one span (discontinuous, M-05); click a painted member to select it. | |
 | 5 | **Relations.** Draw a relation by selecting spans in turn; reorder members of a directed relation (A-05). | |
 | 6 | **Theme editor (Y-07).** Pick a role, set or tag and edit its look with controls that write CSS; warn on collisions and poor contrast (Y-05, Y-06). | |
@@ -19,4 +19,4 @@ Run it with `npm run serve` and open <http://localhost:8000/app/>. (Modules do n
 | 9 | **Standard tiers.** Line, stanza and word tiers made by providers with no lexicon (E-07); reset (E-03). | |
 
 Known limits of the shell: no keyboard-only way to make a selection, no touch selection testing,
-names are edited only at creation.
+set keys are shown but not edited (keys belong to providers), reordering is by buttons.
