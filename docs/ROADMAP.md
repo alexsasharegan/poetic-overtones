@@ -4,7 +4,7 @@
 
 ## 🟢 Now (In Progress)
 
-* **Core library (`src/core/`, ADR-0012):** loader, model and canonical export in plain ES modules; passes all 53 fixtures and 23 round trips. Next: editing operations on the model (add and remove spans, sets and tiers; reorder tiers), with fixtures for them.
+* **Core library (`src/core/`, ADR-0012):** loader, model and canonical export in plain ES modules; passes all 53 fixtures and 23 round trips. Editing operations with undo and redo are in `edit.js` (`tests/editor.mjs`). Next: the renderer and app shell.
 
 ## 🟡 Next (Queued)
 

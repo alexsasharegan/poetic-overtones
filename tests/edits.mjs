@@ -34,6 +34,7 @@ Twinkle, twinkle, little star,
     check('crossing span keeps its text', spanText(d2, 'x1') === 'nkle, twi', spanText(d2, 'x1'));
     check('crossing span is written in pieces', d2.spans.get('x1').pieces.length > 1, JSON.stringify(d2.spans.get('x1').pieces));
     check('other spans unchanged', ['w1', 'w2', 'w3', 'w4'].every((w) => spanText(d2, w) === spanText(doc, w)));
+    check('only the new span is cut', ['w1', 'w2', 'w3', 'w4'].every((w) => d2.spans.get(w).pieces.length === 1), out.split('\n')[5]);
     check('saving again is stable', save(d2) === out);
   }
 }

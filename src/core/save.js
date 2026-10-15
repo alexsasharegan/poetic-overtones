@@ -7,7 +7,8 @@
 // their order; undirected members are in document order (A-05). Spans no set lists are
 // dropped (A-12). Styles are written inline, a src being replaced by the CSS it pointed to.
 // Spans whose pieces would cross are written as heads and continuations (M-05); a piece that
-// has to be cut gets a new id that is unique in the file.
+// has to be cut gets a new id that is unique in the file; of two crossing spans the newer one
+// (later in doc.spans) is cut, so spans already in the file keep their pieces and ids.
 
 import { escAttr, escText, writeNode } from './xml.js';
 
@@ -72,9 +73,14 @@ function markup(doc) {
     for (const p of pieces) {
       while (stack.length && !nests(p, stack[stack.length - 1]) && stack[stack.length - 1].end <= p.start) stack.pop();
       const top = stack[stack.length - 1];
-      if (top && !nests(p, top)) {          // starts inside top, ends after it
-        pieces.push({ head: p.head, id: fresh(p.head), start: top.end, end: p.end, order: order++ });
-        p.end = top.end;
+      if (top && !nests(p, top)) {          // starts inside top, ends after it: cut the newer of the two
+        if (top.order > p.order) {          // so spans that were already in the file keep their ids
+          pieces.push({ head: top.head, id: fresh(top.head), start: p.start, end: top.end, order: order++ });
+          top.end = p.start;
+        } else {
+          pieces.push({ head: p.head, id: fresh(p.head), start: top.end, end: p.end, order: order++ });
+          p.end = top.end;
+        }
         changed = true;
         break;
       }

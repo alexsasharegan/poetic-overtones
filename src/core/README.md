@@ -10,12 +10,19 @@ const { doc, warnings } = load(source, { readFile: (path) => contentsOrNull });
 doc.tiers[0].sets[0].members;   // span ids, in the order of spec/format.md A-05
 spanText(doc, 'w1');            // the text of a span, pieces joined
 save(doc);                      // canonical .pxml text (spec/format.md I-02)
+
+const ed = new Editor(doc);
+const t = ed.addTier({ name: 'Rhyme', role: 'rhyme', kind: 'relation' });
+const s = ed.addSet(t, { name: 'A' });
+ed.mark(s, [[26, 28]]);           // code points; cpIndex() converts from UTF-16
+ed.undo(); ed.redo();
 ```
 
 | File | What it does |
 |---|---|
 | `xml.js` | A small XML 1.0 parser for exactly what the format allows. Rejects CDATA (B-05) and DOCTYPE (B-03). Line numbers on every node. |
 | `load.js` | The loader: a port of `spec/fixtures/check.py`, rule for rule and error code for error code, that keeps everything a document holds. |
+| `edit.js` | `Editor`: add, remove, move and rename tiers and sets; mark text as a member (making or reusing a span, E-08); confirm; undo and redo (E-09). A failed edit throws and changes nothing. Ids are never reused (S-04). |
 | `save.js` | Canonical export. Writes spans that cross as heads and continuations (M-05), drops spans no set lists (A-12), writes styles inline. |
 | `index.js` | The public entry point. |
 
@@ -29,5 +36,5 @@ has `id`, `attrs`, `members` and `confirmed`. `doc.styles` holds `{ attrs, css }
 and, where known, a `line`. Warnings come back as `{ code, line }`.
 
 **Tests.** `npm test` runs `tests/run.mjs` (every fixture in `spec/fixtures/`, plus
-load-save-load round trips and stable saves), `tests/edits.mjs` (edits made in memory),
+load-save-load round trips and stable saves), `tests/edits.mjs` (edits made in memory), `tests/editor.mjs` (the editing operations, undo and redo),
 and both Python reference checkers.

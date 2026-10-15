@@ -4,6 +4,6 @@
   "type": "module",
   "description": "Multi-dimensional poetic analysis of any text. Core library: plain ES modules, no dependencies.",
   "scripts": {
-    "test": "node tests/run.mjs && node tests/edits.mjs && python3 -I spec/fixtures/check.py && python3 -I spec/providers/run.py"
+    "test": "node tests/run.mjs && node tests/edits.mjs && node tests/editor.mjs && python3 -I spec/fixtures/check.py && python3 -I spec/providers/run.py"
   }
 }
