@@ -1,0 +1,74 @@
+/* Community theme, from "Phonetic Markup for Verse" v3.0.
+ * Credit: the scheme's author (credit wording to be agreed; ADR-0005). The source deck is kept
+ * private in sources/community/ and is not part of this repository.
+ *
+ * Plain CSS over the analysis mirror (spec/format.md S-03, S-04). It styles three roles:
+ *   consonant - a label tier whose sets are sounds, tagged sound:<name> place:<..> manner:<..> voiced:<..>
+ *   vowel     - a label tier whose sets are vowels and diphthongs, tagged sound:<name>
+ *   stress    - a label tier with sets keyed primary, secondary, unstressed (as english.stress)
+ * Sound names are in themes/README.md. Where the deck's hex labels contradict its swatches or
+ * its own place logic, this file follows the swatches and place logic; each choice is listed
+ * in themes/README.md and marked "settled" below.
+ */
+
+/* ---- consonants: boxes that frame the sound; border style by manner (deck slide 1) ---- */
+tier[role="consonant"] > set { border: 1pt solid currentColor; }
+tier[role="consonant"] > set[tags~="manner:plosive"]     { border: 4pt solid;     border-radius: 0; }   /* deck: rough brush, drawn solid */
+tier[role="consonant"] > set[tags~="manner:affricate"]   { border: 2.25pt dashed; border-radius: 0; }
+tier[role="consonant"] > set[tags~="manner:fricative"]   { border: 2pt dotted;    border-radius: 0; }
+tier[role="consonant"] > set[tags~="manner:nasal"]       { border: 5pt solid;     border-radius: 4pt; } /* deck: rounded brush, drawn solid */
+tier[role="consonant"] > set[tags~="manner:approximant"] { border: 1pt solid;     border-radius: 0; }
+
+/* colour by place (hue) and voicing (about half brightness), sound by sound (deck slide 4) */
+tier[role="consonant"] > set[tags~="sound:p"]  { border-color: #FF0008; }
+tier[role="consonant"] > set[tags~="sound:b"]  { border-color: #810002; }
+tier[role="consonant"] > set[tags~="sound:t"]  { border-color: #FFB200; }
+tier[role="consonant"] > set[tags~="sound:d"]  { border-color: #815A00; }
+tier[role="consonant"] > set[tags~="sound:k"]  { border-color: #A600FF; }
+tier[role="consonant"] > set[tags~="sound:g"]  { border-color: #540081; }
+tier[role="consonant"] > set[tags~="sound:ch"] { border-color: #005EFF; }
+tier[role="consonant"] > set[tags~="sound:jh"] { border-color: #003082; }
+tier[role="consonant"] > set[tags~="sound:f"]  { border-color: #FF0910; }
+tier[role="consonant"] > set[tags~="sound:v"]  { border-color: #820002; }
+tier[role="consonant"] > set[tags~="sound:th"] { border-color: #FFB100; }
+tier[role="consonant"] > set[tags~="sound:dh"] { border-color: #7F5500; }
+tier[role="consonant"] > set[tags~="sound:s"]  { border-color: #00D80F; }
+tier[role="consonant"] > set[tags~="sound:z"]  { border-color: #006507; }
+tier[role="consonant"] > set[tags~="sound:sh"] { border-color: #005EFF; }
+tier[role="consonant"] > set[tags~="sound:zh"] { border-color: #002F7F; }
+tier[role="consonant"] > set[tags~="sound:m"]  { border-color: #7F0002; }
+tier[role="consonant"] > set[tags~="sound:n"]  { border-color: #7F5500; }
+tier[role="consonant"] > set[tags~="sound:ng"] { border-color: #540081; }  /* settled: label #005EFF, swatch and place say velar purple */
+tier[role="consonant"] > set[tags~="sound:hw"] { border-color: #FF0910; }  /* settled: label #003082, swatch and place say labial red */
+tier[role="consonant"] > set[tags~="sound:w"]  { border-color: #820002; }  /* settled: label #FF0910, swatch and voicing say dark red */
+tier[role="consonant"] > set[tags~="sound:l"]  { border-color: #7F5500; }  /* settled: label #820002, swatch and place say dental */
+tier[role="consonant"] > set[tags~="sound:r"]  { border-color: #006507; }  /* settled: label #FFB100, swatch and place say alveolar green */
+tier[role="consonant"] > set[tags~="sound:y"]  { border-color: #002F7F; }  /* settled: label #FFB100, swatch and place say postalveolar blue */
+tier[role="consonant"] > set[tags~="sound:h"]  { border-color: #A600FF; }  /* settled: label #FFB100, swatch and place say velar row */
+
+/* ---- vowels: highlights that fill the space between consonants (deck slides 2 and 4) ---- */
+tier[role="vowel"] > set { opacity: .6; border-radius: 3pt; }
+tier[role="vowel"] > set[tags~="sound:iy"]  { background: #349EFF; }   /* deep */
+tier[role="vowel"] > set[tags~="sound:ih"]  { background: #9CD0FF; }   /* hilt */
+tier[role="vowel"] > set[tags~="sound:ey"]  { background: #445DFA; }   /* grey */
+tier[role="vowel"] > set[tags~="sound:eir"] { background: #44D1FA; }   /* fair */
+tier[role="vowel"] > set[tags~="sound:eh"]  { background: #96AAFF; }   /* elf */
+tier[role="vowel"] > set[tags~="sound:ae"]  { background: #873FFF; }   /* axe */
+tier[role="vowel"] > set[tags~="sound:er"]  { background: #00C138; }   /* bird */
+tier[role="vowel"] > set[tags~="sound:ah"]  { background: #B0FFC7; }   /* struck */
+tier[role="vowel"] > set[tags~="sound:uw"]  { background: #C10003; }   /* dûm */
+tier[role="vowel"] > set[tags~="sound:uh"]  { background: #FF9FA1; }   /* book */
+tier[role="vowel"] > set[tags~="sound:ow"]  { background: #F88900; }   /* stone */
+tier[role="vowel"] > set[tags~="sound:ao"]  { background: #E9BF6E; }   /* saw */
+tier[role="vowel"] > set[tags~="sound:oh"]  { background: #F618FF; }   /* beyond */
+tier[role="vowel"] > set[tags~="sound:aa"]  { background: #FA89FF; }   /* father */
+
+/* diphthongs: fill is the first vowel, a drop shadow (1pt blur, 5pt offset, 0 degrees) the second */
+tier[role="vowel"] > set[tags~="sound:ay"]  { background: #FA89FF; box-shadow: 5pt 0 1pt #349EFF; }   /* ride */
+tier[role="vowel"] > set[tags~="sound:ay2"] { background: #B0FFC7; box-shadow: 5pt 0 1pt #349EFF; }   /* write */
+tier[role="vowel"] > set[tags~="sound:oy"]  { background: #E9BF6E; box-shadow: 5pt 0 1pt #349EFF; }   /* voice */
+tier[role="vowel"] > set[tags~="sound:aw"]  { background: #FA89FF; box-shadow: 5pt 0 1pt #DA0200; }   /* crown */
+
+/* ---- stress (deck slide 3): bold primary, bold italic secondary ---- */
+tier[role="stress"] > set[key="primary"]   { font-weight: 700; }
+tier[role="stress"] > set[key="secondary"] { font-weight: 700; font-style: italic; }   /* settled: slide 3 says bold/italic, slide 4 italic */

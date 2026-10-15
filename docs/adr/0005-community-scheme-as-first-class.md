@@ -33,3 +33,9 @@ amounts to asking for adoption. The compatibility value is high.
 - The deck's sample poem is copyrighted; it is not used in tests or examples that get committed.
 - The Tengwar grid and the deck disagree in a few places (`docs/synthesis/comparison.md`, section 4.3).
   A scheme must say which classification it follows.
+
+## Addendum (2026-10-15)
+
+Encoded as `themes/community.css`, a theme over the roles `consonant`, `vowel` and `stress` and `sound:` and
+`manner:` tags (ADR-0011). Every value where the deck's label and swatch disagree is listed in
+`themes/README.md` with the choice made. The meter strip, ties and grouped views are not encoded yet.

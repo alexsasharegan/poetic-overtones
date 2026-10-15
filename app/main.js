@@ -12,9 +12,22 @@ let selTier = null, selSet = null;
 
 function status(msg, error = false) { const s = $('status'); s.textContent = msg; s.className = error ? 'error' : ''; }
 
-function open(source, name) {
+// Open a document served next to the app, fetching the files its <text src> and <style src> name.
+async function openUrl(url) {
+  const res = await fetch(url);
+  if (!res.ok) return status(`Could not fetch ${url}.`, true);
+  const source = await res.text();
+  const files = new Map();
+  for (const [, ref] of source.matchAll(/\bsrc="([^"]+)"/g)) {
+    const r = await fetch(new URL(ref, new URL(url, location.href)));
+    if (r.ok) files.set(ref, await r.text());
+  }
+  open(source, url.split('/').pop(), (p) => files.get(p) ?? null);
+}
+
+function open(source, name, readFile = null) {
   try {
-    const { doc, warnings } = load(source);
+    const { doc, warnings } = load(source, { readFile });
     ed = new Editor(doc);
     fileName = name;
     selTier = doc.tiers.at(-1)?.id ?? null;
@@ -119,6 +132,7 @@ $('open').onchange = async (ev) => {
   if (f) open(await f.text(), f.name);
   ev.target.value = '';
 };
+$('samples').onchange = (ev) => (ev.target.value ? openUrl(ev.target.value) : open(sample, 'twinkle.pxml'));
 $('save').onclick = () => {
   const blob = new Blob([save(ed.doc)], { type: 'application/xml' });
   const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: fileName.replace(/(\.pxml)?$/, '.pxml') });

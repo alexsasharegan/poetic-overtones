@@ -1,0 +1,45 @@
+<!-- The community theme on the first two lines of "Twinkle, Twinkle, Little Star" (Jane Taylor,
+     1806, public domain), marked by hand: consonants, vowels and stress. Unstressed vowels
+     (schwa) are not marked; the deck has no colour for schwa. Silent letters belong to no span. -->
+
+<meta title="Twinkle, Twinkle, Little Star" author="Jane Taylor" year="1806" language="en"/>
+
+<text xml:space="preserve">
+Twinkle, twinkle, little star,
+How I wonder what you are!
+</text>
+
+<markup xml:space="preserve">
+<span id="y1"><span id="c1">T</span><span id="c2">w</span><span id="v1">i</span><span id="c3">n</span></span><span id="y2"><span id="c4">k</span><span id="c5">l</span>e</span>, <span id="y3"><span id="c6">t</span><span id="c7">w</span><span id="v2">i</span><span id="c8">n</span></span><span id="y4"><span id="c9">k</span><span id="c10">l</span>e</span>, <span id="y5"><span id="c11">l</span><span id="v3">i</span><span id="c12">t</span></span><span id="y6">t<span id="c13">l</span>e</span> <span id="y7"><span id="c14">s</span><span id="c15">t</span><span id="v4">ar</span></span>,
+<span id="y8"><span id="c16">H</span><span id="v5">ow</span></span> <span id="y9"><span id="v6">I</span></span> <span id="y10"><span id="c17">w</span><span id="v7">o</span><span id="c18">n</span></span><span id="y11"><span id="c19">d</span>er</span> <span id="y12"><span id="c20">wh</span><span id="v8">a</span><span id="c21">t</span></span> <span id="y13"><span id="c22">y</span><span id="v9">ou</span></span> <span id="y14"><span id="v10">ar</span>e</span>!
+</markup>
+
+<analysis>
+  <tier id="t1" name="Stress" role="stress">
+    <set id="s1" name="primary" key="primary" members="y1,y3,y5,y7,y8,y10,y12,y14"/>
+    <set id="s2" name="unstressed" key="unstressed" members="y2,y4,y6,y9,y11,y13"/>
+  </tier>
+  <tier id="t2" name="Vowels" role="vowel">
+    <set id="s10" name="/ɪ/ hilt" tags="sound:ih" members="v1,v2,v3"/>
+    <set id="s11" name="/ɑː/ father" tags="sound:aa" members="v4,v10"/>
+    <set id="s12" name="/aʊ/ crown" tags="sound:aw" members="v5"/>
+    <set id="s13" name="/aɪ/ ride" tags="sound:ay" members="v6"/>
+    <set id="s14" name="/ʌ/ struck" tags="sound:ah" members="v7,v8"/>
+    <set id="s15" name="/uː/ dûm" tags="sound:uw" members="v9"/>
+  </tier>
+  <tier id="t3" name="Consonants" role="consonant">
+    <set id="s20" name="/t/" tags="sound:t place:dental manner:plosive voiced:false" members="c1,c6,c12,c15,c21"/>
+    <set id="s21" name="/k/" tags="sound:k place:velar manner:plosive voiced:false" members="c4,c9"/>
+    <set id="s22" name="/d/" tags="sound:d place:dental manner:plosive voiced:true" members="c19"/>
+    <set id="s23" name="/s/" tags="sound:s place:alveolar manner:fricative voiced:false sibilant:true" members="c14"/>
+    <set id="s24" name="/n/" tags="sound:n place:dental manner:nasal voiced:true" members="c18"/>
+    <set id="s25" name="/ŋ/" tags="sound:ng place:velar manner:nasal voiced:true" members="c3,c8"/>
+    <set id="s26" name="/w/" tags="sound:w place:labial manner:approximant voiced:true" members="c2,c7,c17"/>
+    <set id="s27" name="/hw/" tags="sound:hw place:labial manner:approximant voiced:false" members="c20"/>
+    <set id="s28" name="/l/" tags="sound:l place:dental manner:approximant voiced:true" members="c5,c10,c11,c13"/>
+    <set id="s29" name="/j/" tags="sound:y place:postalveolar manner:approximant voiced:true" members="c22"/>
+    <set id="s30" name="/h/" tags="sound:h place:velar manner:approximant voiced:false" members="c16"/>
+  </tier>
+</analysis>
+
+<style name="Community" src="community.css"/>

@@ -9,7 +9,7 @@
 
 ## 🟡 Next (Queued)
 
-* **Community theme as data:** encode the built-in community scheme as a theme over roles and tags, settling the deck's hex inconsistencies (ADR-0005, ADR-0011).
+* **Community theme, follow-ups:** `themes/community.css` encodes the deck (consonant borders and colours, vowel and diphthong highlights, stress). Still to do: confirm the settled colours and credit wording with the author; meter strip, ties and grouped views (need marks and views).
 * **Review the remaining PROVISIONAL rules** in `spec/app.md` and `spec/format.md`; FQ8 and FQ9 stay open and do not block the MVP.
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.
 
