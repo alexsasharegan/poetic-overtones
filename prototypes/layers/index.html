@@ -32,10 +32,15 @@
   section { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; min-width: 0; }
   section.wide { grid-column: 1 / -1; }
   h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
-  #poem { position: relative; background: #fffdf8; color: #1d1b18; border-radius: 6px; padding: 14px 16px; }
-  #poem .boxes { position: absolute; inset: 0; pointer-events: none; }
-  #poem .boxes > div { position: absolute; box-sizing: border-box; }
-  #poem .text { position: relative; font: 22px/2.1 Georgia, serif; white-space: pre-wrap; }
+  #poem { display: grid; background: #fffdf8; color: #1d1b18; border-radius: 6px; padding: 14px 16px; }
+  #poem, #poem * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #poem > *, #poem .boxes > * { grid-area: 1 / 1; }
+  #poem .boxes { display: grid; pointer-events: none; }
+  #poem .text, #poem .copy { font: 22px/2.1 Georgia, serif; white-space: pre-wrap; }
+  #poem .text { position: relative; }
+  /* a box layer is an invisible copy of the text: same letters, same layout, only the boxes show */
+  #poem .copy, #poem .copy * { color: transparent !important; text-decoration: none !important; text-shadow: none !important; }
+  #poem .copy .box { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
   ol#tiers { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column-reverse; gap: 6px; }
   ol#tiers li { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center;
                 border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
@@ -64,7 +69,7 @@
   <section>
     <h2>Text</h2>
     <div id="poem"><div class="boxes"></div><div class="text"></div></div>
-    <p class="hint">Text styles are on cut-up pieces of the text; boxes are measured and drawn under it.</p>
+    <p class="hint">Text styles are on cut-up pieces of the text; each box layer is an invisible copy of the text underneath, so nothing is measured.</p>
   </section>
   <section class="no-print">
     <h2>Tiers <small>(top of list = top layer)</small></h2>
@@ -289,11 +294,10 @@ function paint(doc) {
   const pts = [...cuts].sort((a, b) => a - b);
   const textEl = document.querySelector('#poem .text');
   textEl.replaceChildren();
-  const segs = [];
-  const opens = new Map(), closes = new Map();   // member -> generated bracket element
+  const segs = [], atoms = [];   // atoms: every element appended to the text, in order
   for (let i = 0; i + 1 < pts.length; i++) {
     const a = pts[i], b = pts[i + 1];
-    const lead = textEl.lastChild;   // whatever is appended from here on belongs to this piece
+    const firstAtom = atoms.length;   // whatever is appended from here on belongs to this piece
     const cover = [];
     for (const e of entries) e.members.forEach((m, mi) => {
       if (m.some(([p, q]) => p <= a && b <= q)) cover.push({ e, mi, first: m[0][0] === a, last: m[m.length - 1][1] === b });
@@ -301,7 +305,7 @@ function paint(doc) {
     // opening characters: lower layer outside
     for (const c of cover) if (c.first && c.e.w.before) {
       const g = document.createElement('span'); g.textContent = c.e.w.before; g.setAttribute('aria-hidden', 'true');
-      g.style.cssText = css(c.e.w.text); textEl.append(g); opens.set(c.e.layer + ':' + c.mi, g);
+      g.style.cssText = css(c.e.w.text); textEl.append(g); atoms.push(g);
     }
     // the piece: text styles, top layer wins per property; every layer's underline nests inside
     const seg = document.createElement('span');
@@ -314,73 +318,62 @@ function paint(doc) {
       inner.append(d); inner = d;
     }
     inner.append(doc.text.slice(a, b));
-    textEl.append(seg);
+    textEl.append(seg); atoms.push(seg);
     const self = { a, b, el: seg };
     segs.push(self);
     // closing characters: higher layer inside, so it closes first
     for (const c of cover.slice().reverse()) if (c.last && c.e.w.after) {
       const g = document.createElement('span'); g.textContent = c.e.w.after; g.setAttribute('aria-hidden', 'true');
-      g.style.cssText = css(c.e.w.text); textEl.append(g); closes.set(c.e.layer + ':' + c.mi, g);
+      g.style.cssText = css(c.e.w.text); textEl.append(g); atoms.push(g);
     }
     // a box at this piece's edge takes in the characters generated there
-    self.first = lead ? lead.nextSibling : textEl.firstChild;
-    self.last = textEl.lastChild;
+    self.firstAtom = firstAtom; self.lastAtom = atoms.length - 1;
   }
-  paint.state = { entries, segs, opens, closes };
-  layoutBoxes();
+  paintBoxes(entries, segs, atoms);
   report(entries);
 }
 
-// A range gives one rectangle per inline piece; a box wants one per line.
-function lineRects(range) {
-  const out = [];
-  for (const r of [...range.getClientRects()].filter((r) => r.width >= 1).sort((a, b) => a.top - b.top || a.left - b.left)) {
-    const line = out.find((o) => Math.min(o.bottom, r.bottom) - Math.max(o.top, r.top) > Math.min(o.bottom - o.top, r.height) / 2);
-    if (line) {
-      line.left = Math.min(line.left, r.left); line.right = Math.max(line.right, r.right);
-      line.top = Math.min(line.top, r.top); line.bottom = Math.max(line.bottom, r.bottom);
-    } else out.push({ left: r.left, right: r.right, top: r.top, bottom: r.bottom });
-  }
-  return out;
-}
-
-// box painter: measure each member after layout and draw its boxes, layer by layer
-function layoutBoxes() {
-  const st = paint.state; if (!st) return;
-  const poem = $('poem'), layer = poem.querySelector('.boxes');
+// box painter: one invisible copy of the text per box layer, the boxes as inline CSS.
+// The browser lays the copies out exactly like the text, so screen, zoom and print all agree.
+function paintBoxes(entries, segs, atoms) {
+  const layer = document.querySelector('#poem .boxes');
   layer.replaceChildren();
-  const origin = poem.getBoundingClientRect();
-  for (const e of st.entries) {
+  for (const e of entries) {
     if (!e.w.box) continue;
-    const pad = ['top', 'right', 'bottom', 'left'].map((s) => parseFloat(e.w.box['padding-' + s] || 0));
-    e.members.forEach((m, mi) => {
-      // touching pieces of one member are drawn as one box
-      const runs = [];
+    // each member's touching pieces become one run of atoms, brackets at its edges included
+    const runs = [];
+    for (const m of e.members) {
+      let cur = null, end = null;
       for (const [p, q] of m) {
-        if (runs.length && runs[runs.length - 1][1] === p) runs[runs.length - 1][1] = q; else runs.push([p, q]);
+        const a = segs.find((s) => s.a === p).firstAtom, z = segs.find((s) => s.b === q).lastAtom;
+        if (cur && end === p) cur[1] = z; else runs.push(cur = [a, z]);
+        end = q;
       }
-      runs.forEach(([p, q], ri) => {
-        const first = st.segs.find((s) => s.a === p), last = st.segs.find((s) => s.b === q);
-        const r = new Range();
-        r.setStartBefore(first.first); r.setEndAfter(last.last);
-        for (const rect of lineRects(r)) {
-          const d = document.createElement('div');
-          const look = Object.fromEntries(Object.entries(e.w.box).filter(([k]) => !k.startsWith('padding-')));
-          d.style.cssText = css(look);
-          d.style.left = rect.left - origin.left - pad[3] + 'px';
-          d.style.top = rect.top - origin.top - pad[0] + 'px';
-          d.style.width = rect.right - rect.left + pad[1] + pad[3] + 'px';
-          d.style.height = rect.bottom - rect.top + pad[0] + pad[2] + 'px';
-          layer.append(d);
-        }
-      });
-    });
+    }
+    // runs of one set that overlap go to separate copies
+    const copies = [];
+    for (const r of runs.sort((x, y) => x[0] - y[0])) {
+      const c = copies.find((c) => c[c.length - 1][1] < r[0]);
+      if (c) c.push(r); else copies.push([r]);
+    }
+    const b = e.w.box, px = (k) => parseFloat(b[k] || 0);
+    const look = { ...b,
+      'margin-left': -(px('padding-left') + px('border-left-width')) + 'px',     // padding and border take no room,
+      'margin-right': -(px('padding-right') + px('border-right-width')) + 'px' }; // so the letters stay put
+    for (const c of copies) {
+      const copy = document.createElement('div'); copy.className = 'copy'; copy.setAttribute('aria-hidden', 'true');
+      let k = 0;
+      for (const [a, z] of c) {
+        for (; k < a; k++) copy.append(atoms[k].cloneNode(true));
+        const box = document.createElement('span'); box.className = 'box'; box.style.cssText = css(look);
+        for (; k <= z; k++) box.append(atoms[k].cloneNode(true));
+        copy.append(box);
+      }
+      for (; k < atoms.length; k++) copy.append(atoms[k].cloneNode(true));
+      layer.append(copy);
+    }
   }
 }
-addEventListener('resize', layoutBoxes);
-addEventListener('beforeprint', layoutBoxes);
-addEventListener('afterprint', layoutBoxes);
-matchMedia('print').addEventListener('change', layoutBoxes);
 
 function report(entries) {
   const rows = ['<tr><th>Layer</th><th>Tier · set</th><th>Text painter</th><th>Box painter</th></tr>'];
@@ -425,7 +418,6 @@ const sel = $('theme');
 doc.styles.filter((s) => s.name).forEach((s) => sel.add(new Option(s.name, s.name, false, !s.disabled)));
 sel.onchange = () => { doc.styles.forEach((s) => { if (s.name) s.disabled = s.name !== sel.value; }); render(doc); };
 render(doc);
-document.fonts && document.fonts.ready.then(layoutBoxes);
 </script>
 </body>
 </html>

@@ -10,7 +10,7 @@
 
 * **Review `spec/app.md` and `spec/format.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions.
 * **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 52).
-* **Channels and the mirror (FQ7):** prototype v2 (`prototypes/layers/`) paints both families of channels (text and box styles) as plain CSS. It renders the same in Chromium, Safari and Firefox 155 (including at 120% zoom), and prints to PDF in Chromium. Still to do: print to PDF from Safari and Firefox, and decide whether members are mirrored (confirmed vs inferred looks).
+* **Channels and the mirror (FQ7):** prototype v2 (`prototypes/layers/`) paints both families of channels (text and box styles) as plain CSS. It renders the same in Chromium, Safari and Firefox 155 (including at 120% zoom), and, since box layers stopped measuring the screen, prints the same everywhere. Still to do: confirm Safari and Firefox print after that change, and decide whether members are mirrored (confirmed vs inferred looks).
 * **Community theme as data:** encode the built-in community scheme as a theme over roles and tags, settling the deck's hex inconsistencies (ADR-0005, ADR-0011).
 * **English baseline POC:** client-side JavaScript (ADR-0006).
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.

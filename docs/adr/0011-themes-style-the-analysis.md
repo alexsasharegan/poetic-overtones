@@ -45,4 +45,6 @@ radius or added characters. Alex wants all of those, and wants output that print
 CSS on ordinary elements, in two families (`spec/app.md` Y-03, `spec/format.md` S-07): **text styles** change the
 letters (top layer wins per character; every layer's underline shows) and **box styles** are measured and drawn
 under the letters (every layer shows, in tier order). Size is clamped to 0.75 to 1.5 times (Y-12). Prototype v2
-shows all of it, including PDF output, in Chromium.
+shows all of it in Chromium, Safari and Firefox. Its first box painter measured the screen and placed boxes;
+Safari printed them out of place, so each box layer is now an invisible copy of the text with the boxes as
+inline CSS, laid out by the browser. Printing keeps colours (`print-color-adjust: exact`).
