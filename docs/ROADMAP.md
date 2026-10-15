@@ -4,15 +4,14 @@
 
 ## 🟢 Now (In Progress)
 
-* **Text form (`spec/format.md`, ADR-0009):** rewritten around 52 fixtures (`spec/fixtures/`, checker `check.py`); `spec/app.md` reconciled to tiers, sets and spans. Questions FQ1 to FQ6 settled; awaiting Alex's review of the PROVISIONAL rules and FQ7 to FQ9.
+* **Core library (`src/core/`, ADR-0012):** loader, model and canonical export in plain ES modules; passes all 53 fixtures and 23 round trips. Next: editing operations on the model (add and remove spans, sets and tiers; reorder tiers), with fixtures for them.
 
 ## 🟡 Next (Queued)
 
-* **Review `spec/app.md` and `spec/format.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions.
-* **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 52).
-* **Channels and the mirror (FQ7):** prototype v2 (`prototypes/layers/`) paints both families of channels (text and box styles) as plain CSS. It renders the same in Chromium, Safari and Firefox 155 (including at 120% zoom), and prints to PDF the same in all three, colours included. Still to do: decide whether members are mirrored (confirmed vs inferred looks).
+* **Renderer:** turn `prototypes/layers/` into a module over the core model (themes style the analysis, ADR-0011).
+* **Minimal UI:** paste text, mark spans into sets, reorder tiers, switch themes, save and open `.pxml`.
 * **Community theme as data:** encode the built-in community scheme as a theme over roles and tags, settling the deck's hex inconsistencies (ADR-0005, ADR-0011).
-* **English baseline POC:** client-side JavaScript (ADR-0006).
+* **Review the remaining PROVISIONAL rules** in `spec/app.md` and `spec/format.md`; FQ8 and FQ9 stay open and do not block the MVP.
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.
 
 ## ⚪ Later
@@ -23,6 +22,8 @@
 * **Stack beyond the POC, hosting and name:** see `docs/synthesis/stack-and-name-options.md`.
 
 ## 🔴 Done (Completed)
+
+* **Text form and rendering decisions:** `spec/format.md` with 53 fixtures; themes style the analysis, roles, layer order, the member mirror and the two families of channels (ADR-0009, ADR-0011). FQ1 to FQ7 settled.
 
 * **Layering prototype:** `prototypes/layers/index.html` paints a theme from the analysis mirror onto the text, one layer per tier in file order (ADR-0011). v1 used CSS highlights; v2 uses two plain-CSS painters (text styles and box styles).
 

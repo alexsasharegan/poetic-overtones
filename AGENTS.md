@@ -74,6 +74,7 @@ Decided by Alex; do not relax them on your own judgment.
 - Members are listed one by one (no ranges). Styles are plain CSS.
 - The fixtures in `spec/fixtures/` are part of the spec. Run `python3 -I spec/fixtures/check.py` before and after any format change.
 - Themes style the analysis (tiers by `role`, sets by position, key and tags), never the text and never by id; tier order is layer order (ADR-0011).
+- The core library is `src/core/` (plain ES modules, no dependencies, ADR-0012). `npm test` runs every fixture through it and through the Python checkers, plus round trips. Keep `load.js` and `check.py` in step: same rules, same error codes.
 - Provider fixtures are in `spec/providers/fixtures/`. Run `python3 -I spec/providers/run.py` before and after any provider change. Never hand-edit a fixture to make it pass; fix the spec first.
 
 ### Inference
