@@ -1,0 +1,27 @@
+<!-- Case 14: tags on sets.
+     A set may carry tags: space-separated tokens such as place:labial. They let a style
+     rule act on a group of sets (the community scheme colours by place and voicing).
+     The renderer stamps them on member spans as data-tags, so CSS can select
+     [data-tags~="place:labial"]. The format does not define any tag; schemes and tier
+     definitions do. -->
+<!-- expect {"sets": {"s1": ["p"], "s2": ["b"]}} -->
+
+<text>
+pat bat
+</text>
+
+<markup>
+<span id="1">p</span>at <span id="2">b</span>at
+</markup>
+
+<analysis>
+  <tier id="t1" name="Consonants">
+    <set id="s1" name="p" members="1" tags="place:labial voiced:false manner:plosive"/>
+    <set id="s2" name="b" members="2" tags="place:labial voiced:true manner:plosive"/>
+  </tier>
+</analysis>
+
+<style>
+  [data-tags~="place:labial"] { background: #fde3e3; }
+  [data-tags~="voiced:true"] { font-weight: 700; }
+</style>

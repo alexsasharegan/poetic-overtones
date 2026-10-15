@@ -19,6 +19,6 @@ caf<span id="3">e</span><span id="4">́</span>
 
 <analysis>
   <tier id="t1" name="Unicode">
-    <set id="s1" name="Piece" members="1-5"/>
+    <set id="s1" name="Piece" members="1,2,3,4,5"/>
   </tier>
 </analysis>

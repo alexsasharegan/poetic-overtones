@@ -1,0 +1,25 @@
+<!-- Case 13: order of members.
+     An undirected set is a set: the order in which members are listed does not matter, and
+     a loader reports them in document order (here "3,1,2,4" is read as one two three four).
+     A directed relation keeps the listed order, which is its meaning: here from "four" back
+     to "two". Exporters write undirected members in document order so files diff cleanly. -->
+<!-- expect {"sets": {
+  "s1": ["one", "two", "three", "four"],
+  "s2": ["four", "two"]}} -->
+
+<text>
+one two three four
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span> <span id="3">three</span> <span id="4">four</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Words">
+    <set id="s1" name="Word" members="3,1,2,4"/>
+  </tier>
+  <tier id="t2" name="Echo" kind="relation" directed="true">
+    <set id="s2" name="back" members="4,2"/>
+  </tier>
+</analysis>

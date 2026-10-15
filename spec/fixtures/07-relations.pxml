@@ -16,7 +16,7 @@ Peter Piper picked a peck of pickled peppers
 
 <analysis>
   <tier id="t1" name="Alliteration" kind="relation">
-    <set id="s1" name="p" members="1-6"/>
+    <set id="s1" name="p" members="1,2,3,4,5,6"/>
   </tier>
   <tier id="t2" name="Repeated rime" kind="relation">
     <set id="s2" name="ick" members="7,8"/>

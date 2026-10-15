@@ -17,17 +17,19 @@ Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning
 |---|---|
 | 01 basic | blocks; bare id'd spans, sub-word spans; tiers hold sets of span ids; ids opaque and unique; names free; CSS on stamped `data-tier` / `data-set`; tab indentation |
 | 02 dedent | common indentation removed from text and markup; stray short whitespace line |
-| 03 crossing | spans that cross: a head span plus a continuation (`cont="head-id"`) |
+| 03 crossing | spans that cross: a head span plus a continuation (`cont="head-id"`); every span has its own id |
 | 04 discontinuous | split digraph (a_e) as a head and a continuation |
 | 05 enjambment | a directed relation tier, one set per enjambment |
-| 06 provider | provider-filled tiers, `reads`, `confirmed`, a hand-made tier, one span in many sets, ranges |
+| 06 provider | provider-filled tiers, `reads`, `confirmed`, a hand-made tier, one span in many sets, members listed one by one |
 | 07 relations | alliteration and a repeated rime over the same words |
 | 08 names | ids opaque; names in any script, repeated or absent |
 | 09 entities | XML escapes and numeric references; no CDATA |
 | 10 text-src | `<text src="..."/>`, self-closing, relative only, nothing escaped |
 | 11 unicode | code-point offsets (astral Shavian), combining mark alone, Private Use |
 | 12 explicit root | the `<pxml>` root form, with an XML declaration |
-| e01-e20 | files that must be rejected, each for one reason (e15 is CDATA) |
+| 13 order | undirected sets are unordered (read in document order); directed relations keep the listed order |
+| 14 tags | tags on sets, stamped as `data-tags` for CSS |
+| e01-e22 | files that must be rejected, each for one reason (e15 is CDATA) |
 | w01-w03 | files that load but are reported: control character, `url()` in CSS, unknown attribute |
 
 Model in one line: a **tier** (a dimension) holds **sets**; a **set** lists **spans** by id;

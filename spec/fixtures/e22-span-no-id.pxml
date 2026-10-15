@@ -1,0 +1,12 @@
+<!-- E22: a span with no id
+     Every span has an id, continuations included. -->
+<!-- expect {"outcome": "error", "errors": ["span-no-id"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span cont="1">two</span>
+</markup>
+

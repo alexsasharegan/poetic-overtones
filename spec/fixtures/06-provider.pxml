@@ -3,7 +3,7 @@
      reset can restore them. confirmed lists the members a human has accepted. "Hand-marked"
      has no provider: reset never touches it. Span 3 is in three sets at once, which is
      fine because a set is just a list of ids. reads names the tier a provider worked from.
-     Members use a range (1-7). -->
+     Members are always listed one by one (no ranges). -->
 <!-- expect {"sets": {
   "s_syll": ["Up", "a", "bove", "the", "world", "so", "high"],
   "s_stressed": ["Up", "bove", "world", "high"],
@@ -20,7 +20,7 @@ Up above the world so high,
 
 <analysis>
   <tier id="t_syll" name="Syllables" provider="english.syllable@1">
-    <set id="s_syll" name="Syllable" members="1-7"/>
+    <set id="s_syll" name="Syllable" members="1,2,3,4,5,6,7"/>
   </tier>
   <tier id="t_stress" name="Stress" provider="english.stress@1" reads="t_syll">
     <set id="s_stressed" name="stressed" members="1,3,5,7" confirmed="1,7"/>

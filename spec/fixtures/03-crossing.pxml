@@ -1,7 +1,8 @@
 <!-- Case 03: crossing spans.
      Trochaic feet: UP a | BOVE the | WORLD so | HIGH. Foot 1 ends inside the word "above",
      so feet and word cross. XML cannot express crossing, and ids must be unique, so the
-     word is a head span (id="w2") plus a continuation (cont="w2") that points back at it.
+     word is a head span (id="w2") plus a continuation (id="w2b" cont="w2") that points back
+     at it. Every span has its own id; a continuation also says which head it continues.
      The logical span's text is the head and its continuations, in document order. Sets
      name the head's id. -->
 <!-- expect {"sets": {
@@ -13,7 +14,7 @@ Up above the world so high,
 </text>
 
 <markup>
-<span id="f1">Up <span id="w2">a</span></span><span id="f2"><span cont="w2">bove</span> the</span> <span id="f3">world so</span> <span id="f4">high</span>,
+<span id="f1">Up <span id="w2">a</span></span><span id="f2"><span id="w2b" cont="w2">bove</span> the</span> <span id="f3">world so</span> <span id="f4">high</span>,
 </markup>
 
 <analysis>

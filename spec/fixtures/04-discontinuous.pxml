@@ -10,7 +10,7 @@ make the cake
 </text>
 
 <markup>
-<span id="w1">m<span id="d1">a</span>k<span cont="d1">e</span></span> the <span id="w2">c<span id="d2">a</span>k<span cont="d2">e</span></span>
+<span id="w1">m<span id="d1">a</span>k<span id="d1b" cont="d1">e</span></span> the <span id="w2">c<span id="d2">a</span>k<span id="d2b" cont="d2">e</span></span>
 </markup>
 
 <analysis>

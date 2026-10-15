@@ -18,7 +18,8 @@ ID_RE = re.compile(r'[A-Za-z0-9_.]+')
 PROVIDER_RE = re.compile(r'[a-z][a-z0-9.-]*@[0-9]+')
 BLOCKS = ('meta', 'text', 'markup', 'analysis', 'style')
 TIER_ATTRS = {'id', 'name', 'kind', 'directed', 'provider', 'reads'}
-SET_ATTRS = {'id', 'name', 'members', 'confirmed'}
+SET_ATTRS = {'id', 'name', 'members', 'confirmed', 'tags'}
+TAG_RE = re.compile(r'[A-Za-z0-9_.:+-]+')
 
 
 class Fail(Exception):
@@ -105,7 +106,7 @@ def flatten(markup, warnings):
             if ch.tag != 'span':
                 raise Fail('markup-unknown-element', ch.tag)
             sid, cont = ch.get('id'), ch.get('cont')
-            if sid is None and cont is None:
+            if sid is None:
                 raise Fail('span-no-id')
             for v in (sid, cont):
                 if v is not None and not ID_RE.fullmatch(v):
@@ -129,18 +130,14 @@ def bad_src(p):
 
 
 def parse_ids(value):
+    """Explicit ids separated by commas and/or whitespace. No ranges."""
     out = []
     for tok in re.split(r'[,\s]+', value.strip()):
         if not tok:
             continue
-        m = re.fullmatch(r'(\d+)-(\d+)', tok)
-        if m:
-            a, b = int(m.group(1)), int(m.group(2))
-            if a > b:
-                raise Fail('tier-bad-range', tok)
-            out.extend(str(i) for i in range(a, b + 1))
-        else:
-            out.append(tok)
+        if not ID_RE.fullmatch(tok):
+            raise Fail('id-bad', tok)
+        out.append(tok)
     return out
 
 
@@ -266,6 +263,7 @@ def check(path, warnings):
                     raise Fail('tier-bad-directed', directed)
                 if directed == 'true' and kind != 'relation':
                     raise Fail('directed-without-relation', tid)
+            is_directed = directed == 'true'
             prov = tr.get('provider')
             if prov is not None and not PROVIDER_RE.fullmatch(prov):
                 raise Fail('provider-bad', prov)
@@ -289,6 +287,11 @@ def check(path, warnings):
                         raise Fail('set-unknown-member', m)
                 if len(set(members)) != len(members):
                     warnings.append('set-duplicate-member')
+                for tg in st.get('tags', '').split():
+                    if not TAG_RE.fullmatch(tg):
+                        raise Fail('tag-bad', tg)
+                if not is_directed:      # an undirected set is unordered: report document order
+                    members = sorted(members, key=lambda m: heads[m][0][0])
                 for c in parse_ids(st.get('confirmed', '')):
                     if c not in members:
                         raise Fail('confirmed-not-member', c)

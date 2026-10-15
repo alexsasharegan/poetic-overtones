@@ -1,0 +1,17 @@
+<!-- E12: a range in members
+     Members are listed one by one. "1-2" is not an id (hyphen is not allowed in ids), so it is rejected. -->
+<!-- expect {"outcome": "error", "errors": ["id-bad"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="T">
+    <set id="s1" members="1-2"/>
+  </tier>
+</analysis>

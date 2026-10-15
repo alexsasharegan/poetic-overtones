@@ -23,6 +23,6 @@
 
 <analysis>
   <tier id="t1" name="Words">
-    <set id="s1" name="Word" members="1-4"/>
+    <set id="s1" name="Word" members="1,2,3,4"/>
   </tier>
 </analysis>

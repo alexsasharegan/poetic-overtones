@@ -1,0 +1,17 @@
+<!-- E21: a tag with a character that is not allowed
+     Tags are space-separated tokens of letters, digits and _ . : + - . -->
+<!-- expect {"outcome": "error", "errors": ["tag-bad"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="T">
+    <set id="s1" members="1" tags="a&quot;b"/>
+  </tier>
+</analysis>
