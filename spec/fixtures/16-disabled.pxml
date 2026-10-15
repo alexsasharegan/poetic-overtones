@@ -1,0 +1,30 @@
+<!-- Case 16: which tiers and styles are switched on.
+     disabled="true" on a tier or a style block is saved view state: the thing is off.
+     Absent (or "false") means on. The attribute needs a value because XML has no bare
+     attributes. Several named style blocks with at most one enabled give scheme switching;
+     all of them are still parsed and checked. -->
+<!-- expect {"sets": {"s1": ["one"], "s2": ["two"]}} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Shown">
+    <set id="s1" members="1"/>
+  </tier>
+  <tier id="t2" name="Hidden" disabled="true">
+    <set id="s2" members="2"/>
+  </tier>
+</analysis>
+
+<style name="light">
+  [data-tier~="t1"] { background: #fdebd0; }
+</style>
+<style name="dark" disabled="true">
+  [data-tier~="t1"] { background: #5a3a12; }
+</style>

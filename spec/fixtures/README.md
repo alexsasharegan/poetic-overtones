@@ -24,12 +24,16 @@ Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning
 | 07 relations | alliteration and a repeated rime over the same words |
 | 08 names | ids opaque; names in any script, repeated or absent |
 | 09 entities | XML escapes and numeric references; no CDATA |
-| 10 text-src | `<text src="..."/>`, self-closing, relative only, nothing escaped |
+| 10 text-src | `<text src="..."/>`, self-closing, relative only, nothing escaped, sliced and dedented like an inline block |
 | 11 unicode | code-point offsets (astral Shavian), combining mark alone, Private Use |
 | 12 explicit root | the `<pxml>` root form, with an XML declaration |
 | 13 order | undirected sets are unordered (read in document order); directed relations keep the listed order |
 | 14 tags | tags on sets, stamped as `data-tags` for CSS |
-| e01-e22 | files that must be rejected, each for one reason (e15 is CDATA) |
+| 15 unreferenced | a span no set lists loads silently |
+| 16 disabled | saved view state: `disabled="true"` on tiers and style blocks |
+| 17 style-src | `<style src="..."/>`, same rules as `<text src>` |
+| 18 indented-src | a text file is dedented like an inline block |
+| e01-e26 | files that must be rejected, each for one reason (e15 is CDATA) |
 | w01-w03 | files that load but are reported: control character, `url()` in CSS, unknown attribute |
 
 Model in one line: a **tier** (a dimension) holds **sets**; a **set** lists **spans** by id;

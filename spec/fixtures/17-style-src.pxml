@@ -1,0 +1,21 @@
+<!-- Case 17: styles in a file.
+     A self-closing <style src="..."/> follows the same rule as <text src>: relative path
+     only, no chaining, raw contents, nothing escaped. The CSS is not dedented and indentation
+     in it means nothing. A style file cannot pull in another (@import is reported, S-02). -->
+<!-- expect {"sets": {"s1": ["one"]}} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Words">
+    <set id="s1" members="1"/>
+  </tier>
+</analysis>
+
+<style name="demo" src="17-style-src.css"/>

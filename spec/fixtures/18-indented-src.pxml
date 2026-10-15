@@ -1,0 +1,20 @@
+<!-- Case 18: an indented text file.
+     The file holds a poem indented by four spaces. It is dedented like an inline block, so
+     the input text is "Down / the / stair" with only the relative indentation left, and
+     the markup (written flush) matches it. The one thing this gives up: an input text whose
+     every line is indented loses that shared indent. -->
+<!-- expect {"sets": {"s1": ["Down", "the", "stair"]}} -->
+
+<text src="18-indented-src.txt"/>
+
+<markup>
+<span id="1">Down</span>
+  <span id="2">the</span>
+    <span id="3">stair</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Words">
+    <set id="s1" members="1,2,3"/>
+  </tier>
+</analysis>

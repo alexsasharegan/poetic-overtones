@@ -1,0 +1,13 @@
+<!-- E26: a style reference with a body as well
+     A src element is self-closing: the contents come from the file only. -->
+<!-- expect {"outcome": "error", "errors": ["style-src-and-body"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<style src="17-style-src.css">p { }</style>

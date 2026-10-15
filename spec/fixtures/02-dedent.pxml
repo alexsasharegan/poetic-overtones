@@ -2,10 +2,11 @@
      The common indentation of the non-blank lines is removed from text and markup alike;
      relative indentation survives. The end tag may be indented. A blank line in the
      markup may hold stray whitespace shorter than the common indent (the blank line in
-     the markup below holds two spaces). -->
+     the markup below holds two spaces). xml:space="preserve" is what exporters write so that
+     XML-aware formatters leave these two blocks alone; loaders ignore it. -->
 <!-- expect {"sets": {"s1": ["Down", "the", "stair", "up"]}} -->
 
-<text>
+<text xml:space="preserve">
     Down
       the
         stair
@@ -13,7 +14,7 @@
     and up
     </text>
 
-<markup>
+<markup xml:space="preserve">
     <span id="1">Down</span>
       <span id="2">the</span>
         <span id="3">stair</span>

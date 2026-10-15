@@ -1,0 +1,19 @@
+<!-- Case 15: a span that no set lists.
+     Such a span means nothing yet (the user drew it and has not placed it, or a reset left
+     it behind). Import accepts it silently. Export drops spans that no set lists, so files
+     stay clean. -->
+<!-- expect {"sets": {"s1": ["one"]}} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Words">
+    <set id="s1" members="1"/>
+  </tier>
+</analysis>

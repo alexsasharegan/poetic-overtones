@@ -1,0 +1,17 @@
+<!-- E25: disabled with a value other than true or false
+     XML has no bare attributes, and no other value means anything. -->
+<!-- expect {"outcome": "error", "errors": ["disabled-bad"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="T" disabled="yes">
+    <set id="s1" members="1"/>
+  </tier>
+</analysis>

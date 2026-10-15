@@ -1,8 +1,8 @@
 <!-- Case 10: the input text lives in a file.
      A self-closing <text src="..."/> names a file next to this one: relative path only,
-     no "..", no URL. One trailing LF of the file is dropped, a BOM is ignored, and the
-     file is NOT dedented (it is the user's text, byte for byte). Nothing in it is
-     escaped. The markup still has to reproduce it. -->
+     no "..", no URL. A BOM is ignored and nothing in the file is escaped. The file is
+     sliced and dedented exactly like an inline block (its final line end goes; a
+     leading blank line stays), so the markup can always reproduce it (case 18). -->
 <!-- expect {"sets": {
   "s1": ["Roses are red,", "Violets are blue,"],
   "s2": ["red", "blue"]}} -->

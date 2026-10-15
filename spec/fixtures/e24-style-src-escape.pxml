@@ -1,0 +1,13 @@
+<!-- E24: a style reference that leaves the folder
+     Same path rules as <text src> (case e06). -->
+<!-- expect {"outcome": "error", "errors": ["style-src-invalid"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<style src="../x.css"/>

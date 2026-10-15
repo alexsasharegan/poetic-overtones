@@ -17,7 +17,8 @@ import xml.etree.ElementTree as ET
 ID_RE = re.compile(r'[A-Za-z0-9_]+')
 PROVIDER_RE = re.compile(r'[a-z][a-z0-9.-]*@[0-9]+')
 BLOCKS = ('meta', 'text', 'markup', 'analysis', 'style')
-TIER_ATTRS = {'id', 'name', 'kind', 'directed', 'provider', 'reads'}
+TIER_ATTRS = {'id', 'name', 'kind', 'directed', 'provider', 'reads', 'disabled'}
+STYLE_ATTRS = {'name', 'disabled', 'src'}
 SET_ATTRS = {'id', 'name', 'members', 'confirmed', 'tags'}
 TAG_RE = re.compile(r'[A-Za-z0-9_.:+-]+')
 
@@ -47,13 +48,13 @@ def sanitize(s, warnings):
     return ''.join(out)
 
 
-def keep_mask(raw):
+def keep_mask(raw, lead=True):
     """Which characters of a block survive: one leading LF and the trailing LF plus
     indentation before the end tag are sliced off, then the common indentation of the
     non-blank lines is removed. Returns a list of booleans over raw."""
     n = len(raw)
     keep = [True] * n
-    if raw.startswith('\n'):
+    if lead and raw.startswith('\n'):
         keep[0] = False
     m = re.search(r'\n[ \t]*\Z', raw)
     if m:
@@ -131,6 +132,31 @@ def bad_src(p):
             or '..' in p.split('/'))
 
 
+def read_ref(ch, base, warnings, kind):
+    """Body of a self-closing src reference: raw file contents, BOM ignored, LF line ends."""
+    ref = ch.get('src')
+    if ''.join(ch.itertext()).strip():
+        raise Fail(kind + '-src-and-body')
+    if bad_src(ref):
+        raise Fail(kind + '-src-invalid', ref)
+    p = os.path.join(base, *ref.split('/'))
+    if not os.path.isfile(p):
+        raise Fail(kind + '-src-missing', ref)
+    with open(p, 'rb') as f:
+        raw = f.read().decode('utf-8').lstrip('\ufeff')
+    return sanitize(raw, warnings).replace('\r\n', '\n')
+
+
+def load_style(ch, base, warnings):
+    if any(k not in STYLE_ATTRS and not k.startswith('x-') for k in ch.attrib):
+        warnings.append('unknown-attribute')
+    if ch.get('disabled') not in (None, 'true', 'false'):
+        raise Fail('disabled-bad', ch.get('disabled'))
+    if ch.get('src') is not None:
+        return read_ref(ch, base, warnings, 'style')
+    return ''.join(ch.itertext())
+
+
 def parse_ids(value):
     """Explicit ids separated by commas and/or whitespace. No ranges."""
     out = []
@@ -169,7 +195,7 @@ def check(path, warnings):
             continue          # comments and processing instructions between blocks
         if ch.tag in BLOCKS:
             if ch.tag == 'style':
-                css.append(ch.text or '')
+                css.append(load_style(ch, base, warnings))
             elif ch.tag in blocks:
                 raise Fail('block-duplicate', ch.tag)
             else:
@@ -190,17 +216,8 @@ def check(path, warnings):
     body = t.text or ''
     ref = t.get('src')
     if ref is not None:
-        if body.strip():
-            raise Fail('text-src-and-body')
-        if bad_src(ref):
-            raise Fail('text-src-invalid', ref)
-        p = os.path.join(base, *ref.split('/'))
-        if not os.path.isfile(p):
-            raise Fail('text-src-missing', ref)
-        with open(p, 'rb') as f:
-            raw = f.read().decode('utf-8').lstrip('﻿')
-        raw = sanitize(raw, warnings).replace('\r\n', '\n')
-        text = raw[:-1] if raw.endswith('\n') else raw
+        raw = read_ref(t, base, warnings, 'text')
+        text, _ = apply_mask(raw, keep_mask(raw, lead=False))
     else:
         text, _ = apply_mask(body, keep_mask(body))
 
@@ -271,6 +288,8 @@ def check(path, warnings):
                 if directed == 'true' and kind != 'relation':
                     raise Fail('directed-without-relation', tid)
             is_directed = directed == 'true'
+            if tr.get('disabled') not in (None, 'true', 'false'):
+                raise Fail('disabled-bad', tr.get('disabled'))
             prov = tr.get('provider')
             if prov is not None and not PROVIDER_RE.fullmatch(prov):
                 raise Fail('provider-bad', prov)
