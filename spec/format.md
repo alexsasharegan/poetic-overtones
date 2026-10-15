@@ -95,8 +95,8 @@ Like a diamond in the sky.
 |---|---|---|---|
 | T-01 | `<text>` holds the input text. Only `<` and `&` need escaping (B-06). | ADOPTED | 01, 09 |
 | T-02 | **Slice.** One newline right after the start tag is dropped, and the final newline together with any spaces or tabs before the end tag is dropped. This lets a block start and end on lines of its own. | ADOPTED | 01, 02 |
-| T-03 | **Dedent.** After slicing, the indentation shared by all non-blank lines is removed. Relative indentation stays. A blank line holding less whitespace than the shared indentation becomes empty. T-02 and T-03 apply to `text` and `markup` in the same way. Exporters write both blocks flush left. | ADOPTED | 01, 02, 12 |
-| T-04 | **File reference.** `<text src="poem.txt"/>`, self-closing, may stand in for the body. The path is relative to the document file, written with `/`, and has no `..`, no leading `/` or `~`, no backslash and no scheme such as `http:`. The file is not itself a document, so there is no chaining. The element must have no body. The file is UTF-8, a BOM is ignored, line ends become LF, and **one** trailing LF is dropped. It is **not dedented** and nothing in it is escaped. Support is optional in the first version (F-08). | ADOPTED (relative only); PROVISIONAL (the rest) | 10, e06 |
+| T-03 | **Dedent.** After slicing, the indentation shared by all non-blank lines is removed. Relative indentation stays. A blank line holding less whitespace than the shared indentation becomes empty. T-02 and T-03 apply to `text` and `markup`, and to text read from a file (T-04), in the same way. Exporters write both blocks flush left. | ADOPTED | 01, 02, 12, 18 |
+| T-04 | **File reference.** `<text src="poem.txt"/>`, self-closing, may stand in for the body. The path is relative to the document file, written with `/`, and has no `..`, no leading `/` or `~`, no backslash and no scheme such as `http:`. The file is not itself a document, so there is no chaining. The element must have no body. The file is UTF-8, a BOM is ignored, line ends become LF, and nothing in it is escaped. Its contents are then treated like an inline block: the final line end is dropped and the shared indentation removed (T-02, T-03), so the markup can always match it. A leading blank line stays, because no start tag precedes it. Support is optional in the first version (F-08). | ADOPTED (relative only, same rule for styles); PROVISIONAL (the rest) | 10, 18, e06 |
 | T-05 | The size limit on input text is an application rule (W-04), not a rule of the format. | ADOPTED | |
 | T-06 | The input text stays out of the document block for a reason: it is never changed by markup. Whatever happens in the other blocks, the text is the text. | PROVISIONAL | e01 |
 
@@ -110,14 +110,14 @@ Like a diamond in the sky.
 | M-04 | A span may be a part of a word and may start or end between a base character and its combining mark. A span may be empty (reported). | PROVISIONAL | 01, 11 |
 | M-05 | **A span in several pieces** (to cross another span, or to be discontinuous such as the English split digraph a_e) is written as a **head** and **continuations**. The head is a span with its own id. Each continuation is a span with its own id and a `cont` attribute holding the head's id. The pieces, in document order, make one span whose text is the pieces joined. A continuation points at a head, never at another continuation; it must come after its head; the pieces must not overlap. Sets name only the head. | PROVISIONAL | 03, 04, e07, e16, e17, e18 |
 | M-06 | Positions are Unicode code points in the stripped text (S-01 of `spec/app.md`). An implementation whose strings are UTF-16 converts at the edges. | PROVISIONAL | 11 |
-| M-07 | Whitespace inside `markup` and `text` is text. A formatter or editor that re-indents them corrupts the file; exporters write them flush left. | PROVISIONAL | 02 |
+| M-07 | Whitespace inside `markup` and `text` is text. A formatter or editor that re-indents them line by line is harmless (T-03), but one that joins or wraps lines corrupts the file. Exporters write both blocks flush left with `xml:space="preserve"`, which XML-aware formatters respect; loaders ignore it. | PROVISIONAL | 02 |
 
 ## 5. The analysis block (A)
 
 | ID | Rule | Status | Cases |
 |---|---|---|---|
 | A-01 | `<analysis>` holds `<tier>` elements, in display order. A tier holds `<set>` elements, in order. Nothing else. | ADOPTED | 01 |
-| A-02 | A **tier** has `id` (required) and these optional attributes: `name`; `kind` (`label`, the default, or `relation`); `directed` (`true` or `false`; only on a `relation` tier); `provider` (`name@version`, an integer version); `reads` (ids of other tiers). | PROVISIONAL | 05, 06, e10, e13, e14, e19 |
+| A-02 | A **tier** has `id` (required) and these optional attributes: `name`; `kind` (`label`, the default, or `relation`); `directed` (`true` or `false`; only on a `relation` tier); `provider` (`name@version`, an integer version); `reads` (ids of other tiers); `disabled` (A-11). | PROVISIONAL | 05, 06, 16, e10, e13, e14, e19 |
 | A-03 | A **set** has `id` (required) and these optional attributes: `name`; `members` (span ids, **listed one by one**, separated by commas or whitespace; no ranges); `confirmed` (a subset of `members`); `tags` (space-separated tokens of letters, digits and `_ . : + -`, such as `place:labial`). Each member is a head span (M-05). | ADOPTED (no ranges); PROVISIONAL (the rest) | 01, 14, e03, e10, e12, e17, e20, e21 |
 | A-04 | **Meaning of kind.** In a `label` tier each member of a set independently has the label that the set stands for (these are lines; these are stressed). In a `relation` tier the members of a set are related to each other (these two rhyme; these six alliterate). When the tier is `directed` the relation runs from the first member to the last in listed order. | PROVISIONAL | 01, 05, 07 |
 | A-05 | **Order.** An undirected set is unordered: a loader reports its members in document order, whatever the listed order. A directed relation keeps the listed order, which is its meaning. Exporters list undirected members in document order, so files diff cleanly. | PROVISIONAL | 13 |
@@ -126,35 +126,46 @@ Like a diamond in the sky.
 | A-08 | **Provenance.** A tier with a `provider` was filled by that provider (`spec/app.md` E-01) and a whole-tier reset reruns it. In such a tier, a member listed in `confirmed` was accepted by a human and every other member is inferred. A tier without a `provider` was made by hand and is never reset. `reads` names the tiers the provider worked from: a dependency, not a hierarchy. | PROVISIONAL | 06, e10, e13 |
 | A-09 | There is no parent and child between tiers (P-04 of `spec/app.md`), and no rule that members of one tier match members of another. | ADOPTED | 06, 07 |
 | A-10 | A tier may hold no sets and a set no members. | PROVISIONAL | |
+| A-11 | **Saved view state.** `disabled="true"` on a tier means it is switched off in the view; absent or `"false"` means on. The value is required because XML has no bare attributes. A disabled tier is still parsed and checked in full. | ADOPTED | 16, e25 |
+| A-12 | A span that no set lists is meaningless. Import accepts it silently. Export drops it (with its continuations). A reset replaces what the sets of a provider tier list, not the spans; a provider that recomputes a span with the same pieces as an existing one reuses its id (`spec/app.md` E-08). | PROVISIONAL | 15 |
 
 ## 6. The style block (S)
 
 | ID | Rule | Status | Cases |
 |---|---|---|---|
-| S-01 | `<style>` holds **plain CSS**. There is no styling language of our own. Several blocks are allowed and apply in order. `<` and `&` must be escaped (CSS nesting needs `&amp;`); `>` is safe. | ADOPTED | 01, 14 |
+| S-01 | `<style>` holds **plain CSS**. There is no styling language of our own. Several blocks are allowed and apply in order. `<` and `&` must be escaped in the body (CSS nesting needs `&amp;`); `>` is safe; or put the CSS in a file (S-06), where nothing is escaped. A style block may have `name`, `disabled` (as A-11) and `src`. | ADOPTED | 01, 14, 16 |
 | S-02 | A loader ignores and reports `url(...)` and `@import` in a style block, so opening a file never fetches anything (F-07 of `spec/app.md`). | PROVISIONAL | w02 |
 | S-03 | **What CSS sees** (a rendering contract, not a rule of the file). The renderer stamps each member span with `data-tier` and `data-set` (the ids of the tiers and sets it is in), `data-tags` (the tags of those sets) and `data-pos` (`tier-id:position` for each, S-04). Each is a space-separated list, so `[data-set~="s3"]` and `[data-tags~="place:labial"]` work. Turning a tier off removes its stamps. | PROVISIONAL | 01, 14 |
 | S-04 | **Position.** The renderer also exposes a set's position in its tier (A-06) to CSS as the custom property `--pos-<tier id>` on each member span, so a tier-level rule can cycle colors. This is a rendering rule, not a file rule; the file only has to keep the order of sets. | ADOPTED (exposed); PROVISIONAL (the form) | |
-| S-05 | A **scheme** is a style block that can be swapped (`spec/app.md` Y-01). A built-in scheme records its credit in its own `<meta>` (Y-08). | PROVISIONAL | |
+| S-05 | A **scheme** is a named style block that can be swapped (`spec/app.md` Y-01): the active scheme is the style block that is not disabled (A-11). A built-in scheme records its credit in its own `<meta>` (Y-08). | PROVISIONAL | 16 |
+| S-06 | **Style reference.** `<style src="scheme.css"/>` follows the rule of T-04: self-closing, relative path only, no chaining, raw contents, nothing escaped. The CSS is not dedented. | ADOPTED | 17, e24, e26 |
 
 ## 7. Import and export (I)
 
 | ID | Rule | Status | Cases |
 |---|---|---|---|
 | I-01 | Importing an export gives back the same document: text, spans, tiers, sets, `confirmed` lists, names, ids and order. | PROVISIONAL | |
-| I-02 | Export is canonical: blocks in the order `meta`, `text`, `markup`, `analysis`, `style`; tiers and sets in display order; undirected members in document order (A-05); `text` and `markup` flush left (T-03). | PROVISIONAL | 01, 13 |
+| I-02 | Export is canonical: blocks in the order `meta`, `text`, `markup`, `analysis`, `style`; tiers and sets in display order; undirected members in document order (A-05); spans that no set lists dropped (A-12); `text` and `markup` flush left with `xml:space="preserve"` (T-03, M-07). | PROVISIONAL | 01, 13, 15 |
 | I-03 | Import reports every problem with the line number and the rule that was broken, and never drops content silently. Warnings (B-07, B-09, S-02, empty spans, duplicate members) do not stop a load. | PROVISIONAL | e01-e23, w01-w03 |
 | I-04 | Import and export are the only ways a document enters or leaves the application's working copy (`spec/app.md` O-04). | ADOPTED | |
 
-## 8. Open questions
+## 8. Questions
+
+Settled on 2026-10-14:
+
+| ID | Question | Answer |
+|---|---|---|
+| FQ1 | Extension and root name | `.pxml`, `<pxml>` (ADOPTED) |
+| FQ2 | Name of the marked-up block | `markup` (ADOPTED) |
+| FQ3 | Where are the view and the active scheme kept? | `disabled="true"` on tiers and style blocks (A-11, S-05) (ADOPTED) |
+| FQ4 | How are orphans written? | They are not: spans belong to no tier, a reset replaces what sets list, providers reuse spans with the same pieces, unlisted spans are dropped on export (A-12) (ADOPTED) |
+| FQ5 | `<style src>`? | Yes, the same rule as `<text src>` (S-06) (ADOPTED) |
+| FQ6 | Indented `src` text | Dedent it like an inline block (T-04) (ADOPTED) |
+
+Still open:
 
 | ID | Question | Current default |
 |---|---|---|
-| FQ1 | The extension and the root name | `.pxml`, `<pxml>` |
-| FQ2 | The name of the marked-up block | `markup` |
-| FQ3 | Where are the view (which tiers are on) and the active scheme kept? | Not decided. `meta` attributes are the likely place |
-| FQ4 | How are spans left behind by a reset (orphans, E-08) written? | Not decided |
-| FQ5 | Should `<style src="..."/>` exist, as `<text src>` does? | No, not yet |
-| FQ6 | May a `src` text file be indented, given that the markup is dedented? | Then the markup cannot match it. Keep the rule; the markup would have to keep the indentation. Needs a decision before file references ship |
 | FQ7 | The exact stamping contract (S-03, S-04) | A first guess, to be settled with the renderer |
-| FQ8 | Should the format say what kinds of provider ids exist (`english.stress@1`)? | No: any dotted name and integer version |
+| FQ8 | Should the format say what provider ids look like (`english.stress@1`)? | No: any dotted name and integer version |
+| FQ9 | An escape hatch for an input text whose every line must keep a shared indent? | None: that shared indent is lost (T-03). Add only if someone needs it |

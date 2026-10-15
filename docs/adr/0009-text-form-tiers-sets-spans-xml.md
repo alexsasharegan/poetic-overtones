@@ -48,3 +48,16 @@ and the warnings.
 - ADR-0007 said conformance would use JSON fixtures; the text-form fixtures are `.pxml` files.
 - Open: where the view and active scheme live, how orphans are written, and the exact stamping contract
   (`spec/format.md` section 8).
+
+## Addendum (2026-10-14, later)
+
+Alex settled the questions the first draft left open:
+
+- `.pxml`, the root `<pxml>` and the block name `markup` are final.
+- The view is saved as `disabled="true"` on tiers and on style blocks; the active scheme is the style block
+  that is not disabled.
+- `<style src="..."/>` exists, under the same rule as `<text src>`.
+- Text read from a file is sliced and dedented like an inline block, so the markup can always match it. This
+  gives up a shared indent on a text whose every line is indented.
+- Orphans are not stored. Spans belong to no tier; a reset replaces what the sets of a provider tier list;
+  providers reuse spans with the same pieces; spans that no set lists are dropped on export.

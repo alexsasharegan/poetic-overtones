@@ -111,7 +111,7 @@ its own style (ADR-0003, `docs/synthesis/comparison.md` section 5).
 | T-03 | **Kind.** In a `label` tier (the default) each member of a set independently has the label the set stands for. In a `relation` tier the members of a set belong together, as a rhyme or an alliteration group does; when the tier is directed they are read in the listed order. Kind says how to read and draw; it adds no exclusivity and no hierarchy. | PROVISIONAL |
 | T-04 | Nothing is exclusive. A span may be in several sets of the same tier. (The earlier "one value per label tier" is dropped.) | ADOPTED |
 | T-05 | Any number of tiers can exist, and the user can create, rename, delete and reorder tiers and sets. | ADOPTED |
-| T-06 | Each tier is switched on or off independently. A **view** is the set of visible tiers plus the active scheme, and views are combinable. | ADOPTED |
+| T-06 | Each tier is switched on or off independently. A **view** is the set of visible tiers plus the active scheme, and views are combinable. A document saves its view as `disabled` on tiers and styles (`spec/format.md` A-11). | ADOPTED |
 | T-07 | A set may carry **tags** (`place:labial`, `manner:plosive`, `voiced:true`). Tags let a scheme and a filter act on a group of sets. | PROVISIONAL |
 | T-08 | The user defines tiers and sets in the application. Nothing about them is fixed by the core. | ADOPTED |
 | T-09 | Names are free text in any script and need not be unique. Ids are opaque. Nothing refers to a name, and no id is derived from one. | ADOPTED |
@@ -132,7 +132,7 @@ The user names the sets A, B and so on when they like.
 | E-05 | The user may **unlink** a standard tier. It then becomes an ordinary custom tier and reset is no longer offered. | PROVISIONAL |
 | E-06 | Every tier records its origin. A tier with a provider is **inferred** (provider id and version), and the members a human accepted are listed as confirmed; a tier without a provider is **human**. Views can show the difference. Reset replaces human edits too (E-03). | ADOPTED |
 | E-07 | The core ships with no provider. The application ships standard providers separately (word, syllable and sound for English first), built through the same interface a user's provider would use. | ADOPTED |
-| E-08 | Resetting a tier can remove spans that sets of other tiers refer to. Those references become **orphans**: kept, shown with a flag, and removable in one action (how they are written is open, `spec/format.md` FQ4). | PROVISIONAL |
+| E-08 | **Reset replaces what the sets of a provider tier list, not the spans.** Spans belong to no tier, so a rhyme set that lists a syllable span cannot dangle. When a provider recomputes a span with the **same pieces** as an existing one it reuses that span id, so hand-made sets survive a reset whenever the boundaries are unchanged. If boundaries change, the old span stays because other sets still list it, and the application flags it as no longer in the provider tier (an **orphan**, worked out, not stored). A span that no set lists is dropped on export (`spec/format.md` A-12). | PROVISIONAL |
 | E-09 | Every edit, reset included, can be undone and redone. | PROVISIONAL |
 
 E-06 follows ADR-0004. Standard providers are specified separately, in `spec/providers/` (not yet written),
@@ -189,11 +189,11 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 | F-01 | There are three kinds of document: **documents**, **schemes** (style sheets) and **tier definitions** (reusable tiers with their sets, names and tags, but no spans). | PROVISIONAL |
 | F-02 | Every kind has a **text form**: plain text in UTF-8 that a person can read and edit in any text editor. Export writes it, import reads it. This is the share layer (P-09). | ADOPTED |
 | F-03 | A document holds the input text, the spans, the tiers with their sets (with origin), the styles and the view. | PROVISIONAL |
-| F-04 | Conformance is tested with fixtures. The text form has them in `spec/fixtures/` (40 cases and a reference checker); provider, reset and round-trip fixtures are not yet written. An implementation in any language can run them. | PROVISIONAL |
+| F-04 | Conformance is tested with fixtures. The text form has them in `spec/fixtures/` (47 cases and a reference checker); provider, reset and round-trip fixtures are not yet written. An implementation in any language can run them. | PROVISIONAL |
 | F-05 | Requirements on the text form: (a) a person can read it without a manual; (b) plain text with a stable order, one item per line where possible, so a diff or version-control history reads well; (c) comments are allowed; (d) it names its format and version; (e) import of an export gives back the same document, including origins, orphans and the view; (f) import reports errors with line numbers and never drops content silently. | PROVISIONAL |
 | F-06 | The grammar of the text form is `spec/format.md`: XML-based, sibling blocks, no CDATA (Q9 resolved). | PROVISIONAL |
 | F-07 | Opening a document never runs code. The text form holds data only. | PROVISIONAL |
-| F-08 | A document file may keep its **input text** in another file, with a self-closing `<text src="..."/>` (`spec/format.md` T-04): relative path only, no chaining. Support is optional and is not in the first version. | PROVISIONAL |
+| F-08 | A document file may keep its **input text** and its **styles** in other files, with self-closing `<text src="..."/>` and `<style src="..."/>` (`spec/format.md` T-04, S-06): relative path only, no chaining. Support is optional and is not in the first version. | PROVISIONAL |
 
 ## 10. Artifacts
 

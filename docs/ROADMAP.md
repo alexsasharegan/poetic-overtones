@@ -4,13 +4,13 @@
 
 ## 🟢 Now (In Progress)
 
-* **Text form (`spec/format.md`, ADR-0009):** rewritten around 40 fixtures (`spec/fixtures/`, checker `check.py`); `spec/app.md` reconciled to tiers, sets and spans. Awaiting Alex's review of the PROVISIONAL rules and the open questions in `spec/format.md` section 8.
+* **Text form (`spec/format.md`, ADR-0009):** rewritten around 47 fixtures (`spec/fixtures/`, checker `check.py`); `spec/app.md` reconciled to tiers, sets and spans. Questions FQ1 to FQ6 settled; awaiting Alex's review of the PROVISIONAL rules and FQ7 to FQ9.
 
 ## 🟡 Next (Queued)
 
 * **Review `spec/app.md` and `spec/format.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions.
 * **Provider spec for English:** word, syllable and sound tiers, in `spec/providers/` (ADR-0007).
-* **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 40).
+* **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 47).
 * **Community scheme as data:** encode the built-in scheme as a CSS style sheet over tags, settling the deck's hex inconsistencies (ADR-0005).
 * **English baseline POC:** client-side JavaScript (ADR-0006).
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.
