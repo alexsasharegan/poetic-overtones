@@ -83,6 +83,7 @@ Earlier ADRs say "layer"; read it as "tier".
 | W-01 | There are two surfaces. The **input editor** holds the text, which is editable. The **workbench** renders the text with its tiers and holds all marking and interaction. | ADOPTED |
 | W-02 | The workbench is a function of its input. Inside the workbench the text cannot be edited. To change the text, the user goes back to the input editor, which gives the workbench a new input. | ADOPTED |
 | W-03 | When the input text changes, the workbench starts fresh: standard tiers are re-derived, and hand edits and the contents of custom tiers are discarded after a warning. Tier definitions, label sets and schemes are kept. | PROVISIONAL |
+| W-04 | The application limits the size of the input text, so that a document file with its tiers stays manageable (about 4 MB as a first guess). The limit is an application rule, not a rule of the text form. | PROVISIONAL |
 
 W-03 is the simplest rule that fits W-02. A friendlier one, re-anchoring annotations after a text change,
 is a later option (Q1).
@@ -184,6 +185,7 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 | F-05 | Requirements on the text form: (a) a person can read it without a manual; (b) plain text with a stable order, one item per line where possible, so a diff or version-control history reads well; (c) comments are allowed; (d) it names its format and version; (e) import of an export gives back the same document, including origins, orphans and the view; (f) import reports errors with line numbers and never drops content silently. | PROVISIONAL |
 | F-06 | The grammar of the text form is not decided yet (Q9). It will be written as its own spec, `spec/format.md`. | OPEN |
 | F-07 | Opening a document never runs code. The text form holds data only. | PROVISIONAL |
+| F-08 | A document file may point to another file for the body of any block, instead of holding the body itself (a **file reference**, `spec/format.md` section 2.1). This lets a large document split across files. Support is optional and is not in the first version. | PROVISIONAL |
 
 ## 10. Artifacts
 
@@ -216,6 +218,7 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 - Audio.
 - Enforcing a hierarchy between tiers (P-04).
 - Windows and Linux as targets. They are not ruled out (P-12).
+- File references in the text form (F-08).
 
 ## 13. Open questions
 
@@ -234,3 +237,5 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 | Q11 | Which export formats are required? | PDF and PNG required; JPEG and SVG optional (A-02) |
 | Q12 | Should an artifact carry its document's text form inside, so it can be traced back or re-imported? | It may (A-05); how is open |
 | Q13 | How are extensions found, installed and trusted, and what is the transport between the application and an extension? | Not decided (X-04, X-05, X-07) |
+| Q14 | What is the input size limit, and in what unit? | About 4 MB for a document file, as a first guess (W-04). File size grows with the number of tiers, and drawing slows down before parsing does, so a limit in lines or tokens may suit better after testing |
+| Q15 | Should file references ever allow absolute paths? | No (`spec/format.md` B-11) |

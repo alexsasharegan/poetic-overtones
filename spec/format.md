@@ -142,7 +142,7 @@ What the example shows:
 | B-04 | The body of a `text` or `marks` block is verbatim: nothing is trimmed and there are no comments. In every other block, blank lines are ignored and a line that starts with `#` is a comment. | PROVISIONAL |
 | B-05 | The block types are in the table below. | PROVISIONAL |
 | B-06 | The file is UTF-8 with LF line ends. An importer accepts CRLF and converts it (FQ2). | PROVISIONAL |
-| B-07 | `text` is required in a document file. A file with no `text` block is a definitions file: tier lines, label sets and schemes (F-01). Any other combination of blocks is allowed. | PROVISIONAL |
+| B-07 | `text` is required in a document file (inline, or by file reference, B-09). A file with no `text` block is a definitions file: tier lines, label sets and schemes (F-01). Any other combination of blocks is allowed. | PROVISIONAL |
 | B-08 | Fields on a line are separated by one or more spaces, so columns can be aligned. | PROVISIONAL |
 
 | Block | Arguments | Body | Count |
@@ -155,6 +155,33 @@ What the example shows:
 | `links` | tier id | one relation per line (V-03) | one per relation tier |
 | `scheme` | scheme id | header lines, then style rules (section 6) | any |
 | `x-<name>` | free | free: reserved for extensions | any |
+
+### 2.1 File references
+
+A very large text can make a single file unwieldy, because every `marks` block repeats the text. A **file
+reference** lets any block's body live in its own file.
+
+```text
+~~~text file="poem.txt"
+~~~marks words file="poem.words.marks"
+~~~labels stress
+s2 = primary
+~~~
+```
+
+| ID | Rule | Status |
+|---|---|---|
+| B-09 | A fence line with a `file="<path>"` argument is a **file reference**. It is a complete block: it has no body and no closing fence. The body is the content of the named file. | PROVISIONAL |
+| B-10 | The file's content is the body, verbatim, as if it were written between fences, with two adjustments: a UTF-8 byte order mark at the start is removed, and one final LF is removed if there is one. So a text file that ends with a newline gives the same body as the inline form. | PROVISIONAL |
+| B-11 | The path is relative to the directory that holds the document file. It uses `/` as the separator and stays inside that directory or below it. An absolute path, a drive letter, a `..` segment, and any `file:` or network URL are errors. | PROVISIONAL |
+| B-12 | A referenced file holds a body only, with no fences. So references cannot chain or loop. | PROVISIONAL |
+| B-13 | A block that is absent is empty and carries no settings: nothing is inferred and no default stands in for it. A reference whose file cannot be read is not absent. It is an error that names the line, and the importer never treats it as an empty block without saying so. | PROVISIONAL |
+| B-14 | Support for file references is optional. An importer without it stops at the first one with the error "file references are not supported" and its line number. They are not in the first version (`spec/app.md` F-08). | PROVISIONAL |
+
+Why relative only (B-11): a shared document must not be able to make an importer read any file on the
+reader's machine and then write its contents into an export. An absolute path also breaks when a document
+moves, and it leaks a path from the author's machine. The default macOS file system ignores case when it
+matches names, so write each path in its exact case.
 
 ## 3. The document block and tier lines
 
@@ -207,6 +234,7 @@ What the example shows:
 | I-04 | Export order is fixed: the first line, `document`, `text`, label sets, then each tier's body block in tier order, then schemes. Inside a body, items follow text position, then id. That keeps diffs small. | PROVISIONAL |
 | I-05 | Unknown block types and keys are kept and written back unchanged. | PROVISIONAL |
 | I-06 | Opening a file never runs code (F-07). | PROVISIONAL |
+| I-07 | Import resolves file references, so the working copy holds contents, not paths. Export writes everything inline. A **split export**, which the user asks for, writes each chosen body to its own file and puts a reference in its place. | PROVISIONAL |
 
 ## 8. Open questions
 
@@ -219,3 +247,5 @@ What the example shows:
 | FQ5 | Is backslash the right escape for marks bodies? | Yes (M-05); the only characters escaped are `[`, `]`, `{`, `}` and `\` |
 | FQ6 | One file or several for large documents? | One file. Definitions files can be shared (B-07) |
 | FQ7 | A formal grammar (EBNF) and conformance fixtures? | After the shape is agreed (F-04) |
+| FQ8 | Should a file reference carry a hash (`sha256=...`), so a changed or swapped file is noticed? | Not in the first shape |
+| FQ9 | Should a reference be allowed on any block? | Yes (B-09); in practice `text` and `marks` are the large ones |
