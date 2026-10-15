@@ -1,3 +1,6 @@
+> **Historical.** Notes from the first prototype (stress inferred from vowel weight), superseded by the
+> pivot of 2026-10-14 (ADR-0003, ADR-0004). Kept for reference; see `docs/HISTORY.md` and `docs/ROADMAP.md`.
+
 # Design Document: Phonemic Poetic Structure Parser (PPSP)
 
 ## 1. Overview

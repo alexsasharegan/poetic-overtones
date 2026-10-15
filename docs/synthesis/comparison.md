@@ -1,5 +1,11 @@
 # Community markup vs poetic-parser: Phase 1 comparison
 
+> **Status, 2026-10-15.** Partly overtaken. The community scheme is encoded with the deck's own values
+> (ADR-0005, `themes/community.css`), not a palette of our own (D3). Stress has three levels as sets keyed
+> `primary`, `secondary`, `unstressed` (D7). The rest are still proposals: ties and breaks in pattern (D8,
+> D9) belong to marks (MRK, CT-3 on the board); the Tengwar and Shavian items (D1, D2, D4 to D6, D10 to D17)
+> to PLT-2 and PLT-3.
+
 > Read-only analysis. Nothing in the code has changed. Alex decides; this document proposes.
 > Written 2026-10-14, **revised the same day** after Alex clarified the purpose: the deck matters less as a
 > visual to copy than as a spec of which sound features get which visual channel, and how well that fits

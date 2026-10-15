@@ -1,9 +1,51 @@
 # poetic-parser
 
-> **Direction:** this is becoming a web app for multi-dimensional poetic analysis of any Unicode text, with layers, configurable colour schemes and the community scheme from *Phonetic Markup for Verse* as a built-in default (credit to its author, wording to be agreed) (ADR-0003 to ADR-0005). The page described below is the early Shavian-only prototype.
+A web app for seeing the sound of a poem in many dimensions at once: syllables, stress, rhyme,
+assonance, alliteration, feet, and anything else a reader wants to mark. It works on any Unicode text.
+English is the baseline; Shavian and Tengwar shape the design. Marks live in **tiers** that overlap
+freely, and **themes** (plain CSS) decide how they look. The community scheme from *Phonetic Markup for
+Verse* is a built-in theme (credit to its author, wording to be agreed).
 
-Tools for seeing the sound of a poem: its meter, rhymes, assonance and alliteration. Poems are written in
-Shavian, so every letter is a sound and English spelling never gets in the way.
+## Status (2026-10-15)
+
+| Part | State |
+|---|---|
+| Text form `.pxml` (`spec/format.md`) | Specified; 53 fixtures; FQ1 to FQ7 settled |
+| Application spec (`spec/app.md`) | Reconciled with the model; many rules still PROVISIONAL |
+| Core library (`src/core/`) | Loads, edits with undo, and saves documents; no dependencies |
+| Renderer (`src/render/`) | Themes painted as text styles and box styles; prints |
+| App (`app/`) | Open, mark, edit tiers and sets, switch themes, save |
+| Community theme (`themes/`) | Encoded; awaiting the author's confirmation |
+| Providers (`spec/providers/`) | Specified; lexicon work parked until after the MVP |
+
+**Start here:** `docs/ROADMAP.md` (the board), then the latest note in `docs/reviews/`, then
+`docs/HISTORY.md`. Agents: `AGENTS.md`.
+
+```sh
+npm test          # fixtures through the JS core and the Python checkers, round trips, editing
+npm run serve     # then open http://localhost:8000/app/
+```
+
+## Repository map
+
+| Path | What it is |
+|---|---|
+| `spec/app.md` | What the application is. The authority: when spec and code disagree, the code is wrong |
+| `spec/format.md`, `spec/fixtures/` | The `.pxml` text form and the fixtures that pin it; `check.py` is the reference checker |
+| `spec/providers/` | Provider contract and English providers, with fixtures and a runner |
+| `src/core/` | Model, XML parser, loader, export, `Editor` (ADR-0012) |
+| `src/render/` | The painter: themes over the analysis mirror (ADR-0011) |
+| `app/` | The app; `docs/ui-plan.md` orders its steps |
+| `themes/` | Built-in themes; `community.css` and how documents must be marked for it |
+| `prototypes/layers/` | The layering prototype the renderer came from (standalone page) |
+| `tests/` | Node tests run by `npm test` |
+| `docs/ROADMAP.md` | The board: epics, tasks, dependencies |
+| `docs/HISTORY.md`, `docs/projects/` | How the project got here; per-project logs |
+| `docs/adr/` | Decision records |
+| `docs/reviews/` | Review notes with decision ledgers |
+| `docs/synthesis/` | Background studies (the deck against Tengwar; stack and name options) |
+| `scansion.html` and the files listed under "Earlier prototype" | The first Shavian prototypes, kept for reference |
+| `sources/community/` | The community PDF; gitignored, never committed |
 
 ## Origin
 
@@ -17,7 +59,12 @@ and the community work on phonetic markup for verse that the colour scheme here 
 <!-- TODO(Alex): add a timestamp for the Tengwar-mode remark. The episode page has no description, so the
      remark is not verified from the page. Check before the README goes public. -->
 
-## Scansion score
+## The first prototype: a Shavian scansion page
+
+Everything below describes `scansion.html`, the page the project started from. It is kept as a reference
+and as the first "preset" the app should eventually cover.
+
+### Scansion score
 
 `scansion.html` is a single page with no build step. Open it in a browser, paste a Shavian poem marked
 with your own scansion, and it draws the poem as a score:
@@ -34,7 +81,7 @@ with your own scansion, and it draws the poem as a score:
 What you paste is kept in that browser's local storage, so it is still there next time. It is not sent
 anywhere.
 
-### Markup
+#### Markup
 
 | Mark | Meaning | Example |
 |---|---|---|
@@ -45,7 +92,7 @@ anywhere.
 
 A blank line separates stanzas. Punctuation and apostrophes are shown but not sounded.
 
-### How it hears the text
+#### How it hears the text
 
 - Syllables are split around each vowel letter; consonants between vowels go to the next syllable when
   they form an English onset (𐑕𐑑, 𐑐𐑮, ...), otherwise one goes to the next syllable and the rest stay.
@@ -55,7 +102,7 @@ A blank line separates stanzas. Punctuation and apostrophes are shown but not so
   their strong forms when marked `*`.
 - An /st/ or /sp/ opening alliterates with plain /s/.
 
-## Earlier prototype
+### Earlier prototype
 
 `syllabifier.py`, `design-doc.md`, `decisions.md`, `diagram.md` and `out.json` are the first attempt,
 which tried to infer stress automatically. Known bugs there: 𐑬 is missing from the vowel lists, 𐑼 counts

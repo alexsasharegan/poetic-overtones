@@ -1,3 +1,6 @@
+> **Historical.** Notes from the first prototype (stress inferred from vowel weight), superseded by the
+> pivot of 2026-10-14 (ADR-0003, ADR-0004). Kept for reference; see `docs/HISTORY.md` and `docs/ROADMAP.md`.
+
 Starting with a short, metrically stable benchmark—like a Shakespearean sonnet (e.g., Sonnet 18)—and a known Shavian target output is the absolute best way to build a test-driven MVP. It gives us a ground truth to validate our parser against before we throw the complex metrical variations of *The Lay of Nimrodel* at it.
 
 To get the core engine running, here are the **4 concrete technical decisions** we need to finalize:
