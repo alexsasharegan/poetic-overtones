@@ -159,7 +159,7 @@ Relations are first-class (P-05). They are the sets of a tier of kind `relation`
 |---|---|---|
 | Y-01 | A **theme** is a CSS style sheet. The application invents no styling language. It is separate from the tiers and swappable at any time. A theme styles the **analysis, not the text** (`spec/format.md` S-03). | ADOPTED |
 | Y-02 | A **channel** is a CSS property, or a custom property the application defines for what CSS cannot draw (relation arcs, text above or below). The set of channels is open: new CSS properties and new custom properties need no change to the core. | PROVISIONAL |
-| Y-03 | The initial channels are in the table below. | PROVISIONAL |
+| Y-03 | Channels come in two **families**, by whether they move the letters. **Text styles** change the letters: a character can have only one value, so where layers overlap the top layer wins, character by character; underlines are the exception and every layer's underline shows. **Box styles** are drawn around or behind the letters without moving them: every layer's box shows, stacked in tier order, always under the letters so the text stays readable. Both are painted as plain CSS on ordinary elements, so they print and export to PDF. The initial channels are in the table below. | PROVISIONAL |
 | Y-04 | A rule selects tiers by role or kind and sets by position, key and tags, in the mirror of the analysis (`spec/format.md` S-03, S-04). Ids are for wiring sets to spans, not for themes; only a document's own tweaks may use them. Adjusting a style (lighter by a fixed amount) is done in CSS (`color-mix`, relative colours, `calc`). A theme where place sets hue and voicing sets brightness is two rules combined by channel. | PROVISIONAL |
 | Y-05 | If two visible tiers set the same channel on overlapping spans, that is a **collision**. Channels that stack show both; for the others the top layer wins (`spec/format.md` S-07). The editor works collisions out and warns. It never blocks. | PROVISIONAL |
 | Y-06 | In one tier, the editor warns when two sets look too alike (colour distance) or when text contrast is poor. It warns and never blocks. | PROVISIONAL |
@@ -168,17 +168,19 @@ Relations are first-class (P-05). They are the sets of a tier of kind `relation`
 | Y-09 | A loader never fetches anything a style names (`url(...)`, `@import`). Opening a file stays offline (F-07, `spec/format.md` S-02). | PROVISIONAL |
 | Y-10 | **Roles.** The built-in roles are `line`, `stanza`, `word`, `syllable`, `stress`, `rhyme`, `rhyme-scheme`, `alliteration`, `assonance`, `consonance` and `meter`. Any other word is allowed. A theme without a part for a tier's role styles it with its fallback. One role per tier; for a second meaning, make a second tier (`spec/format.md` A-13). | ADOPTED (one role); PROVISIONAL (the list) |
 | Y-11 | **Layer order is the user's.** Dragging a tier in the tier list restacks it, and the new order is saved as the order of tiers in the file (`spec/format.md` A-01, S-07). A theme does not reorder tiers. A new tier goes on top. | ADOPTED (order is the user's, saved in the file); PROVISIONAL (new tier on top) |
+| Y-12 | **Size within reason.** A theme may scale text between 0.75 and 1.5 times the base size; a larger or smaller value is clamped and the editor says so. | PROVISIONAL |
 
-Initial channels (Y-03). The groups are for the editor; the list is expected to grow.
+Initial channels (Y-03). Each is a CSS property a theme sets on a `set` (or on its `tier`, `spec/format.md` S-08). The list is expected to grow.
 
-| Group | Channels |
-|---|---|
-| Text | colour, weight, italic, size |
-| Box | fill colour, fill opacity, border colour, border width, border style (solid, dashed, dotted, double), corner radius |
-| Line | underline, overline, strikethrough: each with colour, thickness and style (solid, dashed, dotted, wavy) |
-| Mark | text or badge above, text or badge below, marker shape (application custom properties) |
-| Effect | shadow, glow, background pattern |
-| Relation | arc or connector colour, width and dash; shared marker (application custom properties) |
+| Family | Group | Channels (CSS) |
+|---|---|---|
+| Text | Letters | colour (`color`), weight (`font-weight`), italic (`font-style`), size (`font-size`, Y-12), shadow (`text-shadow`) |
+| Text | Lines | underline, overline, strikethrough (`text-decoration`): colour, thickness, style (solid, dashed, dotted, double, wavy). Every layer's line shows |
+| Text | Added characters | text before and after a span (`::before` and `::after` with `content`), such as brackets around a foot |
+| Box | Fill | colour (`background-color`), opacity (`opacity`) |
+| Box | Edge | border and outline: width, style (solid, dashed, dotted, double), colour, offset; corner radius (`border-radius`) |
+| Box | Space and shadow | padding around the text (`padding`), shadow (`box-shadow`) |
+| Box (later) | Marks and relations | text or badge above or below, arcs and connectors between members (application custom properties, R-05) |
 
 ## 9. Offline, storage and files
 
@@ -243,7 +245,7 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 | Q3 | May a span be in several sets of one tier? | Yes (T-04). Nothing is exclusive |
 | Q4 | Can a set list raw character ranges, not spans? | No: sets list span ids. A span is the thing with an identity (S-02) |
 | Q5 | Should reset ever be narrower than a whole tier? | No (E-03). A scope such as a line or a selection can come later |
-| Q6 | How many channels, and how are they grouped? | Open registry with the initial list in Y-03 |
+| Q6 | How many channels, and how are they grouped? | Two families, text and box styles (Y-03), with the initial list in the table; marks and arcs come later |
 | Q7 | Where do theme credits and licences live, and in what form? | In the theme file (Y-08); form to be agreed with the scheme's author |
 | Q8 | Should a document record several readers' annotation sets side by side? | Not in this version (ADR-0004 notes that two readers can disagree) |
 | Q9 | What is the grammar of the text form? | `spec/format.md`: XML-based, sibling blocks, spans with ids, sets in tiers, plain CSS (F-06) |

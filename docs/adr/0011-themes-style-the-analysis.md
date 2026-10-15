@@ -37,3 +37,12 @@ And nothing said how overlapping tiers stack (lines should sit under rhymes).
 * Later on top, for tiers and for sets within a tier, approved by Alex (S-07). Tier rules reach their sets
   (S-08) and theme CSS is contained (S-09), also approved, after the layering prototype.
 * The community scheme of ADR-0005 becomes the community theme.
+
+## Addendum: two plain-CSS painters (2026-10-14)
+
+The first prototype painted with the CSS Custom Highlight API, which cannot do bold, italic, size, borders, corner
+radius or added characters. Alex wants all of those, and wants output that prints well. Painting is therefore plain
+CSS on ordinary elements, in two families (`spec/app.md` Y-03, `spec/format.md` S-07): **text styles** change the
+letters (top layer wins per character; every layer's underline shows) and **box styles** are measured and drawn
+under the letters (every layer shows, in tier order). Size is clamped to 0.75 to 1.5 times (Y-12). Prototype v2
+shows all of it, including PDF output, in Chromium.

@@ -10,7 +10,7 @@
 
 * **Review `spec/app.md` and `spec/format.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions.
 * **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 52).
-* **Channels and the mirror (FQ7):** the layering prototype (`prototypes/layers/`) works in Chromium; decide what to do about channels the highlight API cannot paint (weight, italic, size, borders, marks), and test Safari and Firefox.
+* **Channels and the mirror (FQ7):** prototype v2 (`prototypes/layers/`) paints both families of channels (text and box styles) as plain CSS and prints to PDF in Chromium. Still to do: test Safari and Firefox, and decide whether members are mirrored (confirmed vs inferred looks).
 * **Community theme as data:** encode the built-in community scheme as a theme over roles and tags, settling the deck's hex inconsistencies (ADR-0005, ADR-0011).
 * **English baseline POC:** client-side JavaScript (ADR-0006).
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.
@@ -24,6 +24,6 @@
 
 ## 🔴 Done (Completed)
 
-* **Layering prototype:** `prototypes/layers/index.html` paints a theme from the analysis mirror onto plain text with the CSS Custom Highlight API, one layer per tier in file order (ADR-0011).
+* **Layering prototype:** `prototypes/layers/index.html` paints a theme from the analysis mirror onto the text, one layer per tier in file order (ADR-0011). v1 used CSS highlights; v2 uses two plain-CSS painters (text styles and box styles).
 
 * **Scansion score:** `scansion.html`, the Shavian-only prototype (first preset).
