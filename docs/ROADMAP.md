@@ -4,15 +4,14 @@
 
 ## 🟢 Now (In Progress)
 
-* **Application spec (`spec/app.md`, ADR-0007):** first draft written from Alex's scope answers; awaiting his review. Earlier: the pivot (ADR-0003 to ADR-0006) and `docs/synthesis/comparison.md`.
+* **Text form (`spec/format.md`, ADR-0009):** rewritten around 40 fixtures (`spec/fixtures/`, checker `check.py`); `spec/app.md` reconciled to tiers, sets and spans. Awaiting Alex's review of the PROVISIONAL rules and the open questions in `spec/format.md` section 8.
 
 ## 🟡 Next (Queued)
 
-* **Review `spec/app.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions (section 13).
-* **Text form (`spec/format.md`):** first shape drafted (blocks, one marked copy of the text per tier); awaiting Alex's reaction. Then a formal grammar and conformance fixtures (spec Q9, ADR-0008).
+* **Review `spec/app.md` and `spec/format.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions.
 * **Provider spec for English:** word, syllable and sound tiers, in `spec/providers/` (ADR-0007).
-* **JSON fixtures** for providers, reset and editing (`spec/fixtures/`).
-* **Community scheme as data:** encode the built-in scheme, settling the deck's hex inconsistencies (ADR-0005).
+* **Fixtures** for providers, reset, editing and round trips (`spec/fixtures/`; the text form already has 40).
+* **Community scheme as data:** encode the built-in scheme as a CSS style sheet over tags, settling the deck's hex inconsistencies (ADR-0005).
 * **English baseline POC:** client-side JavaScript (ADR-0006).
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.
 

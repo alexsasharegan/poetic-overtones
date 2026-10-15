@@ -25,3 +25,4 @@ Number ADRs sequentially and never reuse a number. The pattern is the one in Ale
 | [ADR-0006](./0006-poc-scope-client-side-english-baseline.md) | POC Scope: Client-Side JavaScript, English Baseline | Active | 2026-10-14 |
 | [ADR-0007](./0007-spec-first-and-tiers.md) | Spec First, and "Tier" as the Working Name | Active | 2026-10-14 |
 | [ADR-0008](./0008-offline-first-text-form-and-extensions.md) | Offline First, a Text Form, Artifacts and Extensions | Active | 2026-10-14 |
+| [ADR-0009](./0009-text-form-tiers-sets-spans-xml.md) | Text Form: Tiers Hold Sets of Spans, in XML-Based Blocks | Active | 2026-10-14 |

@@ -34,3 +34,5 @@ design, with the spec above any language or stack, as in shavian2tengwar. He als
 - Standard providers (English first) are specified separately, after the core spec, in `spec/providers/`.
 - The community scheme becomes data in the scheme format the spec defines (ADR-0005).
 - If Alex prefers another word, a search-and-replace across `spec/`, `AGENTS.md` and `docs/` changes it.
+
+Refined by ADR-0009: a tier holds sets of spans, the kinds are label and relation, and text-form fixtures are `.pxml` files.

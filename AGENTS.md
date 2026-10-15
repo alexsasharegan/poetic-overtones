@@ -62,7 +62,7 @@ Load Alex's user-level `project-docs` skill before starting any task. It sets ou
 
 ### Annotation model
 
-Stand-off tiers over tokens (ADR-0003; ADR-0007 renames layers to tiers). A change to tokenization, the tier schema, how tiers depend on each other, or how schemes bind to labels needs an ADR. The prototype's text markup (`*` before a stressed syllable, `.` manual split, `-` compound, `·` namer dot) is defined in `README.md`; it stays as an import and export format.
+Stand-off analysis: a tier holds sets, a set lists spans, and spans are marked in the text (ADR-0003; ADR-0007 renames layers to tiers; ADR-0009). A change to tokenization, the tier schema, how tiers depend on each other, or how schemes bind to labels needs an ADR. The prototype's text markup (`*` before a stressed syllable, `.` manual split, `-` compound, `·` namer dot) is defined in `README.md`; it stays as an import and export format.
 
 ### File format invariants
 
@@ -70,6 +70,8 @@ Decided by Alex; do not relax them on your own judgment.
 
 - **No CDATA, anywhere.** The text form is XML-based, but `<![CDATA[ ... ]]>` is not part of it and a loader rejects it. Escape with `&lt;` `&amp;` or numeric references, or keep the text in a file and reference it with a self-closing `<text src="..."/>` (fixtures `09`, `10`, `e15`).
 - Markup follows the XML spec, not HTML5 leniency, and uses JSX-style self-closing tags (`<tag ... />`).
+- Ids are unique across the whole file and opaque. Never derive an id from a name or the reverse. Every span has an id; a span in pieces uses `cont`, never a repeated id.
+- Members are listed one by one (no ranges). Styles are plain CSS.
 - The fixtures in `spec/fixtures/` are part of the spec. Run `python3 -I spec/fixtures/check.py` before and after any format change.
 
 ### Inference
