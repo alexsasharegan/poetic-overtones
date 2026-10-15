@@ -1,6 +1,6 @@
 # Roadmap
 
-> The board for poetic-parser: where the project stands, every queued task grouped into epics, and what
+> The board for poetic-overtones: where the project stands, every queued task grouped into epics, and what
 > blocks what. Start here in a new session, then read the latest note in `docs/reviews/`.
 > Last updated 2026-10-15. History: `docs/HISTORY.md`.
 
@@ -41,7 +41,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | DEC-5 | Export of `<style src>`: inline (now) or keep the reference | 🟡 | CORE-4 | Q19 |
 | DEC-6 | Skim the PROVISIONAL rules (23 in format.md, 41 in app.md, 8 in contract.md) and adopt or change | 🟡 | | review A5 |
 | DEC-7 | Browser tests may use Playwright as a dev-only dependency | 🟡 | QA-1 | ADR-0012 forbids runtime dependencies only |
-| DEC-8 | Hosting, stack beyond the POC, and the name | ⚪ | PLT-1 | `docs/synthesis/stack-and-name-options.md` |
+| DEC-8 | Hosting and the stack beyond the POC (the name is decided: poetic-overtones, ADR-0013) | ⚪ | PLT-1 | `docs/synthesis/stack-and-name-options.md` |
 | DEC-9 | FQ8 (provider id form), FQ9 (shared indent), C-08 | ⚪ | | not blocking the MVP |
 | DEC-10 | Timestamp for the Tengwar-mode remark in the README | ⚪ | | README TODO |
 

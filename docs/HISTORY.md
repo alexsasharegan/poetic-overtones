@@ -1,6 +1,6 @@
 # History
 
-How poetic-parser got where it is, in phases. For the task board see `docs/ROADMAP.md`; for decisions,
+How poetic-overtones (named poetic-parser until 2026-10-15) got where it is, in phases. For the task board see `docs/ROADMAP.md`; for decisions,
 `docs/adr/`; for the detailed log of the foundation work, `docs/projects/0001-foundation/LOG.md`.
 Dates are Alex's local time (America/Phoenix).
 
@@ -74,3 +74,8 @@ Alex widened the project to a web app for multi-dimensional poetic analysis of a
 * `themes/community.css`: the community scheme as a theme; seven colours settled where the deck's labels
   contradict its swatches (`themes/README.md`).
 * Review note with a decision ledger: `docs/reviews/2026-10-15.md`. The roadmap became a board of epics.
+
+## 7. A name (2026-10-15, morning)
+
+* The project is renamed **poetic-overtones** ("Poetic Overtones"): overtones are the layers inside one sound,
+  as tiers are the layers over one text. ADR-0013.

@@ -2,7 +2,7 @@
 
 A stack of small files, each testing one case the format has to support. They are part
 of the spec: if a rule in `../format.md` and a fixture disagree, one of them is wrong and
-must be fixed, not ignored. They are the poetic-parser counterpart of the corpus in
+must be fixed, not ignored. They are the poetic-overtones counterpart of the corpus in
 shavian2tengwar.
 
 Run them all: `python3 -I check.py` (Python 3, stdlib only). `check.py --show FILE`

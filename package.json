@@ -1,5 +1,5 @@
 {
-  "name": "poetic-parser",
+  "name": "poetic-overtones",
   "private": true,
   "type": "module",
   "description": "Multi-dimensional poetic analysis of any text. Core library: plain ES modules, no dependencies.",

@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-> Why poetic-parser is built the way it is, and how to back a decision out.
+> Why poetic-overtones is built the way it is, and how to back a decision out.
 
 ## Status Legend
 
@@ -29,3 +29,4 @@ Number ADRs sequentially and never reuse a number. The pattern is the one in Ale
 | [ADR-0010](./0010-provider-contract-and-lexicon-as-data.md) | Providers Are Pure Functions Over Lexicon Data, Tested by Reset Equality | Active | 2026-10-14 |
 | [ADR-0011](./0011-themes-style-the-analysis.md) | Themes Style the Analysis; Tiers Have a Role; Tier Order Is Layer Order | Active | 2026-10-14 |
 | [ADR-0012](./0012-core-library-plain-modules.md) | The Core Library Is Plain ES Modules With Its Own XML Parser | Active | 2026-10-14 |
+| [ADR-0013](./0013-name-poetic-overtones.md) | The Project Is Named poetic-overtones | Active | 2026-10-15 |

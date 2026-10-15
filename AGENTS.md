@@ -109,7 +109,7 @@ Tools may suggest labels. Each label records who set it (inferred, with its sour
 
 ### Sound rules shared with shavian2tengwar
 
-Where poetic-parser and shavian2tengwar both describe a sound (IPA for a letter, how a ligature expands, weak forms of 𐑞 𐑝 𐑯 𐑑 𐑓), they must agree. If they differ, raise it with Alex rather than picking one. Known differences are in `docs/synthesis/comparison.md`.
+Where poetic-overtones and shavian2tengwar both describe a sound (IPA for a letter, how a ligature expands, weak forms of 𐑞 𐑝 𐑯 𐑑 𐑓), they must agree. If they differ, raise it with Alex rather than picking one. Known differences are in `docs/synthesis/comparison.md`.
 
 ### Community theme
 

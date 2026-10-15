@@ -1,6 +1,6 @@
-# poetic-parser
+# poetic-overtones
 
-A web app for seeing the sound of a poem in many dimensions at once: syllables, stress, rhyme,
+**Poetic Overtones** (formerly poetic-parser). A web app for seeing the sound of a poem in many dimensions at once: syllables, stress, rhyme,
 assonance, alliteration, feet, and anything else a reader wants to mark. It works on any Unicode text.
 English is the baseline; Shavian and Tengwar shape the design. Marks live in **tiers** that overlap
 freely, and **themes** (plain CSS) decide how they look. The community scheme from *Phonetic Markup for

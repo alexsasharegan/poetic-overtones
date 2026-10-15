@@ -48,7 +48,7 @@ hand-marked, inferred, or both (ADR-0004).
 
 ## Name options
 
-The repo is `poetic-parser` for now. Ideas, none checked for existing projects or packages:
+**Decided 2026-10-15: `poetic-overtones`** (ADR-0013). The list below is kept as it was. The repo was `poetic-parser`. Ideas, none checked for existing projects or packages:
 
 | Name | Why |
 |---|---|
