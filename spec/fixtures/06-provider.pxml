@@ -1,0 +1,26 @@
+<!-- Case 06: providers, confirmation and several tiers on one span.
+     The syllable tier and the two stress tiers are filled by providers (inferred), so a
+     whole-tier reset can restore them. confirmed lists the members a human has accepted.
+     "Hand-marked" has no provider: reset never touches it. Span 3 sits in three tiers at
+     once, which is fine because a tier is just a set. reads names the tier a provider
+     worked from. -->
+<!-- expect {"tiers": {
+  "syll": ["Up", "a", "bove", "the", "world", "so", "high"],
+  "stressed": ["Up", "bove", "world", "high"],
+  "unstressed": ["a", "the", "so"],
+  "mine": ["bove"]}} -->
+
+<text>
+Up above the world so high,
+</text>
+
+<markup>
+<span id="1">Up</span> <span id="2">a</span><span id="3">bove</span> <span id="4">the</span> <span id="5">world</span> <span id="6">so</span> <span id="7">high</span>,
+</markup>
+
+<analysis>
+  <tier name="Syllables" channel="syll" provider="english.syllable@1" members="1-7"/>
+  <tier name="Stressed" channel="stressed" provider="english.stress@1" reads="syll" members="1,3,5,7" confirmed="1,7"/>
+  <tier name="Unstressed" channel="unstressed" provider="english.stress@1" reads="syll" members="2,4,6"/>
+  <tier name="Hand-marked" channel="mine" members="3"/>
+</analysis>

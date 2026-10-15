@@ -1,0 +1,12 @@
+<!-- E11: an element other than span inside the markup
+     Markup holds spans and text only. -->
+<!-- expect {"outcome": "error", "errors": ["markup-unknown-element"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <b>two</b>
+</markup>
+

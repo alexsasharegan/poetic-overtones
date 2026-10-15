@@ -1,0 +1,17 @@
+<!-- E05: two names that slugify to the same channel
+     No channel given, so it defaults to the slug of the name: "Rhyme A" and "rhyme-a" both give rhyme-a. -->
+<!-- expect {"outcome": "error", "errors": ["tier-slug-collision"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier name="Rhyme A" members="1"/>
+  <tier name="rhyme-a" members="2"/>
+</analysis>
+

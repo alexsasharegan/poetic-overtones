@@ -1,0 +1,17 @@
+<!-- W03: an unknown attribute on a tier
+     Unknown attributes are kept and reported; x- prefixed ones are the extension space and are silent. -->
+<!-- expect {"warnings": ["tier-unknown-attribute"], "tiers": {"t": ["one"], "u": ["two"]}} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier name="T" channel="t" colour="red" members="1"/>
+  <tier name="U" channel="u" x-note="fine" members="2"/>
+</analysis>
+

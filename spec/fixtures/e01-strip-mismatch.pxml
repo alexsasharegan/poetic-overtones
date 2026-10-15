@@ -1,0 +1,12 @@
+<!-- E01: markup text differs from the input text
+     Stripping the markup must give back the text exactly. Here the markup has a typo. -->
+<!-- expect {"outcome": "error", "errors": ["strip-mismatch"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">tow</span>
+</markup>
+

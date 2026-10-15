@@ -1,0 +1,26 @@
+<!-- Case 02: dedent.
+     The common indentation of the non-blank lines is removed from text and markup alike;
+     relative indentation survives. The end tag may be indented. A blank line in the
+     markup may hold stray whitespace shorter than the common indent (the second blank
+     line below holds two spaces). -->
+<!-- expect {"tiers": {"w": ["Down", "the", "stair", "up"]}} -->
+
+<text>
+    Down
+      the
+        stair
+
+    and up
+    </text>
+
+<markup>
+    <span id="1">Down</span>
+      <span id="2">the</span>
+        <span id="3">stair</span>
+  
+    and <span id="4">up</span>
+    </markup>
+
+<analysis>
+  <tier name="Words" channel="w" members="1-4"/>
+</analysis>

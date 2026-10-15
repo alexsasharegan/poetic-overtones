@@ -1,0 +1,20 @@
+<!-- W02: a style block that can fetch things
+     url() and @import are ignored by the loader (offline-first, no tracking) and reported. The file still loads. -->
+<!-- expect {"warnings": ["style-url"], "tiers": {"t": ["one"]}} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier name="T" channel="t" members="1"/>
+</analysis>
+
+<style><![CDATA[
+  .t { background: url("https://example.com/x.png"); }
+  @import "https://example.com/y.css";
+]]></style>

@@ -1,0 +1,16 @@
+<!-- E03: a tier names a span that does not exist
+     Every member must be a span id present in the markup. -->
+<!-- expect {"outcome": "error", "errors": ["tier-unknown-member"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier name="T" channel="t" members="1,9"/>
+</analysis>
+

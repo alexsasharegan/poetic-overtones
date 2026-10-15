@@ -1,0 +1,29 @@
+<!-- Case 08: grouping tiers into one dimension for the UI.
+     "Scheme" and "Rhyme" are dimensions made of several tiers (one tier per value).
+     group is only a hint for toggling and layout; it does not change what a tier is. -->
+<!-- expect {"tiers": {
+  "scheme-a": ["Twinkle, twinkle, little star,", "How I wonder what you are!"],
+  "scheme-b": ["Up above the world so high,", "Like a diamond in the sky."],
+  "rhyme-a": ["ar", "are"],
+  "rhyme-b": ["igh", "y"]}} -->
+
+<text>
+Twinkle, twinkle, little star,
+How I wonder what you are!
+Up above the world so high,
+Like a diamond in the sky.
+</text>
+
+<markup>
+<span id="1">Twinkle, twinkle, little st<span id="5">ar</span>,</span>
+<span id="2">How I wonder what you <span id="6">are</span>!</span>
+<span id="3">Up above the world so h<span id="7">igh</span>,</span>
+<span id="4">Like a diamond in the sk<span id="8">y</span>.</span>
+</markup>
+
+<analysis>
+  <tier name="Scheme A" group="Scheme" members="1,2"/>
+  <tier name="Scheme B" group="Scheme" members="3,4"/>
+  <tier name="Rhyme A"  group="Rhyme"  members="5,6"/>
+  <tier name="Rhyme B"  group="Rhyme"  members="7,8"/>
+</analysis>

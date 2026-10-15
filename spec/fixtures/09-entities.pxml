@@ -1,0 +1,19 @@
+<!-- Case 09: characters that XML treats specially.
+     Only &lt; &gt; &amp; &quot; &apos; exist by name; anything else is a numeric
+     reference (&#x2019; is a right single quote). CDATA is allowed in both blocks.
+     The two blocks need not use the same escaping, only produce the same text. -->
+<!-- expect {"tiers": {"sym": ["Tom & Jerry", "<"]}} -->
+
+<text>
+Tom &amp; Jerry &lt;3 it&#x2019;s fine
+<![CDATA[a < b && c > d]]>
+</text>
+
+<markup>
+<span id="1">Tom &amp; Jerry</span> <![CDATA[<3]]> it’s fine
+a <span id="2"><![CDATA[<]]></span> b &amp;&amp; c &gt; d
+</markup>
+
+<analysis>
+  <tier name="Symbols" channel="sym" members="1,2"/>
+</analysis>

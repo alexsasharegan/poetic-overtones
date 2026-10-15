@@ -1,0 +1,22 @@
+<!-- Case 11: Unicode.
+     Offsets are code points, not UTF-16 units: Shavian is outside the BMP, so one letter
+     is two UTF-16 units. Line 2 is "cafe" + U+0301 (decomposed): a span may hold just
+     the combining mark, splitting it from its base. Line 3 is two Private Use
+     characters (the Tengwar range), which XML allows. -->
+<!-- expect {"tiers": {"u": ["\ud801\udc51\ud801\udc62\ud801\udc66\ud801\udc59\ud801\udc52\ud801\udc69\ud801\udc64", "\ud801\udc78", "e", "\u0301", "\ue001"]}} -->
+
+<text>
+𐑑𐑢𐑦𐑙𐑒𐑩𐑤 𐑕𐑑𐑸
+café
+
+</text>
+
+<markup>
+<span id="1">𐑑𐑢𐑦𐑙𐑒𐑩𐑤</span> 𐑕𐑑<span id="2">𐑸</span>
+caf<span id="3">e</span><span id="4">́</span>
+<span id="5"></span>
+</markup>
+
+<analysis>
+  <tier name="Unicode" channel="u" members="1-5"/>
+</analysis>

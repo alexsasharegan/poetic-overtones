@@ -1,0 +1,16 @@
+<!-- E14: directed on a plain set
+     Order means something only for relations. -->
+<!-- expect {"outcome": "error", "errors": ["directed-without-relation"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier name="T" channel="t" directed="true" members="1,2"/>
+</analysis>
+

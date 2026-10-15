@@ -1,0 +1,20 @@
+<!-- Case 10: the input text lives in a file.
+     A self-closing <text src="..."/> names a file next to this one: relative path only,
+     no "..", no URL. One trailing LF of the file is dropped, a BOM is ignored, and the
+     file is NOT dedented (it is the user's text, byte for byte). The markup still has
+     to reproduce it. -->
+<!-- expect {"tiers": {
+  "lines": ["Roses are red,", "Violets are blue,"],
+  "rhyme-end": ["red", "blue"]}} -->
+
+<text src="10-text-src.txt"/>
+
+<markup>
+<span id="1">Roses are <span id="3">red</span>,</span>
+<span id="2">Violets are <span id="4">blue</span>,</span>
+</markup>
+
+<analysis>
+  <tier name="Lines" channel="lines" members="1,2"/>
+  <tier name="Ends" channel="rhyme-end" kind="relation" members="3,4"/>
+</analysis>

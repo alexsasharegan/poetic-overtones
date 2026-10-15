@@ -1,0 +1,16 @@
+<!-- E10: confirmed names a span that is not a member
+     confirmed must be a subset of members. -->
+<!-- expect {"outcome": "error", "errors": ["confirmed-not-member"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier name="T" channel="t" provider="english.word@1" members="1" confirmed="2"/>
+</analysis>
+

@@ -1,0 +1,8 @@
+<!-- E09: no text block
+     Exactly one text block is required, inline or by reference. -->
+<!-- expect {"outcome": "error", "errors": ["block-missing-text"]} -->
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+

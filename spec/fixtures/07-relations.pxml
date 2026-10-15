@@ -1,0 +1,20 @@
+<!-- Case 07: relations that overlap on the same words.
+     Alliteration (the six /p/ onsets) and a repeated rime (ick, in "picked" and
+     "pickled") are both relation tiers over the same words. The onset span and the rime
+     span are adjacent siblings, so nothing crosses. -->
+<!-- expect {"tiers": {
+  "allit-p": ["P", "P", "p", "p", "p", "p"],
+  "ick": ["ick", "ick"]}} -->
+
+<text>
+Peter Piper picked a peck of pickled peppers
+</text>
+
+<markup>
+<span id="1">P</span>eter <span id="2">P</span>iper <span id="3">p</span><span id="7">ick</span>ed a <span id="4">p</span>eck of <span id="5">p</span><span id="8">ick</span>led <span id="6">p</span>eppers
+</markup>
+
+<analysis>
+  <tier name="Alliteration /p/" channel="allit-p" kind="relation" members="1-6"/>
+  <tier name="Repeated rime: ick" channel="ick" kind="relation" members="7,8"/>
+</analysis>

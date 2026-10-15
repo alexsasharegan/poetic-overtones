@@ -1,0 +1,30 @@
+<!-- Case 05: enjambment as a directed relation.
+     Paradise Lost I.1-3 (Milton, public domain). The sense runs from the end of one
+     line into the start of the next. A relation tier lists its members in order;
+     directed="true" says the order means something. One tier holds ONE relation, so
+     two enjambments are two tiers, tied together for the UI by group="Enjambment".
+     (Open question: should one tier be able to hold several relations?) -->
+<!-- expect {"tiers": {
+  "lines": ["Of Man's first disobedience, and the fruit",
+            "Of that forbidden tree whose mortal taste",
+            "Brought death into the world, and all our woe,"],
+  "enj1": ["fruit", "Of that forbidden tree"],
+  "enj2": ["taste", "Brought death"]}} -->
+
+<text>
+Of Man's first disobedience, and the fruit
+Of that forbidden tree whose mortal taste
+Brought death into the world, and all our woe,
+</text>
+
+<markup>
+<span id="l1">Of Man's first disobedience, and the <span id="e1a">fruit</span></span>
+<span id="l2"><span id="e1b">Of that forbidden tree</span> whose mortal <span id="e2a">taste</span></span>
+<span id="l3"><span id="e2b">Brought death</span> into the world, and all our woe,</span>
+</markup>
+
+<analysis>
+  <tier name="Lines" channel="lines" members="l1,l2,l3"/>
+  <tier name="Enjambment 1" channel="enj1" kind="relation" directed="true" group="Enjambment" members="e1a,e1b"/>
+  <tier name="Enjambment 2" channel="enj2" kind="relation" directed="true" group="Enjambment" members="e2a,e2b"/>
+</analysis>

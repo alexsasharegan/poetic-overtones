@@ -1,0 +1,10 @@
+<!-- E06: a file reference that leaves the folder
+     Relative paths only: no "..", no absolute paths, no URLs, no backslashes. -->
+<!-- expect {"outcome": "error", "errors": ["text-src-invalid"]} -->
+
+<text src="../secret.txt"/>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
