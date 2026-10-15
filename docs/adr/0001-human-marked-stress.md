@@ -1,6 +1,6 @@
 # ADR-0001: Human-Marked Stress
 
-**Status:** Active
+**Status:** Superseded by ADR-0004 (inference is now wanted, with the reader confirming). The rejection of the vowel-weight rule still stands.
 **Date:** 2026-10-14
 **Affected:** scansion.html, README.md; supersedes the approach of syllabifier.py
 **Origin:** Discussion with Alex, 2026-10-12

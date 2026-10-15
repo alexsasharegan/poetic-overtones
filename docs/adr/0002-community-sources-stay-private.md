@@ -1,6 +1,6 @@
 # ADR-0002: Community Sources Stay Private
 
-**Status:** Active
+**Status:** Superseded by ADR-0005 (Alex: the owner shared the scheme for community adoption).
 **Date:** 2026-10-14
 **Affected:** .gitignore, sources/community/
 **Origin:** Alex, 2026-10-14

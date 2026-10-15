@@ -4,12 +4,23 @@
 
 ## 🟢 Now (In Progress)
 
-* Nothing in progress.
+* **Application spec (`spec/app.md`, ADR-0007):** first draft written from Alex's scope answers; awaiting his review. Earlier: the pivot (ADR-0003 to ADR-0006) and `docs/synthesis/comparison.md`.
 
 ## 🟡 Next (Queued)
 
-* **Community markup synthesis:** compare *Phonetic Markup for Verse* (v3.0, in `sources/community/`) with our markup and sound rules; report alignment, differences and decisions for Alex; then integrate. Phase 1 is a written comparison only.
+* **Review `spec/app.md`:** Alex marks up the PROVISIONAL rules and answers the OPEN questions (section 13).
+* **Text form grammar:** `spec/format.md`, with overlapping tiers in mind (spec Q9, ADR-0008).
+* **Provider spec for English:** word, syllable and sound tiers, in `spec/providers/` (ADR-0007).
+* **JSON fixtures** for providers, reset and editing (`spec/fixtures/`).
+* **Community scheme as data:** encode the built-in scheme, settling the deck's hex inconsistencies (ADR-0005).
+* **English baseline POC:** client-side JavaScript (ADR-0006).
+* **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.
+
+## ⚪ Later
+
+* **Tengwar view:** per-glyph and per-mark styling through shavian2tengwar; test mark placement first.
+* **Stack beyond the POC, hosting and name:** see `docs/synthesis/stack-and-name-options.md`.
 
 ## 🔴 Done (Completed)
 
-* **Scansion score:** `scansion.html`, built from human-marked stress (ADR-0001).
+* **Scansion score:** `scansion.html`, the Shavian-only prototype (first preset).

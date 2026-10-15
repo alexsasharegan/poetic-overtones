@@ -1,7 +1,21 @@
 # poetic-parser
 
+> **Direction:** this is becoming a web app for multi-dimensional poetic analysis of any Unicode text, with layers, configurable colour schemes and the community scheme from *Phonetic Markup for Verse* as a built-in default (credit to its author, wording to be agreed) (ADR-0003 to ADR-0005). The page described below is the early Shavian-only prototype.
+
 Tools for seeing the sound of a poem: its meter, rhymes, assonance and alliteration. Poems are written in
 Shavian, so every letter is a sound and English spelling never gets in the way.
+
+## Origin
+
+This project began with the discussion of the Lay of Nimrodel in
+[*Mythgard's Exploring The Lord of the Rings*](https://exlotr.fireside.fm/), Dr. Corey Olsen's podcast from
+Signum University's Mythgard Institute, in
+[Session 385, "Poetry Time! Nimrodel: Session 1"](https://exlotr.fireside.fm/386) (20 September 2026). The
+wish for a Tengwar mode that helps with the poetic analysis of that poem sparked this project, shavian2tengwar,
+and the community work on phonetic markup for verse that the colour scheme here comes from.
+
+<!-- TODO(Alex): add a timestamp for the Tengwar-mode remark. The episode page has no description, so the
+     remark is not verified from the page. Check before the README goes public. -->
 
 ## Scansion score
 

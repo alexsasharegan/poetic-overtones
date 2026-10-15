@@ -4,5 +4,5 @@
 __pycache__/
 .venv/
 node_modules/
-# Community sources: Alex may use them privately, but publishing them here needs the owner's agreement (ADR-0002).
+# Community PDF: kept out of the repo until Alex decides to commit it (ADR-0005). The scheme itself is adopted.
 sources/community/
