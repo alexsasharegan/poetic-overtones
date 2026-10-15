@@ -33,5 +33,7 @@ And nothing said how overlapping tiers stack (lines should sit under rhymes).
 * Single-value channels (text colour, weight) collide; the top layer wins and the editor warns.
 * Only channels the renderer knows how to paint can be carried from the mirror to the text (Y-02, Y-03).
 * Open: the mirror's exact shape, and whether members are mirrored so confirmed and inferred members can
-  look different (format.md FQ7). A painter's-order choice (later on top) is PROVISIONAL.
+  look different (format.md FQ7).
+* Later on top, for tiers and for sets within a tier, approved by Alex (S-07). Tier rules reach their sets
+  (S-08) and theme CSS is contained (S-09), also approved, after the layering prototype.
 * The community scheme of ADR-0005 becomes the community theme.
