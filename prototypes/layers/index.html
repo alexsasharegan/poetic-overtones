@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layering prototype</title>
+<!--
+  Prototype for ADR-0011 / spec/format.md S-03 to S-07. Not the application.
+  A .pxml document is parsed in the browser. Its style blocks are applied to a hidden
+  mirror of the analysis (tier and set elements in a shadow root), never to the text.
+  For each set the computed style is read and painted onto its spans with the CSS
+  Custom Highlight API, one layer per tier in file order (later on top).
+  Open the file directly in a browser; it fetches nothing.
+-->
+<style>
+  :root { --bg: #fbfaf7; --fg: #1d1b18; --muted: #6b665d; --line: #dcd6cb; --panel: #fff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1b1a18; --fg: #ece8e1; --muted: #a39d92; --line: #3a372f; --panel: #23221f; }
+  }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 24px 16px 48px; display: grid; gap: 20px;
+         grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+  @media (max-width: 760px) { main { grid-template-columns: 1fr; } }
+  h1 { grid-column: 1 / -1; font-size: 18px; margin: 0; }
+  h1 small { color: var(--muted); font-weight: 400; }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+  #poem { font: 22px/1.9 Georgia, serif; white-space: pre-wrap; color: #1d1b18; background: #fffdf8;
+          padding: 12px 14px; border-radius: 6px; }
+  ol#tiers { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column-reverse; gap: 6px; }
+  ol#tiers li { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center;
+                border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+  ol#tiers li .role { color: var(--muted); font-size: 12px; }
+  button { font: inherit; font-size: 12px; padding: 2px 8px; border: 1px solid var(--line); border-radius: 4px;
+           background: transparent; color: inherit; cursor: pointer; }
+  button:disabled { opacity: .35; cursor: default; }
+  .hint { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
+  select { font: inherit; }
+  pre { font: 12px/1.45 ui-monospace, monospace; overflow-x: auto; margin: 0; white-space: pre; }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  td, th { text-align: left; padding: 3px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .drop { color: #b3261e; }
+  #warn { grid-column: 1 / -1; display: none; border-color: #b3261e; }
+</style>
+<style id="painted"></style>
+</head>
+<body>
+<main>
+  <h1>Layering prototype <small>· themes style the analysis, layers follow tier order</small></h1>
+  <section id="warn"></section>
+  <section>
+    <h2>Text</h2>
+    <div id="poem"></div>
+    <p class="hint">The text is one plain text node. Nothing in it is an element; every colour is a painted layer.</p>
+  </section>
+  <section>
+    <h2>Tiers <small>(top of list = top layer)</small></h2>
+    <ol id="tiers"></ol>
+    <p class="hint">Moving a tier rewrites the tier order in the file (shown below). Theme:
+      <select id="theme"></select></p>
+  </section>
+  <section>
+    <h2>What was painted</h2>
+    <table id="report"></table>
+    <p class="hint">Channels the highlight API cannot paint are listed in red. They would need another painter.</p>
+  </section>
+  <section>
+    <h2>The analysis as it would be saved</h2>
+    <pre id="saved"></pre>
+  </section>
+</main>
+
+<script type="text/plain" id="doc">
+<meta title="Twinkle, Twinkle, Little Star" author="Jane Taylor" year="1806" language="en"/>
+
+<text>
+Twinkle, twinkle, little star,
+How I wonder what you are!
+Up above the world so high,
+Like a diamond in the sky.
+</text>
+
+<markup>
+<span id="1"><span id="9">Twinkle, <span id="10">twinkle</span></span><span id="10b" cont="10">, little</span> st<span id="5">ar</span>,</span>
+<span id="2">How I wonder what you <span id="6">are</span>!</span>
+<span id="3">Up above the world so h<span id="7">igh</span>,</span>
+<span id="4">Like a diamond in the sk<span id="8">y</span>.</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Lines" role="line">
+    <set id="s1" members="1,2,3,4"/>
+  </tier>
+  <tier id="t2" name="Rhyme scheme" role="rhyme-scheme">
+    <set id="s2" name="A" members="1,2"/>
+    <set id="s3" name="B" members="3,4"/>
+  </tier>
+  <tier id="t3" name="Repetition" kind="relation" role="repetition">
+    <set id="s4" members="9"/>
+  </tier>
+  <tier id="t4" name="Short i" kind="relation" role="assonance">
+    <set id="s5" members="10"/>
+  </tier>
+  <tier id="t5" name="End rhyme" kind="relation" role="rhyme">
+    <set id="s6" name="A" members="5,6"/>
+    <set id="s7" name="B" members="7,8"/>
+  </tier>
+</analysis>
+
+<style name="Reader">
+  tier { color: #444; }
+  tier[role="line"] > set { background: rgb(120 110 90 / .10); }
+  tier[role="rhyme-scheme"] > set:nth-child(1) { background: rgb(240 160 60 / .22); }
+  tier[role="rhyme-scheme"] > set:nth-child(2) { background: rgb(60 130 230 / .20); }
+  tier[role="repetition"] > set { text-decoration: underline wavy #7a4fb3 2px; }
+  tier[role="assonance"] > set { background: rgb(40 170 120 / .30); }
+  tier[role="rhyme"] > set:nth-child(1) { color: #b3261e; font-weight: 700; }
+  tier[role="rhyme"] > set:nth-child(2) { color: #1b5fa8; font-weight: 700; }
+</style>
+
+<style name="Ink" disabled="true">
+  tier[role="line"] > set { text-decoration: underline solid rgb(0 0 0 / .15) 1px; }
+  tier[role="rhyme-scheme"] > set:nth-child(odd) { background: rgb(255 214 0 / .35); }
+  tier[role="rhyme-scheme"] > set:nth-child(even) { background: rgb(0 200 220 / .25); }
+  tier[role="repetition"] > set { text-shadow: 0 0 6px rgb(160 0 200 / .6); }
+  tier:not([role="line"]):not([role="rhyme-scheme"]) > set { background: rgb(255 80 120 / .35); }
+  tier[role="rhyme"] > set { color: #c2185b; font-style: italic; }
+</style>
+</script>
+
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id);
+const SENTINEL = 'rgb(1, 2, 3)';
+
+// ---------- load (just enough of spec/format.md for this demo) ----------
+function slice(raw) {             // T-02: drop one leading LF and a final LF plus indent
+  let s = raw.startsWith('\n') ? raw.slice(1) : raw;
+  return s.replace(/\n[ \t]*$/, '');
+}
+
+function load(src) {
+  const xml = new DOMParser().parseFromString('<pxml>' + src + '</pxml>', 'application/xml');
+  const err = xml.querySelector('parsererror');
+  if (err) throw new Error(err.textContent);
+  const root = xml.documentElement;
+  const text = slice(root.querySelector(':scope > text').textContent);
+
+  // markup: walk it, recording where each span starts and ends in the text
+  const spans = {}; let pos = 0; let lead = 0;
+  const markup = root.querySelector(':scope > markup');
+  const rawStart = markup.textContent.startsWith('\n') ? 1 : 0;
+  (function walk(node) {
+    for (const ch of node.childNodes) {
+      if (ch.nodeType === 3) { pos += ch.data.length; continue; }
+      if (ch.nodeType !== 1 || ch.tagName !== 'span') continue;
+      const start = pos; walk(ch); const piece = [start - rawStart, pos - rawStart];
+      const cont = ch.getAttribute('cont');
+      if (cont) spans[cont].pieces.push(piece);
+      else spans[ch.getAttribute('id')] = { pieces: [piece] };
+    }
+  })(markup);
+  if (slice(markup.textContent) !== text) throw new Error('strip mismatch: markup text is not the input text');
+
+  const tiers = [...root.querySelectorAll(':scope > analysis > tier')].map((t) => ({
+    attrs: Object.fromEntries([...t.attributes].map((a) => [a.name, a.value])),
+    sets: [...t.querySelectorAll(':scope > set')].map((s) => ({
+      attrs: Object.fromEntries([...s.attributes].map((a) => [a.name, a.value])),
+      members: (s.getAttribute('members') || '').split(/[\s,]+/).filter(Boolean),
+    })),
+  }));
+  const styles = [...root.querySelectorAll(':scope > style')].map((s) => ({
+    name: s.getAttribute('name'), disabled: s.getAttribute('disabled') === 'true', css: s.textContent,
+  }));
+  return { text, spans, tiers, styles };
+}
+
+// ---------- the mirror: tiers and sets as elements, in a shadow root ----------
+const host = document.createElement('div');
+host.hidden = true;
+document.body.append(host);
+const shadow = host.attachShadow({ mode: 'open' });
+
+const SHOWN_TIER = ['id', 'role', 'kind', 'directed', 'provider'];   // format.md S-04
+const SHOWN_SET = ['id', 'key', 'tags'];
+
+function buildMirror(doc) {
+  shadow.replaceChildren();
+  const base = document.createElement('style');
+  base.textContent = `:host, div { color: ${SENTINEL}; font-weight: 400; font-style: normal; }`;
+  shadow.append(base);
+  const theme = doc.styles.find((s) => s.name && !s.disabled);
+  if (theme) { const st = document.createElement('style'); st.textContent = theme.css; shadow.append(st); }
+  const box = document.createElement('div');
+  shadow.append(box);
+  const els = [];
+  for (const t of doc.tiers) {
+    if (t.attrs.disabled === 'true') { els.push(null); continue; }
+    const te = document.createElement('tier');
+    for (const k of SHOWN_TIER) if (k in t.attrs) te.setAttribute(k, t.attrs[k]);
+    const ses = t.sets.map((s) => {
+      const se = document.createElement('set');
+      for (const k of SHOWN_SET) if (k in s.attrs) se.setAttribute(k, s.attrs[k]);
+      te.append(se);
+      return se;
+    });
+    box.append(te);
+    els.push({ te, ses });
+  }
+  return els;
+}
+
+// Read the channels a set asks for. A channel the set does not set falls back to its tier.
+function channels(se, te) {
+  const cs = getComputedStyle(se), ct = getComputedStyle(te);
+  const pick = (prop, isSet) => (isSet(cs.getPropertyValue(prop)) ? cs : isSet(ct.getPropertyValue(prop)) ? ct : null);
+  const out = { paint: {}, drop: [] };
+  const bg = pick('background-color', (v) => v !== 'rgba(0, 0, 0, 0)');
+  if (bg) out.paint['background-color'] = bg.getPropertyValue('background-color');
+  if (cs.color !== SENTINEL) out.paint.color = cs.color;            // colour inherits from the tier anyway
+  const td = pick('text-decoration-line', (v) => v !== 'none');
+  if (td) for (const p of ['text-decoration-line', 'text-decoration-style', 'text-decoration-color', 'text-decoration-thickness'])
+    out.paint[p] = td.getPropertyValue(p);
+  const sh = pick('text-shadow', (v) => v !== 'none');
+  if (sh) out.paint['text-shadow'] = sh.getPropertyValue('text-shadow');
+  if (cs.fontWeight !== '400') out.drop.push('font-weight: ' + cs.fontWeight);
+  if (cs.fontStyle !== 'normal') out.drop.push('font-style: ' + cs.fontStyle);
+  return out;
+}
+
+// ---------- paint ----------
+function paint(doc) {
+  const poem = $('poem');
+  poem.textContent = doc.text;
+  const node = poem.firstChild;
+  CSS.highlights.clear();
+  const els = buildMirror(doc);
+  const rules = [], rows = ['<tr><th>Layer</th><th>Tier · set</th><th>Painted</th></tr>'];
+  doc.tiers.forEach((t, ti) => {
+    const m = els[ti];
+    if (!m) { rows.push(`<tr><td>${ti + 1}</td><td>${t.attrs.name} (off)</td><td></td></tr>`); return; }
+    t.sets.forEach((s, si) => {
+      const ch = channels(m.ses[si], m.te);
+      const decls = Object.entries(ch.paint).map(([k, v]) => `${k}: ${v}`);
+      const name = `L${ti}-${si}`;
+      const ranges = s.members.flatMap((id) => doc.spans[id].pieces.map(([a, b]) => {
+        const r = new Range(); r.setStart(node, a); r.setEnd(node, b); return r;
+      }));
+      const hl = new Highlight(...ranges);
+      hl.priority = ti * 100 + si;                                     // format.md S-07: later is on top
+      CSS.highlights.set(name, hl);
+      if (decls.length) rules.push(`::highlight(${name}) { ${decls.join('; ')}; }`);
+      rows.push(`<tr><td>${ti + 1}</td><td>${t.attrs.name} · ${s.attrs.name || '#' + (si + 1)}</td><td>${
+        decls.join('<br>') || '—'}${ch.drop.map((d) => `<br><span class="drop">${d} (not paintable)</span>`).join('')}</td></tr>`);
+    });
+  });
+  $('painted').textContent = rules.join('\n');
+  $('report').innerHTML = rows.join('');
+}
+
+// ---------- tier list, theme switch, and what would be saved ----------
+function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
+
+function saved(doc) {
+  const attrs = (o) => Object.entries(o).map(([k, v]) => ` ${k}="${esc(v)}"`).join('');
+  return '<analysis>\n' + doc.tiers.map((t) => `  <tier${attrs(t.attrs)}>\n` +
+    t.sets.map((s) => `    <set${attrs(s.attrs)}/>`).join('\n') + '\n  </tier>').join('\n') + '\n</analysis>\n\n' +
+    doc.styles.map((s) => `<style name="${esc(s.name)}"${s.disabled ? ' disabled="true"' : ''}>…</style>`).join('\n');
+}
+
+function render(doc) {
+  const ol = $('tiers');
+  ol.replaceChildren(...doc.tiers.map((t, i) => {
+    const li = document.createElement('li');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = t.attrs.disabled !== 'true'; cb.title = 'Shown';
+    cb.onchange = () => { if (cb.checked) delete t.attrs.disabled; else t.attrs.disabled = 'true'; render(doc); };
+    const label = document.createElement('span');
+    label.innerHTML = `${esc(t.attrs.name)} <span class="role">${t.attrs.role ? 'role ' + esc(t.attrs.role) : 'no role'}</span>`;
+    const up = document.createElement('button'); up.textContent = 'Up'; up.disabled = i === doc.tiers.length - 1;
+    up.onclick = () => { doc.tiers.splice(i, 2, doc.tiers[i + 1], doc.tiers[i]); render(doc); };
+    const down = document.createElement('button'); down.textContent = 'Down'; down.disabled = i === 0;
+    down.onclick = () => { doc.tiers.splice(i - 1, 2, doc.tiers[i], doc.tiers[i - 1]); render(doc); };
+    li.append(cb, label, up, down);
+    return li;
+  }));
+  $('saved').textContent = saved(doc);
+  paint(doc);
+}
+
+function start() {
+  if (!(window.CSS && CSS.highlights && window.Highlight)) {
+    const w = $('warn'); w.style.display = 'block';
+    w.textContent = 'This browser has no CSS Custom Highlight API, so nothing can be painted. That is a finding in itself.';
+    return;
+  }
+  const doc = load($('doc').textContent);
+  const sel = $('theme');
+  doc.styles.filter((s) => s.name).forEach((s) => sel.add(new Option(s.name, s.name, false, !s.disabled)));
+  sel.onchange = () => { doc.styles.forEach((s) => { if (s.name) s.disabled = s.name !== sel.value; }); render(doc); };
+  render(doc);
+}
+start();
+</script>
+</body>
+</html>
