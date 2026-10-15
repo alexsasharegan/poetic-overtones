@@ -48,3 +48,10 @@ under the letters (every layer shows, in tier order). Size is clamped to 0.75 to
 shows all of it in Chromium, Safari and Firefox. Its first box painter measured the screen and placed boxes;
 Safari printed them out of place, so each box layer is now an invisible copy of the text with the boxes as
 inline CSS, laid out by the browser. Printing keeps colours (`print-color-adjust: exact`).
+
+## Addendum: decisions accepted (2026-10-14)
+
+Alex accepted the recommendations: the two families of channels, the size clamp (0.75 to 1.5), boxes always
+under the letters, and mirroring members. The mirror is `tier` > `set` > `member`; a member carries `inferred`
+when a provider filled it in and no person has confirmed it, so a theme can style `member[inferred]`. Rules reach
+down from tier to set to member (S-08). FQ7 is settled.
