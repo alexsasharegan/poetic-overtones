@@ -4,12 +4,11 @@
 
 ## 🟢 Now (In Progress)
 
-* **Core library (`src/core/`, ADR-0012):** loader, model and canonical export in plain ES modules; passes all 53 fixtures and 23 round trips. Editing operations with undo and redo are in `edit.js` (`tests/editor.mjs`). Next: the renderer and app shell.
+* **Core library (`src/core/`, ADR-0012):** loader, model and canonical export in plain ES modules; passes all 53 fixtures and 23 round trips. Editing operations with undo and redo are in `edit.js` (`tests/editor.mjs`).
+* **App (`app/`, `docs/ui-plan.md`):** steps 1 and 2 done: open, render with `src/render/paint.js`, restack and toggle tiers, switch themes, add tiers and sets, mark selected text, undo, save. Next: step 3, tier and set details.
 
 ## 🟡 Next (Queued)
 
-* **Renderer:** turn `prototypes/layers/` into a module over the core model (themes style the analysis, ADR-0011).
-* **Minimal UI:** paste text, mark spans into sets, reorder tiers, switch themes, save and open `.pxml`.
 * **Community theme as data:** encode the built-in community scheme as a theme over roles and tags, settling the deck's hex inconsistencies (ADR-0005, ADR-0011).
 * **Review the remaining PROVISIONAL rules** in `spec/app.md` and `spec/format.md`; FQ8 and FQ9 stay open and do not block the MVP.
 * **Origin and credit:** add a timestamp for the Tengwar-mode remark in the README; ask the scheme's author how to be credited once there is something to share.

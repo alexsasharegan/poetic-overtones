@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poetic Parser</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header>
+  <h1>Poetic Parser</h1>
+  <div class="tools">
+    <label class="button">Open<input id="open" type="file" accept=".pxml,.xml,text/xml" hidden></label>
+    <button id="save">Save</button>
+    <button id="undo" title="Undo (Ctrl+Z)">Undo</button>
+    <button id="redo" title="Redo (Ctrl+Shift+Z)">Redo</button>
+    <label>Theme <select id="theme"></select></label>
+  </div>
+</header>
+<main>
+  <section class="page">
+    <div id="poem"></div>
+    <p id="status" role="status"></p>
+  </section>
+  <aside>
+    <h2>Tiers <small>top of the list is the top layer</small></h2>
+    <ol id="tiers"></ol>
+    <form id="new-tier" class="inline">
+      <input name="name" placeholder="New tier name" required>
+      <input name="role" placeholder="role" pattern="[a-z][a-z0-9_\-]*" size="9">
+      <label><input type="checkbox" name="relation"> relation</label>
+      <button>Add tier</button>
+    </form>
+    <div id="sets"></div>
+  </aside>
+</main>
+<script type="module" src="main.js"></script>
+</body>
+</html>
