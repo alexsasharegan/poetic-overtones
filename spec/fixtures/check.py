@@ -14,7 +14,7 @@ This is a reference for the draft rules in spec/format.md, not the implementatio
 import json, os, re, sys
 import xml.etree.ElementTree as ET
 
-ID_RE = re.compile(r'[A-Za-z0-9_.]+')
+ID_RE = re.compile(r'[A-Za-z0-9_]+')
 PROVIDER_RE = re.compile(r'[a-z][a-z0-9.-]*@[0-9]+')
 BLOCKS = ('meta', 'text', 'markup', 'analysis', 'style')
 TIER_ATTRS = {'id', 'name', 'kind', 'directed', 'provider', 'reads'}
@@ -103,6 +103,8 @@ def flatten(markup, warnings):
         if e.text:
             add(e.text)
         for ch in e:
+            if not isinstance(ch.tag, str):
+                raise Fail('comment-in-text')
             if ch.tag != 'span':
                 raise Fail('markup-unknown-element', ch.tag)
             sid, cont = ch.get('id'), ch.get('cont')
@@ -156,12 +158,15 @@ def check(path, warnings):
     if '<![CDATA[' in re.sub(r'<!--.*?-->', '', wrapped, flags=re.S):
         raise Fail('cdata-not-allowed')
     try:
-        root = ET.fromstring(wrapped)
+        root = ET.fromstring(wrapped, parser=ET.XMLParser(
+            target=ET.TreeBuilder(insert_comments=True, insert_pis=True)))
     except ET.ParseError as e:
         raise Fail('xml-not-wellformed', str(e))
 
     blocks, css = {}, []
     for ch in root:
+        if not isinstance(ch.tag, str):
+            continue          # comments and processing instructions between blocks
         if ch.tag in BLOCKS:
             if ch.tag == 'style':
                 css.append(ch.text or '')
@@ -178,6 +183,8 @@ def check(path, warnings):
 
     # ---- text
     t = blocks['text']
+    if any(not isinstance(x.tag, str) for x in t):
+        raise Fail('comment-in-text')
     if len(t):
         raise Fail('text-has-elements')
     body = t.text or ''
@@ -243,7 +250,7 @@ def check(path, warnings):
     # ---- analysis: tiers contain sets; sets list span ids
     tiers, sets = {}, {}
     if 'analysis' in blocks:
-        for tr in blocks['analysis']:
+        for tr in (x for x in blocks['analysis'] if isinstance(x.tag, str)):
             if tr.tag != 'tier':
                 raise Fail('analysis-unknown-element', tr.tag)
             if any(k not in TIER_ATTRS and not k.startswith('x-') for k in tr.attrib):
@@ -268,7 +275,7 @@ def check(path, warnings):
             if prov is not None and not PROVIDER_RE.fullmatch(prov):
                 raise Fail('provider-bad', prov)
             tiers[tid] = {'reads': tr.get('reads', '')}
-            for st in tr:
+            for st in (x for x in tr if isinstance(x.tag, str)):
                 if st.tag != 'set':
                     raise Fail('analysis-unknown-element', st.tag)
                 if any(k not in SET_ATTRS and not k.startswith('x-') for k in st.attrib):

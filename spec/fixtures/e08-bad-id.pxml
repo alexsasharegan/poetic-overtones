@@ -1,5 +1,5 @@
 <!-- E08: a span id with a space in it
-     Ids are tokens: letters, digits, underscore, dot. No spaces, commas or hyphens (hyphen is the range operator). -->
+     Ids are tokens of letters, digits and underscore. No spaces, commas, dots or hyphens. -->
 <!-- expect {"outcome": "error", "errors": ["id-bad"]} -->
 
 <text>

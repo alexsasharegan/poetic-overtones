@@ -1,251 +1,160 @@
 # Text Form Spec (draft)
 
-This document defines the **text form** of `spec/app.md` (F-02, F-05, F-06): the plain-text serialisation
-of a document, a tier definition or a scheme. It is the share layer. It names no programming language.
+This document defines the **text form** of `spec/app.md` (F-02, F-05, F-06): the plain-text serialisation of
+a document. It is the share layer. It names no programming language. The working file extension is `.pxml`
+("poetic XML": a small subset and dialect of XML, in the way `.jsx` relates to `.js`).
 
-Every rule here is `PROVISIONAL` or `OPEN`. This is a first shape for Alex to react to, not a decision. The
-alternatives and the prior art behind it are in `docs/synthesis/format-options.md`. The working extension
-`.tiers` is a placeholder (FQ3).
+**The fixtures in `spec/fixtures/` are part of this spec.** Each rule below cites the cases that pin it
+down. If a rule and a fixture disagree, one of them is wrong and must be fixed, not ignored. Run
+`python3 -I spec/fixtures/check.py`. The checker there is a reference, not the implementation.
 
 ## 0. Conventions
 
-Statuses are as in `spec/app.md`: `ADOPTED`, `PROVISIONAL`, `OPEN`. An agent never promotes one.
+Statuses are as in `spec/app.md`: `ADOPTED` (Alex decided it, chat of 2026-10-14), `PROVISIONAL` (an agent's
+default), `OPEN`. An agent never promotes one on its own judgment.
 
 | Prefix | Section |
 |---|---|
-| B | Blocks and fences |
-| D | The document block and tier lines |
-| M | Marks: the text with a tier's tokens marked |
-| V | Value tables: label sets, labels, links |
-| C | Schemes |
+| B | The file and its blocks |
+| T | The text block |
+| M | The markup block: spans |
+| A | The analysis block: tiers and sets |
+| S | The style block |
 | I | Import and export |
+
+Model in one line: a **tier** (a dimension) holds **sets**; a **set** lists **spans** by id; a **span** is a
+stretch of the input text. Every id in a file is unique.
 
 ## 1. Shape in one example
 
-A file is a list of **blocks**, in the style of a Vue or Svelte single-file component: one block for the
-input text, one for each tier's markup, one for tier metadata, one for styles. The input text stays
-undistorted in its own block. Each tier has its own marked copy of the text, so tiers overlap freely
-without any markup getting in each other's way.
+A file is a list of blocks, side by side, in the manner of a Vue single-file component: the input text, the
+text with spans marked, the analysis, and the styles. (This is fixture `01-basic`, without its comments.)
 
-```text
-%tiers 1
+```xml
+<meta title="Twinkle, Twinkle, Little Star" author="Jane Taylor" year="1806" language="en"/>
 
-~~~document
-title: Sonnet 18, opening lines (public domain)
-language: en
-scheme: demo
-view: words syllables stress feet rhyme
+<text>
+Twinkle, twinkle, little star,
+How I wonder what you are!
+Up above the world so high,
+Like a diamond in the sky.
+</text>
 
-tier words     segmentation "Words"      provider=english.word@1
-tier syllables segmentation "Syllables"  provider=english.syllable@1 reads=words
-tier stress    label        "Stress"     provider=english.stress@1 reads=syllables target=syllables labels=stress3
-tier feet      segmentation "Feet"
-tier sounds    segmentation "Sounds"
-tier phonemes  label        "Phonemes"   target=sounds labels=phonemes
-tier rhyme     relation     "Rhyme"      labels=relations
-~~~
+<markup>
+  <span id="1">Twinkle, twinkle, little st<span id="5">ar</span>,</span>
+  <span id="2">How I wonder what you <span id="6">are</span>!</span>
+  <span id="3">Up above the world so h<span id="7">igh</span>,</span>
+  <span id="4">Like a diamond in the sk<span id="8">y</span>.</span>
+</markup>
 
-~~~text
-Shall I compare thee to a summer's day?
-Thou art more lovely and more temperate:
-Rough winds do shake the darling buds of May,
-~~~
+<analysis>
+  <tier id="t1" name="Rhyme scheme">
+    <set id="s1" name="A" members="1,2"/>
+    <set id="s2" name="B" members="3,4"/>
+  </tier>
+  <tier id="t2" name="Rhyme" kind="relation">
+    <set id="s3" name="A" members="5,6"/>
+    <set id="s4" name="B" members="7,8"/>
+  </tier>
+</analysis>
 
-~~~labelset stress3
-primary    "Primary stress"
-secondary  "Secondary stress"
-none       "Unstressed"
-~~~
-
-~~~labelset phonemes
-sh  "ʃ"   place:postalveolar manner:fricative voiced:false
-ei  "eɪ"  class:vowel
-k   "k"   place:velar manner:plosive voiced:false
-~~~
-
-~~~labelset relations
-rhyme         "Rhyme"
-alliteration  "Alliteration"
-~~~
-
-~~~marks words
-[Shall]{w1} [I]{w2} [compare]{w3} [thee]{w4} [to]{w5} [a]{w6} [summer's]{w7} [day]{w8}?
-[Thou]{w9} [art]{w10} [more]{w11} [lovely]{w12} [and]{w13} [more]{w14} [temperate]{w15}:
-[Rough]{w16} [winds]{w17} [do]{w18} [shake]{w19} [the]{w20} [darling]{w21} [buds]{w22} [of]{w23} [May]{w24},
-~~~
-
-~~~marks syllables
-Shall I [com]{s1}[pare]{s2} thee to a [sum]{s3}[mer's]{s4} [day]{s5!}?
-Thou art more lovely and more temperate:
-Rough winds do shake the darling buds of May,
-~~~
-
-~~~labels stress
-s2 = primary
-s3 = primary
-s5 = primary !
-~~~
-
-~~~marks feet
-[Shall I]{f1} [compare]{f2} [thee to]{f3} [a sum]{f4}[mer's day]{f5}?
-Thou art more lovely and more temperate:
-Rough winds do shake the darling buds of May,
-~~~
-
-~~~marks sounds
-Shall I compare thee to a summer's day?
-Thou art more lovely and more temperate:
-Rough winds do [sh]{p1}[a]{p2}[k]{p3}[e]{p2} the darling buds of May,
-~~~
-
-~~~labels phonemes
-p1 = sh
-p2 = ei
-p3 = k
-~~~
-
-~~~links rhyme
-rhyme: w8 w24
-~~~
-
-~~~scheme demo
-name: Demo scheme
-credit: written for this example
-
-words                   { underline: dotted #8a909c }
-syllables               { border-style: solid; border-colour: #5d6370 }
-stress/primary          { weight: bold }
-feet                    { fill-colour: #6250d6; fill-opacity: 15% }
-tag(place:postalveolar) { border-colour: #2a78d6 }
-tag(place:velar)        { border-colour: #a600ff }
-rhyme/rhyme             { arc-colour: #6250d6; arc-width: 2px }
-~~~
+<style>
+  [data-set="s1"] { background: #fdebd0; }
+  [data-set="s2"] { background: #d6e9ff; }
+  [data-set="s3"] { color: #b3261e; font-weight: 700; }
+  [data-set="s4"] { color: #1b5fa8; font-weight: 700; }
+</style>
 ```
 
-What the example shows:
+- `text` is the input text, exactly as given.
+- `markup` is the same text with bare, id'd `<span>`s. It says where things are and nothing about what they
+  mean.
+- `analysis` says what they mean. A set such as rhyme "A" lists the spans that belong to it. A span can be in
+  any number of sets in any number of tiers, so tiers overlap freely and no hierarchy is implied.
+- `style` is plain CSS, applied to the rendered spans (section 6).
 
-- `words` tokens every word. `syllables` and `sounds` cover only part of the text; the rest is untokenised.
-- `feet` crosses word and syllable boundaries ("a sum"), which a single inline markup could not do.
-- In `sounds`, the token `p2` has two pieces (`a` and `e`), the split digraph of *shake*. It is one token
-  with two ranges (S-02).
-- `{s5!}` and `s5 = primary !` mark human edits in tiers whose other items came from a provider (E-06).
-- `rhyme: w8 w24` links *day* and *May* in a relation tier, across lines.
-- `tag(place:velar)` styles every phoneme whose label set value has that tag (Y-04).
+## 2. The file and its blocks (B)
 
-## 2. Blocks
-
-| ID | Rule | Status |
-|---|---|---|
-| B-01 | A file is plain text made of **blocks**. Text outside blocks is ignored, so notes can sit between them. | PROVISIONAL |
-| B-02 | The first line is `%tiers 1`: the format name and its version. | PROVISIONAL |
-| B-03 | A block opens with a **fence** line: three or more `~`, then the block type, then arguments, separated by spaces. It closes with a line of exactly the same number of `~` and nothing else. An exporter picks a fence longer than any run of `~` at the start of a body line (at least three). | PROVISIONAL |
-| B-04 | The body of a `text` or `marks` block is verbatim: nothing is trimmed and there are no comments. In every other block, blank lines are ignored and a line that starts with `#` is a comment. | PROVISIONAL |
-| B-05 | The block types are in the table below. | PROVISIONAL |
-| B-06 | The file is UTF-8 with LF line ends. An importer accepts CRLF and converts it (FQ2). | PROVISIONAL |
-| B-07 | `text` is required in a document file (inline, or by file reference, B-09). A file with no `text` block is a definitions file: tier lines, label sets and schemes (F-01). Any other combination of blocks is allowed. | PROVISIONAL |
-| B-08 | Fields on a line are separated by one or more spaces, so columns can be aligned. | PROVISIONAL |
-
-| Block | Arguments | Body | Count |
+| ID | Rule | Status | Cases |
 |---|---|---|---|
-| `document` | none | `key: value` lines, then tier lines (section 3) | at most one |
-| `text` | none | the input text, verbatim | one per document file |
-| `labelset` | label set id | one value per line (V-01) | any |
-| `marks` | tier id | the text with that tier's tokens marked (section 4) | one per segmentation tier |
-| `labels` | tier id | one label per line (V-02) | one per label tier |
-| `links` | tier id | one relation per line (V-03) | one per relation tier |
-| `scheme` | scheme id | header lines, then style rules (section 6) | any |
-| `x-<name>` | free | free: reserved for extensions | any |
+| B-01 | A file is UTF-8 text. A leading byte order mark is ignored. | PROVISIONAL | 10 |
+| B-02 | The syntax is **XML 1.0**, well-formed, not HTML5. Empty elements are written JSX-style as self-closing tags, `<tag ... />`; a tag without the slash expects its end tag. A file that is not well-formed is rejected. | ADOPTED | e02 |
+| B-03 | Blocks are **siblings at the top level**, as in a Vue component. No enclosing element is needed: a loader wraps the file in a `<pxml>` element before parsing (it adds no line break, so error line numbers are unchanged). A file may instead have an explicit `<pxml>` root, with an optional XML declaration. Both forms mean the same. There is no DOCTYPE. | PROVISIONAL | 01, 12 |
+| B-04 | The blocks are `meta` (at most one, attributes only), `text` (exactly one), `markup` (exactly one), `analysis` (at most one) and `style` (any number). A block whose name starts with `x-` belongs to an extension and is kept without a warning. Any other block is kept and reported. | PROVISIONAL | e09 |
+| B-05 | **CDATA sections are not part of the format.** A loader rejects `<![CDATA[`. Escape instead, or keep the text in a file and reference it (T-04). | ADOPTED | 09, e15 |
+| B-06 | Only the five XML named entities exist (`&lt; &gt; &amp; &quot; &apos;`). Any other character is written literally or as a numeric reference (`&#x2019;`). HTML names such as `&nbsp;` are errors. | ADOPTED | 09 |
+| B-07 | A character that XML 1.0 forbids (most control characters) becomes U+FFFD, with a warning. The file still loads. | PROVISIONAL | w01 |
+| B-08 | Comments are allowed between blocks and inside `analysis` and `style`. A comment or processing instruction inside `text` or `markup` is rejected, because parsers drop them silently and the text would change without a trace. | PROVISIONAL | 12, e23 |
+| B-09 | An attribute the format does not define is kept and reported. Names starting with `x-` are the extension space and are not reported. | PROVISIONAL | w03 |
+| B-10 | **Ids** are tokens of letters, digits and underscore. They are **unique across the whole file**: spans, tiers and sets share one namespace. Ids are opaque. The format derives nothing from them, and they need not be readable or ordered. How an application makes them is its own business. | ADOPTED (unique, opaque); PROVISIONAL (characters) | 08, e04, e05, e08 |
+| B-11 | A **name** is free text in any script. Names need not be unique and may be absent. Nothing refers to a name. | ADOPTED | 08 |
 
-### 2.1 File references
+## 3. The text block (T)
 
-A very large text can make a single file unwieldy, because every `marks` block repeats the text. A **file
-reference** lets any block's body live in its own file.
+| ID | Rule | Status | Cases |
+|---|---|---|---|
+| T-01 | `<text>` holds the input text. Only `<` and `&` need escaping (B-06). | ADOPTED | 01, 09 |
+| T-02 | **Slice.** One newline right after the start tag is dropped, and the final newline together with any spaces or tabs before the end tag is dropped. This lets a block start and end on lines of its own. | ADOPTED | 01, 02 |
+| T-03 | **Dedent.** After slicing, the indentation shared by all non-blank lines is removed. Relative indentation stays. A blank line holding less whitespace than the shared indentation becomes empty. T-02 and T-03 apply to `text` and `markup` in the same way. Exporters write both blocks flush left. | ADOPTED | 01, 02, 12 |
+| T-04 | **File reference.** `<text src="poem.txt"/>`, self-closing, may stand in for the body. The path is relative to the document file, written with `/`, and has no `..`, no leading `/` or `~`, no backslash and no scheme such as `http:`. The file is not itself a document, so there is no chaining. The element must have no body. The file is UTF-8, a BOM is ignored, line ends become LF, and **one** trailing LF is dropped. It is **not dedented** and nothing in it is escaped. Support is optional in the first version (F-08). | ADOPTED (relative only); PROVISIONAL (the rest) | 10, e06 |
+| T-05 | The size limit on input text is an application rule (W-04), not a rule of the format. | ADOPTED | |
+| T-06 | The input text stays out of the document block for a reason: it is never changed by markup. Whatever happens in the other blocks, the text is the text. | PROVISIONAL | e01 |
 
-```text
-~~~text file="poem.txt"
-~~~marks words file="poem.words.marks"
-~~~labels stress
-s2 = primary
-~~~
-```
+## 4. The markup block (M)
 
-| ID | Rule | Status |
-|---|---|---|
-| B-09 | A fence line with a `file="<path>"` argument is a **file reference**. It is a complete block: it has no body and no closing fence. The body is the content of the named file. | PROVISIONAL |
-| B-10 | The file's content is the body, verbatim, as if it were written between fences, with two adjustments: a UTF-8 byte order mark at the start is removed, and one final LF is removed if there is one. So a text file that ends with a newline gives the same body as the inline form. | PROVISIONAL |
-| B-11 | The path is relative to the directory that holds the document file. It uses `/` as the separator and stays inside that directory or below it. An absolute path, a drive letter, a `..` segment, and any `file:` or network URL are errors. | PROVISIONAL |
-| B-12 | A referenced file holds a body only, with no fences. So references cannot chain or loop. | PROVISIONAL |
-| B-13 | A block that is absent is empty and carries no settings: nothing is inferred and no default stands in for it. A reference whose file cannot be read is not absent. It is an error that names the line, and the importer never treats it as an empty block without saying so. | PROVISIONAL |
-| B-14 | Support for file references is optional. An importer without it stops at the first one with the error "file references are not supported" and its line number. They are not in the first version (`spec/app.md` F-08). | PROVISIONAL |
+| ID | Rule | Status | Cases |
+|---|---|---|---|
+| M-01 | `<markup>` holds the input text with `<span>` elements. After slicing and dedenting (T-02, T-03) and removing the spans, its text must equal the input text exactly (the **strip invariant**). Otherwise the file is rejected. | PROVISIONAL | 01, e01 |
+| M-02 | `<span>` is the only element allowed. Spans may nest. They cannot cross, because XML cannot express it (M-05). | ADOPTED | e11 |
+| M-03 | **Every span has an id** (B-10). | ADOPTED | e22 |
+| M-04 | A span may be a part of a word and may start or end between a base character and its combining mark. A span may be empty (reported). | PROVISIONAL | 01, 11 |
+| M-05 | **A span in several pieces** (to cross another span, or to be discontinuous such as the English split digraph a_e) is written as a **head** and **continuations**. The head is a span with its own id. Each continuation is a span with its own id and a `cont` attribute holding the head's id. The pieces, in document order, make one span whose text is the pieces joined. A continuation points at a head, never at another continuation; it must come after its head; the pieces must not overlap. Sets name only the head. | PROVISIONAL | 03, 04, e07, e16, e17, e18 |
+| M-06 | Positions are Unicode code points in the stripped text (S-01 of `spec/app.md`). An implementation whose strings are UTF-16 converts at the edges. | PROVISIONAL | 11 |
+| M-07 | Whitespace inside `markup` and `text` is text. A formatter or editor that re-indents them corrupts the file; exporters write them flush left. | PROVISIONAL | 02 |
 
-Why relative only (B-11): a shared document must not be able to make an importer read any file on the
-reader's machine and then write its contents into an export. An absolute path also breaks when a document
-moves, and it leaks a path from the author's machine. The default macOS file system ignores case when it
-matches names, so write each path in its exact case.
+## 5. The analysis block (A)
 
-## 3. The document block and tier lines
+| ID | Rule | Status | Cases |
+|---|---|---|---|
+| A-01 | `<analysis>` holds `<tier>` elements, in display order. A tier holds `<set>` elements, in order. Nothing else. | ADOPTED | 01 |
+| A-02 | A **tier** has `id` (required) and these optional attributes: `name`; `kind` (`label`, the default, or `relation`); `directed` (`true` or `false`; only on a `relation` tier); `provider` (`name@version`, an integer version); `reads` (ids of other tiers). | PROVISIONAL | 05, 06, e10, e13, e14, e19 |
+| A-03 | A **set** has `id` (required) and these optional attributes: `name`; `members` (span ids, **listed one by one**, separated by commas or whitespace; no ranges); `confirmed` (a subset of `members`); `tags` (space-separated tokens of letters, digits and `_ . : + -`, such as `place:labial`). Each member is a head span (M-05). | ADOPTED (no ranges); PROVISIONAL (the rest) | 01, 14, e03, e10, e12, e17, e20, e21 |
+| A-04 | **Meaning of kind.** In a `label` tier each member of a set independently has the label that the set stands for (these are lines; these are stressed). In a `relation` tier the members of a set are related to each other (these two rhyme; these six alliterate). When the tier is `directed` the relation runs from the first member to the last in listed order. | PROVISIONAL | 01, 05, 07 |
+| A-05 | **Order.** An undirected set is unordered: a loader reports its members in document order, whatever the listed order. A directed relation keeps the listed order, which is its meaning. Exporters list undirected members in document order, so files diff cleanly. | PROVISIONAL | 13 |
+| A-06 | Sets are ordered within their tier, and that order is preserved. A set's **position** is its place in the tier, counting from 1 (S-04). | ADOPTED (position exposed); PROVISIONAL (the rest) | 01 |
+| A-07 | A span may be in any number of sets of any number of tiers. Nothing is exclusive. A label dimension with several values is one tier with several sets. | ADOPTED | 06, 07 |
+| A-08 | **Provenance.** A tier with a `provider` was filled by that provider (`spec/app.md` E-01) and a whole-tier reset reruns it. In such a tier, a member listed in `confirmed` was accepted by a human and every other member is inferred. A tier without a `provider` was made by hand and is never reset. `reads` names the tiers the provider worked from: a dependency, not a hierarchy. | PROVISIONAL | 06, e10, e13 |
+| A-09 | There is no parent and child between tiers (P-04 of `spec/app.md`), and no rule that members of one tier match members of another. | ADOPTED | 06, 07 |
+| A-10 | A tier may hold no sets and a set no members. | PROVISIONAL | |
 
-| ID | Rule | Status |
-|---|---|---|
-| D-01 | The `document` body starts with `key: value` lines. Keys: `title`, `language` (a BCP 47 tag), `scheme` (the active scheme id) and `view` (the visible tier ids, in drawing order). Unknown keys are kept. | PROVISIONAL |
-| D-02 | A **tier line** is `tier <id> <kind> "<name>" key=value ...`. The kind is `segmentation`, `label` or `relation`. The order of tier lines is the order of the tiers (T-05). | PROVISIONAL |
-| D-03 | Tier line keys: `provider=<id>@<version>` (E-01); `reads=<tier ids, comma separated>` (E-02); `target=<tier id>` for a label tier (T-03); `labels=<label set id>` for a label or relation tier; `parent=<tier id>` for the editing hint (S-06). | PROVISIONAL |
-| D-04 | An id starts with a letter and holds letters, digits, `-`, `_` and `.`. Tier, label set and scheme ids are unique among their own kind. Token ids are unique in the whole document (S-04). | PROVISIONAL |
-| D-05 | In a quoted name, `\"` is a quote and `\\` is a backslash. | PROVISIONAL |
+## 6. The style block (S)
 
-## 4. Marks
+| ID | Rule | Status | Cases |
+|---|---|---|---|
+| S-01 | `<style>` holds **plain CSS**. There is no styling language of our own. Several blocks are allowed and apply in order. `<` and `&` must be escaped (CSS nesting needs `&amp;`); `>` is safe. | ADOPTED | 01, 14 |
+| S-02 | A loader ignores and reports `url(...)` and `@import` in a style block, so opening a file never fetches anything (F-07 of `spec/app.md`). | PROVISIONAL | w02 |
+| S-03 | **What CSS sees** (a rendering contract, not a rule of the file). The renderer stamps each member span with `data-tier` and `data-set` (the ids of the tiers and sets it is in), `data-tags` (the tags of those sets) and `data-pos` (`tier-id:position` for each, S-04). Each is a space-separated list, so `[data-set~="s3"]` and `[data-tags~="place:labial"]` work. Turning a tier off removes its stamps. | PROVISIONAL | 01, 14 |
+| S-04 | **Position.** The renderer also exposes a set's position in its tier (A-06) to CSS as the custom property `--pos-<tier id>` on each member span, so a tier-level rule can cycle colors. This is a rendering rule, not a file rule; the file only has to keep the order of sets. | ADOPTED (exposed); PROVISIONAL (the form) | |
+| S-05 | A **scheme** is a style block that can be swapped (`spec/app.md` Y-01). A built-in scheme records its credit in its own `<meta>` (Y-08). | PROVISIONAL | |
 
-| ID | Rule | Status |
-|---|---|---|
-| M-01 | `marks <tier-id>` holds the full text with that tier's tokens marked. Without the markup it must equal the `text` block exactly (I-01). A missing block means an empty tier. | PROVISIONAL |
-| M-02 | A **piece** is `[` text `]`, optionally followed by `{` ids `}`. The ids are separated by spaces and name tokens of this tier. A token's pieces together are its span. A token whose pieces are apart is discontinuous (S-02). A piece with several ids belongs to several tokens, which is how tokens overlap inside one tier. | PROVISIONAL |
-| M-03 | Pieces do not nest, and a character is in at most one piece. | PROVISIONAL |
-| M-04 | A piece with no `{...}` is an anonymous token and gets an id on import. An exporter always writes ids. | PROVISIONAL |
-| M-05 | In a `marks` body, a `[`, `]`, `{`, `}` or `\` that belongs to the text is written `\[`, `\]`, `\{`, `\}` or `\\`. | PROVISIONAL |
-| M-06 | An id followed by `!` says a human made or changed that token, in a tier that has a provider (E-06). In a tier with no provider every token is human, and `!` is not needed. | PROVISIONAL |
-| M-07 | Text outside any piece is untokenised in this tier (S-05). The body still holds all of the text. | PROVISIONAL |
+## 7. Import and export (I)
 
-## 5. Value tables
-
-| ID | Rule | Status |
-|---|---|---|
-| V-01 | A `labelset` body has one value per line: `<value-id> "<name>" <tag>:<value> ...`. The order is the order of the set (T-07). | PROVISIONAL |
-| V-02 | A `labels` body has one label per line: `<token-id> = <value-id>`, then an optional `!` for a human label. The token belongs to the tier's target tier. | PROVISIONAL |
-| V-03 | A `links` body has one relation per line: `<type-id>: <token-id> <token-id> ...`. In a directed relation the tokens are separated by `->`. An optional `!` ends a human relation. Token ids can come from any tier. | PROVISIONAL |
-| V-04 | A reference to an id that does not exist is an **orphan** (E-08). It is kept on import, flagged in the application and written back on export. | PROVISIONAL |
-
-## 6. Schemes
-
-| ID | Rule | Status |
-|---|---|---|
-| C-01 | A `scheme` body starts with `key: value` lines (`name`, `credit`), then a blank line, then style rules in a CSS-like syntax. | PROVISIONAL |
-| C-02 | A rule is `<selector> { <channel>: <value>; ... }`. Selectors: `<tier-id>` (every token of the tier), `<tier-id>/<value-id>` (the tokens, or the relations, with that value), and `tag(<tag>:<value>)`. | PROVISIONAL |
-| C-03 | Channel names come from the application's registry (Y-02). Unknown channels are kept and not drawn. | PROVISIONAL |
-| C-04 | A value may adjust instead of set, such as `lighten(-50%)` (Y-04). The list of functions is not decided. | OPEN |
-| C-05 | A built-in scheme must have a `credit` line (Y-08). | PROVISIONAL |
-
-## 7. Import and export
-
-| ID | Rule | Status |
-|---|---|---|
-| I-01 | On import, each `marks` body is stripped of markup and compared with the `text` block. A difference is an error that names the block and the first line that differs. | PROVISIONAL |
-| I-02 | Importing an export gives back the same document, with ids, origins, orphans and view (F-05). | PROVISIONAL |
-| I-03 | Errors carry line numbers. Import never drops content silently (F-05). | PROVISIONAL |
-| I-04 | Export order is fixed: the first line, `document`, `text`, label sets, then each tier's body block in tier order, then schemes. Inside a body, items follow text position, then id. That keeps diffs small. | PROVISIONAL |
-| I-05 | Unknown block types and keys are kept and written back unchanged. | PROVISIONAL |
-| I-06 | Opening a file never runs code (F-07). | PROVISIONAL |
-| I-07 | Import resolves file references, so the working copy holds contents, not paths. Export writes everything inline. A **split export**, which the user asks for, writes each chosen body to its own file and puts a reference in its place. | PROVISIONAL |
+| ID | Rule | Status | Cases |
+|---|---|---|---|
+| I-01 | Importing an export gives back the same document: text, spans, tiers, sets, `confirmed` lists, names, ids and order. | PROVISIONAL | |
+| I-02 | Export is canonical: blocks in the order `meta`, `text`, `markup`, `analysis`, `style`; tiers and sets in display order; undirected members in document order (A-05); `text` and `markup` flush left (T-03). | PROVISIONAL | 01, 13 |
+| I-03 | Import reports every problem with the line number and the rule that was broken, and never drops content silently. Warnings (B-07, B-09, S-02, empty spans, duplicate members) do not stop a load. | PROVISIONAL | e01-e23, w01-w03 |
+| I-04 | Import and export are the only ways a document enters or leaves the application's working copy (`spec/app.md` O-04). | ADOPTED | |
 
 ## 8. Open questions
 
 | ID | Question | Current default |
 |---|---|---|
-| FQ1 | Should every `marks` block repeat the whole text? | Yes (M-01). A line range per block is a later option for long texts |
-| FQ2 | S-01 says the text is not normalised. Do line endings count? | Line endings become LF when the text enters the input editor |
-| FQ3 | What are the file extension and format name? | `.tiers` and `tiers`, as placeholders |
-| FQ4 | How far should the scheme syntax follow CSS? | Rules only: no variables, nesting or cascade yet |
-| FQ5 | Is backslash the right escape for marks bodies? | Yes (M-05); the only characters escaped are `[`, `]`, `{`, `}` and `\` |
-| FQ6 | One file or several for large documents? | One file. Definitions files can be shared (B-07) |
-| FQ7 | A formal grammar (EBNF) and conformance fixtures? | After the shape is agreed (F-04) |
-| FQ8 | Should a file reference carry a hash (`sha256=...`), so a changed or swapped file is noticed? | Not in the first shape |
-| FQ9 | Should a reference be allowed on any block? | Yes (B-09); in practice `text` and `marks` are the large ones |
+| FQ1 | The extension and the root name | `.pxml`, `<pxml>` |
+| FQ2 | The name of the marked-up block | `markup` |
+| FQ3 | Where are the view (which tiers are on) and the active scheme kept? | Not decided. `meta` attributes are the likely place |
+| FQ4 | How are spans left behind by a reset (orphans, E-08) written? | Not decided |
+| FQ5 | Should `<style src="..."/>` exist, as `<text src>` does? | No, not yet |
+| FQ6 | May a `src` text file be indented, given that the markup is dedented? | Then the markup cannot match it. Keep the rule; the markup would have to keep the indentation. Needs a decision before file references ship |
+| FQ7 | The exact stamping contract (S-03, S-04) | A first guess, to be settled with the renderer |
+| FQ8 | Should the format say what kinds of provider ids exist (`english.stress@1`)? | No: any dotted name and integer version |

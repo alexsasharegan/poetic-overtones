@@ -1,0 +1,13 @@
+<!-- E23: a comment inside the input text
+     XML parsers drop comments silently, which would change the text without a trace. So a
+     comment or processing instruction inside <text> or <markup> is rejected. Comments are
+     fine between blocks and inside <analysis> and <style>. -->
+<!-- expect {"outcome": "error", "errors": ["comment-in-text"]} -->
+
+<text>
+one <!-- note --> two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
