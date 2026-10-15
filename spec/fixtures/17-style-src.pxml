@@ -13,7 +13,7 @@ one two
 </markup>
 
 <analysis>
-  <tier id="t1" name="Words">
+  <tier id="t1" name="Words" role="word">
     <set id="s1" members="1"/>
   </tier>
 </analysis>

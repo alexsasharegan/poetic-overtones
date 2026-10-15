@@ -137,6 +137,8 @@ PROVIDERS = {
                        ['primary', 'secondary', 'unstressed', 'check', 'unmarked']),
 }
 STRESS_KEY = {1: 'primary', 2: 'secondary', 0: 'unstressed'}
+ROLE = {'text.line': 'line', 'text.stanza': 'stanza', 'english.word': 'word',
+        'english.syllable': 'syllable', 'english.stress': 'stress'}
 
 
 def run(pid, text, inp, lex):

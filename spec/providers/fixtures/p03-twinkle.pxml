@@ -15,17 +15,17 @@ Like a diamond in the sky.
 </markup>
 
 <analysis>
-  <tier id="t1" name="Lines" provider="text.line@1">
+  <tier id="t1" name="Lines" role="line" provider="text.line@1">
     <set id="s1" name="Line" key="line" members="1,12,21,30"/>
   </tier>
-  <tier id="t2" name="Words" provider="english.word@1">
+  <tier id="t2" name="Words" role="word" provider="english.word@1">
     <set id="s2" name="Word" key="word" members="2,5,8,11,13,14,15,18,19,20,22,23,26,27,28,29,31,32,33,36,37,38"/>
   </tier>
-  <tier id="t3" name="Syllables" provider="english.syllable@1" reads="t2">
+  <tier id="t3" name="Syllables" role="syllable" provider="english.syllable@1" reads="t2">
     <set id="s3" name="Syllable" key="syllable" members="3,4,6,7,9,10,11,13,14,16,17,18,19,20,22,24,25,26,27,28,29,31,32,34,35,36,37,38"/>
     <set id="s4" name="Unknown word" key="unknown" tags="status:unknown" members=""/>
   </tier>
-  <tier id="t4" name="Stress" provider="english.stress@1" reads="t2 t3">
+  <tier id="t4" name="Stress" role="stress" provider="english.stress@1" reads="t2 t3">
     <set id="s5" name="primary" key="primary" tags="stress:primary" members="3,6,9,11,13,14,16,18,19,20,22,25,27,28,29,31,34,38"/>
     <set id="s6" name="secondary" key="secondary" tags="stress:secondary" members=""/>
     <set id="s7" name="unstressed" key="unstressed" tags="stress:unstressed" members="4,7,10,17,24,26,32,35,36,37"/>

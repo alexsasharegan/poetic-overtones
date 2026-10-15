@@ -1,0 +1,41 @@
+<!-- Case 20: roles and layers.
+     role says what a tier is about, so a theme finds tiers without knowing their ids.
+     A tier has at most one role; roles are not unique (two tiers here are both "rhyme").
+     A tier may have no role; a theme styles it with its fallback rule.
+     Tier order is layer order: a later tier is painted on top (A-01, S-07). Here the
+     lines are at the bottom and the rhymes above them, as most readers would want.
+     The user restacks by dragging, which rewrites this order. The theme names no ids. -->
+<!-- expect {"tiers": [["t1", "line"], ["t2", null], ["t3", "rhyme"], ["t4", "rhyme"]],
+  "sets": {"s1": ["Twinkle, twinkle, little star,", "How I wonder what you are!"],
+           "s3": ["star", "are"], "s4": ["Twinkle", "twinkle"]}} -->
+
+<text>
+Twinkle, twinkle, little star,
+How I wonder what you are!
+</text>
+
+<markup>
+<span id="1"><span id="6">Twinkle</span>, <span id="7">twinkle</span>, little <span id="3">star</span>,</span>
+<span id="2">How I <span id="5">wonder</span> what you <span id="4">are</span>!</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Lines" role="line">
+    <set id="s1" members="1,2"/>
+  </tier>
+  <tier id="t2" name="My notes">
+    <set id="s2" name="favourite word" members="5"/>
+  </tier>
+  <tier id="t3" name="End rhyme" kind="relation" role="rhyme">
+    <set id="s3" name="A" members="3,4"/>
+  </tier>
+  <tier id="t4" name="Repetition" kind="relation" role="rhyme">
+    <set id="s4" members="6,7"/>
+  </tier>
+</analysis>
+
+<style name="plain">
+  tier { text-decoration: underline dotted; }
+  tier[role="line"] > set { background: #f3efe6; }
+  tier[role="rhyme"] > set:nth-child(1) { background: #fdebd0; color: #b3261e; }
+</style>

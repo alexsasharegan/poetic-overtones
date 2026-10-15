@@ -1,8 +1,9 @@
 <!-- Case 01: the basic idea.
      Plain text; markup with bare id'd spans (sub-word spans allowed); an analysis block of
      tiers, each holding sets of span ids; plain CSS. Ids are opaque and unique across the
-     whole file; names are free text for people. The renderer stamps member spans with
-     data-tier and data-set, and the CSS selects on those. Blocks are siblings, Vue style.
+     whole file; names are free text for people. The CSS styles the analysis, not the text:
+     it picks tiers by role and sets by position, and the renderer paints each set's style
+     onto its spans (format S-03). Blocks are siblings, Vue style.
      Markup is tab-indented, text is not: dedent applies. -->
 <!-- expect {"sets": {
   "s1": ["Twinkle, twinkle, little star,", "How I wonder what you are!"],
@@ -27,19 +28,19 @@ Like a diamond in the sky.
 </markup>
 
 <analysis>
-	<tier id="t1" name="Rhyme scheme">
+	<tier id="t1" name="Rhyme scheme" role="rhyme-scheme">
 		<set id="s1" name="A" members="1,2"/>
 		<set id="s2" name="B" members="3,4"/>
 	</tier>
-	<tier id="t2" name="Rhyme" kind="relation">
+	<tier id="t2" name="Rhyme" kind="relation" role="rhyme">
 		<set id="s3" name="A" members="5,6"/>
 		<set id="s4" name="B" members="7,8"/>
 	</tier>
 </analysis>
 
 <style>
-	[data-set="s1"] { background: #fdebd0; }
-	[data-set="s2"] { background: #d6e9ff; }
-	[data-set="s3"] { color: #b3261e; font-weight: 700; }
-	[data-set="s4"] { color: #1b5fa8; font-weight: 700; }
+	tier[role="rhyme-scheme"] > set:nth-child(1) { background: #fdebd0; }
+	tier[role="rhyme-scheme"] > set:nth-child(2) { background: #d6e9ff; }
+	tier[role="rhyme"] > set:nth-child(1) { color: #b3261e; font-weight: 700; }
+	tier[role="rhyme"] > set:nth-child(2) { color: #1b5fa8; font-weight: 700; }
 </style>

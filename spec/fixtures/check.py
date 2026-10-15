@@ -8,6 +8,7 @@ Each fixture carries its own expectation in a comment:  <!-- expect {json} -->
   errors    [code]                            (default [])
   warnings  [code, ...]                       (default [])
   sets      {set id: [text of each member]}   (only the sets listed are compared)
+  tiers     [[tier id, role or null], ...]    (every tier, in order; compared when given)
 
 This is a reference for the draft rules in spec/format.md, not the implementation.
 """
@@ -17,10 +18,11 @@ import xml.etree.ElementTree as ET
 ID_RE = re.compile(r'[A-Za-z0-9_]+')
 PROVIDER_RE = re.compile(r'[a-z][a-z0-9.-]*@[0-9]+')
 BLOCKS = ('meta', 'text', 'markup', 'analysis', 'style')
-TIER_ATTRS = {'id', 'name', 'kind', 'directed', 'provider', 'reads', 'disabled'}
+TIER_ATTRS = {'id', 'name', 'role', 'kind', 'directed', 'provider', 'reads', 'disabled'}
 STYLE_ATTRS = {'name', 'disabled', 'src'}
 SET_ATTRS = {'id', 'name', 'key', 'members', 'confirmed', 'tags'}
 KEY_RE = re.compile(r'[a-z][a-z0-9_]*')
+ROLE_RE = re.compile(r'[a-z][a-z0-9_-]*')
 TAG_RE = re.compile(r'[A-Za-z0-9_.:+-]+')
 
 
@@ -282,6 +284,9 @@ def load(path, warnings):
             if not ID_RE.fullmatch(tid):
                 raise Fail('id-bad', tid)
             claim(tid, 'tier')
+            role = tr.get('role')
+            if role is not None and not ROLE_RE.fullmatch(role):
+                raise Fail('role-bad', role)
             kind = tr.get('kind', 'label')
             if kind not in ('label', 'relation'):
                 raise Fail('tier-bad-kind', kind)
@@ -297,7 +302,7 @@ def load(path, warnings):
             prov = tr.get('provider')
             if prov is not None and not PROVIDER_RE.fullmatch(prov):
                 raise Fail('provider-bad', prov)
-            tiers[tid] = {'id': tid, 'name': tr.get('name'), 'kind': kind, 'directed': is_directed,
+            tiers[tid] = {'id': tid, 'name': tr.get('name'), 'role': role, 'kind': kind, 'directed': is_directed,
                           'provider': prov, 'reads': tr.get('reads', ''),
                           'disabled': tr.get('disabled') == 'true', 'attrs': dict(tr.attrib), 'sets': []}
             keys = set()
@@ -350,14 +355,15 @@ def load(path, warnings):
 
 
 def check(path, warnings):
-    return load(path, warnings)['sets']
+    return load(path, warnings)
 
 
 def run(path):
     warnings = []
     try:
-        tiers = check(path, warnings)
-        return {'outcome': 'ok', 'errors': [], 'warnings': sorted(set(warnings)), 'sets': tiers}
+        model = check(path, warnings)
+        return {'outcome': 'ok', 'errors': [], 'warnings': sorted(set(warnings)), 'sets': model['sets'],
+                'tiers': [[t['id'], t['role']] for t in model['tiers']]}
     except Fail as e:
         return {'outcome': 'error', 'errors': [e.code], 'warnings': sorted(set(warnings)),
                 'sets': {}, 'detail': e.detail}
@@ -378,6 +384,8 @@ def compare(exp, got):
         probs.append('errors %r, expected %r (%s)' % (got['errors'], exp.get('errors', []), got.get('detail', '')))
     if got['warnings'] != sorted(exp.get('warnings', [])):
         probs.append('warnings %r, expected %r' % (got['warnings'], sorted(exp.get('warnings', []))))
+    if 'tiers' in exp and got.get('tiers') != exp['tiers']:
+        probs.append('tiers %r, expected %r' % (got.get('tiers'), exp['tiers']))
     for sid, texts in exp.get('sets', {}).items():
         if got['sets'].get(sid) != texts:
             probs.append('set %s: got %r, expected %r' % (sid, got['sets'].get(sid), texts))

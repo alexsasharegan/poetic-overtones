@@ -17,6 +17,6 @@ one two
 </analysis>
 
 <style>
-  [data-tier="t1"] { background: url("https://example.com/x.png"); }
+  tier > set { background: url("https://example.com/x.png"); }
   @import "https://example.com/y.css";
 </style>

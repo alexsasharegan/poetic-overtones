@@ -48,21 +48,21 @@ Like a diamond in the sky.
 </markup>
 
 <analysis>
-  <tier id="t1" name="Rhyme scheme">
+  <tier id="t1" name="Rhyme scheme" role="rhyme-scheme">
     <set id="s1" name="A" members="1,2"/>
     <set id="s2" name="B" members="3,4"/>
   </tier>
-  <tier id="t2" name="Rhyme" kind="relation">
+  <tier id="t2" name="Rhyme" kind="relation" role="rhyme">
     <set id="s3" name="A" members="5,6"/>
     <set id="s4" name="B" members="7,8"/>
   </tier>
 </analysis>
 
 <style>
-  [data-set="s1"] { background: #fdebd0; }
-  [data-set="s2"] { background: #d6e9ff; }
-  [data-set="s3"] { color: #b3261e; font-weight: 700; }
-  [data-set="s4"] { color: #1b5fa8; font-weight: 700; }
+  tier[role="rhyme-scheme"] > set:nth-child(1) { background: #fdebd0; }
+  tier[role="rhyme-scheme"] > set:nth-child(2) { background: #d6e9ff; }
+  tier[role="rhyme"] > set:nth-child(1) { color: #b3261e; font-weight: 700; }
+  tier[role="rhyme"] > set:nth-child(2) { color: #1b5fa8; font-weight: 700; }
 </style>
 ```
 
@@ -71,7 +71,8 @@ Like a diamond in the sky.
   mean.
 - `analysis` says what they mean. A set such as rhyme "A" lists the spans that belong to it. A span can be in
   any number of sets in any number of tiers, so tiers overlap freely and no hierarchy is implied.
-- `style` is plain CSS, applied to the rendered spans (section 6).
+- `style` is plain CSS. It styles the **analysis**, not the text: it picks tiers by `role` and sets by
+  position, key or tags, and the application paints each set's style onto its spans (section 6).
 
 ## 2. The file and its blocks (B)
 
@@ -116,8 +117,8 @@ Like a diamond in the sky.
 
 | ID | Rule | Status | Cases |
 |---|---|---|---|
-| A-01 | `<analysis>` holds `<tier>` elements, in display order. A tier holds `<set>` elements, in order. Nothing else. | ADOPTED | 01 |
-| A-02 | A **tier** has `id` (required) and these optional attributes: `name`; `kind` (`label`, the default, or `relation`); `directed` (`true` or `false`; only on a `relation` tier); `provider` (`name@version`, an integer version); `reads` (ids of other tiers); `disabled` (A-11). | PROVISIONAL | 05, 06, 16, e10, e13, e14, e19 |
+| A-01 | `<analysis>` holds `<tier>` elements, in **layer order**: each tier is painted above the tiers before it (S-07). A tier holds `<set>` elements, in order. Nothing else. | ADOPTED (tier order is layer order); PROVISIONAL (later is on top) | 01, 20 |
+| A-02 | A **tier** has `id` (required) and these optional attributes: `name`; `role` (A-13); `kind` (`label`, the default, or `relation`); `directed` (`true` or `false`; only on a `relation` tier); `provider` (`name@version`, an integer version); `reads` (ids of other tiers); `disabled` (A-11). | PROVISIONAL | 05, 06, 16, e10, e13, e14, e19 |
 | A-03 | A **set** has `id` (required) and these optional attributes: `name`; `key` (the provider's own name for a set it owns: lower-case letters, digits and underscore, unique within the tier; a set without a key is the user's and a reset never touches it); `members` (span ids, **listed one by one**, separated by commas or whitespace; no ranges); `confirmed` (a subset of `members`); `tags` (space-separated tokens of letters, digits and `_ . : + -`, such as `place:labial`). Each member is a head span (M-05). | ADOPTED (no ranges); PROVISIONAL (the rest) | 01, 14, 19, e03, e10, e12, e17, e20, e21, e27, e28 |
 | A-04 | **Meaning of kind.** In a `label` tier each member of a set independently has the label that the set stands for (these are lines; these are stressed). In a `relation` tier the members of a set are related to each other (these two rhyme; these six alliterate). When the tier is `directed` the relation runs from the first member to the last in listed order. | PROVISIONAL | 01, 05, 07 |
 | A-05 | **Order.** An undirected set is unordered: a loader reports its members in document order, whatever the listed order. A directed relation keeps the listed order, which is its meaning. Exporters list undirected members in document order, so files diff cleanly. | PROVISIONAL | 13 |
@@ -128,6 +129,7 @@ Like a diamond in the sky.
 | A-10 | A tier may hold no sets and a set no members. | PROVISIONAL | |
 | A-11 | **Saved view state.** `disabled="true"` on a tier means it is switched off in the view; absent or `"false"` means on. The value is required because XML has no bare attributes. A disabled tier is still parsed and checked in full. | ADOPTED | 16, e25 |
 | A-12 | A span that no set lists is meaningless. Import accepts it silently. Export drops it (with its continuations). A reset replaces what the sets of a provider tier list, not the spans; a provider that recomputes a span with the same pieces as an existing one reuses its id (`spec/app.md` E-08). | PROVISIONAL | 15 |
+| A-13 | **Role.** `role` says what a tier is about (`line`, `rhyme`, `stress`), so that a theme can find the tiers it styles without knowing their ids (S-03). A tier has **at most one** role; for a second role, make a second tier. A role is a lower-case ASCII letter followed by lower-case letters, digits, `_` or `-`. Roles are not unique: several tiers may share one. A provider gives the tiers it fills their role. The built-in vocabulary is in `spec/app.md` Y-10; any other word is allowed. | ADOPTED (one role per tier); PROVISIONAL (syntax) | 01, 20, e29 |
 
 ## 6. The style block (S)
 
@@ -135,17 +137,18 @@ Like a diamond in the sky.
 |---|---|---|---|
 | S-01 | `<style>` holds **plain CSS**. There is no styling language of our own. Several blocks are allowed and apply in order. `<` and `&` must be escaped in the body (CSS nesting needs `&amp;`); `>` is safe; or put the CSS in a file (S-06), where nothing is escaped. A style block may have `name`, `disabled` (as A-11) and `src`. | ADOPTED | 01, 14, 16 |
 | S-02 | A loader ignores and reports `url(...)` and `@import` in a style block, so opening a file never fetches anything (F-07 of `spec/app.md`). | PROVISIONAL | w02 |
-| S-03 | **What CSS sees** (a rendering contract, not a rule of the file). The renderer stamps each member span with `data-tier` and `data-set` (the ids of the tiers and sets it is in), `data-tags` (the tags of those sets) and `data-pos` (`tier-id:position` for each, S-04). Each is a space-separated list, so `[data-set~="s3"]` and `[data-tags~="place:labial"]` work. Turning a tier off removes its stamps. | PROVISIONAL | 01, 14 |
-| S-04 | **Position.** The renderer also exposes a set's position in its tier (A-06) to CSS as the custom property `--pos-<tier id>` on each member span, so a tier-level rule can cycle colors. This is a rendering rule, not a file rule; the file only has to keep the order of sets. | ADOPTED (exposed); PROVISIONAL (the form) | |
-| S-05 | A **scheme** is a named style block that can be swapped (`spec/app.md` Y-01): the active scheme is the style block that is not disabled (A-11). A built-in scheme records its credit in its own `<meta>` (Y-08). | PROVISIONAL | 16 |
-| S-06 | **Style reference.** `<style src="scheme.css"/>` follows the rule of T-04: self-closing, relative path only, no chaining, raw contents, nothing escaped. The CSS is not dedented. | ADOPTED | 17, e24, e26 |
+| S-03 | **Themes style the analysis, not the text.** The renderer keeps a hidden **mirror** of the analysis: one `tier` element for each tier that is not disabled, in file order, holding one `set` element for each of its sets, in order. Style blocks are applied to the mirror. For each set the renderer reads the computed value of each channel (`spec/app.md` Y-03) and paints the set's members onto the text with it. Nothing in the text is selected by CSS, so spans can cross, nest and come in pieces freely. | ADOPTED (themes style the analysis); PROVISIONAL (the mirror's shape) | 01, 14, 20 |
+| S-04 | **What the mirror shows.** A `tier` element carries `role`, `kind`, `directed`, `provider` and `id`; a `set` element carries `key`, `tags` (space-separated, so `[tags~="place:labial"]` works) and `id`. Position (A-06) is the element's place: `set:nth-child(2)`. Names are not shown: they are free text for people. Ids are shown only so a document can tweak one set of its own; a theme meant to be shared selects by role, kind, position, key and tags, never by id. | PROVISIONAL | 01, 14 |
+| S-05 | A **theme** is a named style block that can be swapped (`spec/app.md` Y-01): the active theme is the named style block that is not disabled (A-11). A theme is made of **parts**, one for each role it styles (`tier[role="rhyme"] ...`), and a fallback for other tiers (`tier`, `tier:not([role])`). A built-in theme records its credit in its own `<meta>` (Y-08). | PROVISIONAL | 16 |
+| S-06 | **Style reference.** `<style src="theme.css"/>` follows the rule of T-04: self-closing, relative path only, no chaining, raw contents, nothing escaped. The CSS is not dedented. | ADOPTED | 17, e24, e26 |
+| S-07 | **Layers.** Each visible tier is painted as one layer, in tier order: a later tier is on top (A-01). Within a tier, a later set is on top. A channel that can stack (fills, underlines) shows every layer; a channel that cannot (text colour, weight) takes its value from the topmost layer that sets it. The user restacks layers by dragging tiers, which changes the tier order saved in the file. | ADOPTED (tier order decides); PROVISIONAL (direction, sets within a tier) | 20 |
 
 ## 7. Import and export (I)
 
 | ID | Rule | Status | Cases |
 |---|---|---|---|
 | I-01 | Importing an export gives back the same document: text, spans, tiers, sets, `confirmed` lists, names, ids and order. | PROVISIONAL | |
-| I-02 | Export is canonical: blocks in the order `meta`, `text`, `markup`, `analysis`, `style`; tiers and sets in display order; undirected members in document order (A-05); spans that no set lists dropped (A-12); `text` and `markup` flush left with `xml:space="preserve"` (T-03, M-07). | PROVISIONAL | 01, 13, 15 |
+| I-02 | Export is canonical: blocks in the order `meta`, `text`, `markup`, `analysis`, `style`; tiers and sets in their order (tier order is layer order, A-01); undirected members in document order (A-05); spans that no set lists dropped (A-12); `text` and `markup` flush left with `xml:space="preserve"` (T-03, M-07). | PROVISIONAL | 01, 13, 15 |
 | I-03 | Import reports every problem with the line number and the rule that was broken, and never drops content silently. Warnings (B-07, B-09, S-02, empty spans, duplicate members) do not stop a load. | PROVISIONAL | e01-e23, w01-w03 |
 | I-04 | Import and export are the only ways a document enters or leaves the application's working copy (`spec/app.md` O-04). | ADOPTED | |
 
@@ -157,7 +160,7 @@ Settled on 2026-10-14:
 |---|---|---|
 | FQ1 | Extension and root name | `.pxml`, `<pxml>` (ADOPTED) |
 | FQ2 | Name of the marked-up block | `markup` (ADOPTED) |
-| FQ3 | Where are the view and the active scheme kept? | `disabled="true"` on tiers and style blocks (A-11, S-05) (ADOPTED) |
+| FQ3 | Where are the view and the active theme kept? | `disabled="true"` on tiers and style blocks (A-11, S-05) (ADOPTED) |
 | FQ4 | How are orphans written? | They are not: spans belong to no tier, a reset replaces what sets list, providers reuse spans with the same pieces, unlisted spans are dropped on export (A-12) (ADOPTED) |
 | FQ5 | `<style src>`? | Yes, the same rule as `<text src>` (S-06) (ADOPTED) |
 | FQ6 | Indented `src` text | Dedent it like an inline block (T-04) (ADOPTED) |
@@ -166,6 +169,6 @@ Still open:
 
 | ID | Question | Current default |
 |---|---|---|
-| FQ7 | The exact stamping contract (S-03, S-04) | A first guess, to be settled with the renderer |
+| FQ7 | The shape of the mirror (S-03, S-04): element and attribute names, and whether members are mirrored too, so a theme can draw confirmed and inferred members differently (`spec/app.md` E-06) | A first guess in S-03 and S-04; members not yet mirrored. To be settled with the prototype renderer |
 | FQ8 | Should the format say what provider ids look like (`english.stress@1`)? | No: any dotted name and integer version |
 | FQ9 | An escape hatch for an input text whose every line must keep a shared indent? | None: that shared indent is lost (T-03). Add only if someone needs it |

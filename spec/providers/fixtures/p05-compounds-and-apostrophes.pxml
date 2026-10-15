@@ -9,14 +9,14 @@ Summer’s moon-light and Elven-king
 </markup>
 
 <analysis>
-  <tier id="t1" name="Words" provider="english.word@1">
+  <tier id="t1" name="Words" role="word" provider="english.word@1">
     <set id="s1" name="Word" key="word" members="1,4,7,8"/>
   </tier>
-  <tier id="t2" name="Syllables" provider="english.syllable@1" reads="t1">
+  <tier id="t2" name="Syllables" role="syllable" provider="english.syllable@1" reads="t1">
     <set id="s2" name="Syllable" key="syllable" members="2,3,5,6,7"/>
     <set id="s3" name="Unknown word" key="unknown" tags="status:unknown" members="8"/>
   </tier>
-  <tier id="t3" name="Stress" provider="english.stress@1" reads="t1 t2">
+  <tier id="t3" name="Stress" role="stress" provider="english.stress@1" reads="t1 t2">
     <set id="s4" name="primary" key="primary" tags="stress:primary" members="2,5,6,7"/>
     <set id="s5" name="secondary" key="secondary" tags="stress:secondary" members=""/>
     <set id="s6" name="unstressed" key="unstressed" tags="stress:unstressed" members="3"/>

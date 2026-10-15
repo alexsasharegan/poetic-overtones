@@ -9,7 +9,7 @@
 </markup>
 
 <analysis>
-  <tier id="t1" name="Words" provider="english.word@1">
+  <tier id="t1" name="Words" role="word" provider="english.word@1">
     <set id="s1" name="Word" key="word" members="1,2,3,4,5,6,7,8,9,10,11,12"/>
   </tier>
 </analysis>

@@ -19,6 +19,7 @@ get filled in, and it follows the same contract as a provider written by a user 
 | C-06 | **Don't guess.** When the provider lacks the data to decide, it says so in a set (see english.md `unknown`, `check`, `unmarked`) instead of inventing an answer. A wrong silent guess is worse than a visible gap. | PROVISIONAL |
 | C-07 | The **lexicon** is data, not code. The provider contract fixes the lexicon format (section 3); which dictionary fills it is a packaging decision, kept out of the spec so tests do not depend on any licensed word list. | PROVISIONAL |
 | C-08 | A provider has an id and an integer version, written `name@int`. Output may change between versions; the version in the file says which one produced it. The exact form of the id is open (format.md FQ8). | OPEN |
+| C-09 | A provider gives the tier it fills a **role** (format.md A-13), so themes find the tier without knowing its id. The runner checks it. | PROVISIONAL |
 
 ## 2. Conformance: reset equality
 

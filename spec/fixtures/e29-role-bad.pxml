@@ -1,0 +1,18 @@
+<!-- E29: a role with a space
+     A tier has at most one role: a lower-case letter followed by lower-case letters,
+     digits, underscore or hyphen. For a second role, make a second tier. -->
+<!-- expect {"outcome": "error", "errors": ["role-bad"]} -->
+
+<text>
+one two
+</text>
+
+<markup>
+<span id="1">one</span> <span id="2">two</span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Both" role="rhyme line">
+    <set id="s1" members="1,2"/>
+  </tier>
+</analysis>

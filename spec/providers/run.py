@@ -58,6 +58,8 @@ def run_file(path):
                 problems.append('%s: needs a %s tier in the file' % (pid, need))
             elif tier_of[need]['id'] not in reads:
                 problems.append('%s: reads should list tier %s (%s)' % (pid, tier_of[need]['id'], need))
+        if tier_of[pid].get('role') != ref.ROLE[pid]:
+            problems.append('%s: role %r, expected %r' % (pid, tier_of[pid].get('role'), ref.ROLE[pid]))
         if set(file_out[pid]) != set(keys):
             problems.append('%s: set keys %s, expected %s' % (pid, sorted(file_out[pid]), sorted(keys)))
             continue

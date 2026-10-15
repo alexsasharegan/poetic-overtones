@@ -43,12 +43,15 @@ Provider ids (form still open, format.md FQ8): `text.line`, `text.stanza`, `engl
 | E-33 | Unknown words (E-21) get no stress and appear in no stress set. | p04 |
 | E-34 | Every set the provider owns exists in the tier even when empty. | p04 |
 
-## 5. Stamping and tags
+## 5. Roles and tags
 
-The sets carry tags so schemes can target them with CSS without knowing the provider: stress sets use
-`stress:primary`, `stress:secondary`, `stress:unstressed`; gap sets use `status:unknown`, `status:check`,
-`status:unmarked`. Tags are PROVISIONAL, as is the stamping contract (format.md FQ7). The fixtures include them
-but the runner does not compare tags or names.
+Each provider gives the tier it fills a role (format.md A-13), so themes find it without knowing ids:
+`text.line` → `line`, `text.stanza` → `stanza`, `english.word` → `word`, `english.syllable` → `syllable`,
+`english.stress` → `stress`. The runner checks it.
+
+Sets carry tags so a theme can style them by meaning: stress sets use `stress:primary`, `stress:secondary`,
+`stress:unstressed`; gap sets use `status:unknown`, `status:check`, `status:unmarked`. A theme can equally select
+by `key` (`tier[role="stress"] > set[key="primary"]`). Tags are PROVISIONAL. The runner does not compare tags or names.
 
 ## 6. Deferred: `english.sound`
 

@@ -15,7 +15,7 @@ Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning
 
 | Case | What it pins down |
 |---|---|
-| 01 basic | blocks; bare id'd spans, sub-word spans; tiers hold sets of span ids; ids opaque and unique; names free; CSS on stamped `data-tier` / `data-set`; tab indentation |
+| 01 basic | blocks; bare id'd spans, sub-word spans; tiers hold sets of span ids; ids opaque and unique; names free; CSS styles the analysis (tiers by role, sets by position); tab indentation |
 | 02 dedent | common indentation removed from text and markup; stray short whitespace line |
 | 03 crossing | spans that cross: a head span plus a continuation (`cont="head-id"`); every span has its own id |
 | 04 discontinuous | split digraph (a_e) as a head and a continuation |
@@ -28,13 +28,14 @@ Names: `NN-` loads cleanly, `eNN-` must be rejected, `wNN-` loads with a warning
 | 11 unicode | code-point offsets (astral Shavian), combining mark alone, Private Use |
 | 12 explicit root | the `<pxml>` root form, with an XML declaration |
 | 13 order | undirected sets are unordered (read in document order); directed relations keep the listed order |
-| 14 tags | tags on sets, stamped as `data-tags` for CSS |
+| 14 tags | tags on sets, shown on the mirror's set elements for CSS (`set[tags~=...]`) |
 | 15 unreferenced | a span no set lists loads silently |
 | 16 disabled | saved view state: `disabled="true"` on tiers and style blocks |
 | 17 style-src | `<style src="..."/>`, same rules as `<text src>` |
 | 18 indented-src | a text file is dedented like an inline block |
 | 19 key | the `key` of a set: the provider's own name for the sets it owns |
-| e01-e28 | files that must be rejected, each for one reason (e15 is CDATA) |
+| 20 roles and layers | `role` on tiers (one each, not unique, optional); tier order is layer order, later on top; a theme that names no ids |
+| e01-e29 | files that must be rejected, each for one reason (e15 is CDATA, e29 a bad role) |
 | w01-w03 | files that load but are reported: control character, `url()` in CSS, unknown attribute |
 
 Model in one line: a **tier** (a dimension) holds **sets**; a **set** lists **spans** by id;

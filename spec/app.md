@@ -27,7 +27,7 @@ An agent never promotes a status on its own judgment.
 | T | Tiers |
 | E | Standard tiers, reset, provenance, editing |
 | R | Relations |
-| Y | Styles, schemes, collisions |
+| Y | Styles, themes, collisions |
 | O | Offline and storage |
 | F | Files and the text form |
 | A | Artifacts (exports) |
@@ -50,9 +50,12 @@ Earlier ADRs say "layer"; read it as "tier". A tier holds **sets**; a set lists 
 | Standard tier | An ordinary tier whose contents came from a provider |
 | Provider | A replaceable function that fills a tier from the text and other tiers |
 | Override | A human edit to something a provider produced |
-| Scheme | A CSS style sheet that styles spans by the tiers, sets and tags they belong to |
+| Theme | A CSS style sheet that styles the analysis: tiers by role, sets by position, key and tags. The application paints the result onto the text |
+| Part | The rules of a theme for one role (its rhyme part, its stress part) |
+| Role | What a tier is about (line, rhyme, stress). One per tier. It is how a theme finds the tiers it styles |
+| Layer | A visible tier as painted. Tier order is layer order, later on top |
 | Channel | One visual property a style can set: a CSS property, or an application custom property for what CSS cannot draw |
-| View | Which tiers are visible, with the active scheme |
+| View | Which tiers are visible, in which order, with the active theme |
 | Working copy | The document as the application keeps it in persistent local storage |
 | Text form | The plain-text serialisation of a document: the share layer, readable and editable in any text editor |
 | Artifact | A fixed rendering of a view (PDF or image) that needs no application to read |
@@ -81,7 +84,7 @@ Earlier ADRs say "layer"; read it as "tier". A tier holds **sets**; a set lists 
 |---|---|---|
 | W-01 | There are two surfaces. The **input editor** holds the text, which is editable. The **workbench** renders the text with its tiers and holds all marking and interaction. | ADOPTED |
 | W-02 | The workbench is a function of its input. Inside the workbench the text cannot be edited. To change the text, the user goes back to the input editor, which gives the workbench a new input. | ADOPTED |
-| W-03 | When the input text changes, the workbench starts fresh: standard tiers are re-derived, and hand edits and the contents of custom tiers are discarded after a warning. Tier definitions and schemes are kept. | PROVISIONAL |
+| W-03 | When the input text changes, the workbench starts fresh: standard tiers are re-derived, and hand edits and the contents of custom tiers are discarded after a warning. Tier definitions and themes are kept. | PROVISIONAL |
 | W-04 | The application limits the size of the **input text** (not the size of the files it writes). The limit is stable and counted in Unicode code points, with 1,000,000 as a first guess. Size is not a concern for the first version. The limit is an application rule, not a rule of the text form. | PROVISIONAL |
 
 W-03 is the simplest rule that fits W-02. A friendlier one, re-anchoring annotations after a text change,
@@ -111,8 +114,8 @@ its own style (ADR-0003, `docs/synthesis/comparison.md` section 5).
 | T-03 | **Kind.** In a `label` tier (the default) each member of a set independently has the label the set stands for. In a `relation` tier the members of a set belong together, as a rhyme or an alliteration group does; when the tier is directed they are read in the listed order. Kind says how to read and draw; it adds no exclusivity and no hierarchy. | PROVISIONAL |
 | T-04 | Nothing is exclusive. A span may be in several sets of the same tier. (The earlier "one value per label tier" is dropped.) | ADOPTED |
 | T-05 | Any number of tiers can exist, and the user can create, rename, delete and reorder tiers and sets. | ADOPTED |
-| T-06 | Each tier is switched on or off independently. A **view** is the set of visible tiers plus the active scheme, and views are combinable. A document saves its view as `disabled` on tiers and styles (`spec/format.md` A-11). | ADOPTED |
-| T-07 | A set may carry **tags** (`place:labial`, `manner:plosive`, `voiced:true`). Tags let a scheme and a filter act on a group of sets. | PROVISIONAL |
+| T-06 | Each tier is switched on or off independently. A **view** is the set of visible tiers plus the active theme, and views are combinable. A document saves its view as `disabled` on tiers and styles (`spec/format.md` A-11). | ADOPTED |
+| T-07 | A set may carry **tags** (`place:labial`, `manner:plosive`, `voiced:true`). Tags let a theme and a filter act on a group of sets. | PROVISIONAL |
 | T-08 | The user defines tiers and sets in the application. Nothing about them is fixed by the core. | ADOPTED |
 | T-09 | Names are free text in any script and need not be unique. Ids are opaque. Nothing refers to a name, and no id is derived from one. | ADOPTED |
 | T-10 | The order of sets in a tier is kept, and a set's **position** in its tier is available to styles (`spec/format.md` A-06, S-04), so a tier can cycle styles as the user adds sets. | ADOPTED (exposed); PROVISIONAL (form) |
@@ -150,19 +153,21 @@ Relations are first-class (P-05). They are the sets of a tier of kind `relation`
 | R-04 | A relation can be drawn by hand (select spans, connect them) or produced by a provider. Its origin follows E-06. | PROVISIONAL |
 | R-05 | A relation is drawn through channels (section 8): an arc or connector, or the same marker on every member. | PROVISIONAL |
 
-## 8. Styles, schemes, collisions
+## 8. Styles, themes, collisions
 
 | ID | Rule | Status |
 |---|---|---|
-| Y-01 | A **scheme** is a CSS style sheet. The application invents no styling language. It is separate from the tiers and swappable at any time. | ADOPTED |
+| Y-01 | A **theme** is a CSS style sheet. The application invents no styling language. It is separate from the tiers and swappable at any time. A theme styles the **analysis, not the text** (`spec/format.md` S-03). | ADOPTED |
 | Y-02 | A **channel** is a CSS property, or a custom property the application defines for what CSS cannot draw (relation arcs, text above or below). The set of channels is open: new CSS properties and new custom properties need no change to the core. | PROVISIONAL |
 | Y-03 | The initial channels are in the table below. | PROVISIONAL |
-| Y-04 | A rule selects by the tiers, sets, tags and positions that the renderer exposes on each span (`spec/format.md` S-03, S-04). Adjusting a style (lighter by a fixed amount) is done in CSS (`color-mix`, relative colours, `calc`). A scheme where place sets hue and voicing sets brightness is two rules combined by channel. | PROVISIONAL |
-| Y-05 | If two visible rules set the same channel on overlapping spans, that is a **collision**. The editor works it out from the selectors and warns. It never blocks. | PROVISIONAL |
+| Y-04 | A rule selects tiers by role or kind and sets by position, key and tags, in the mirror of the analysis (`spec/format.md` S-03, S-04). Ids are for wiring sets to spans, not for themes; only a document's own tweaks may use them. Adjusting a style (lighter by a fixed amount) is done in CSS (`color-mix`, relative colours, `calc`). A theme where place sets hue and voicing sets brightness is two rules combined by channel. | PROVISIONAL |
+| Y-05 | If two visible tiers set the same channel on overlapping spans, that is a **collision**. Channels that stack show both; for the others the top layer wins (`spec/format.md` S-07). The editor works collisions out and warns. It never blocks. | PROVISIONAL |
 | Y-06 | In one tier, the editor warns when two sets look too alike (colour distance) or when text contrast is poor. It warns and never blocks. | PROVISIONAL |
 | Y-07 | The application has a visual style editor for any set, tag or tier. It writes CSS. | ADOPTED |
-| Y-08 | A built-in scheme records its credit in its own file. The community scheme is a first-class built-in (ADR-0005). | PROVISIONAL |
+| Y-08 | A built-in theme records its credit in its own file. The community theme (the community scheme of ADR-0005) is a first-class built-in. | PROVISIONAL |
 | Y-09 | A loader never fetches anything a style names (`url(...)`, `@import`). Opening a file stays offline (F-07, `spec/format.md` S-02). | PROVISIONAL |
+| Y-10 | **Roles.** The built-in roles are `line`, `stanza`, `word`, `syllable`, `stress`, `rhyme`, `rhyme-scheme`, `alliteration`, `assonance`, `consonance` and `meter`. Any other word is allowed. A theme without a part for a tier's role styles it with its fallback. One role per tier; for a second meaning, make a second tier (`spec/format.md` A-13). | ADOPTED (one role); PROVISIONAL (the list) |
+| Y-11 | **Layer order is the user's.** Dragging a tier in the tier list restacks it, and the new order is saved as the order of tiers in the file (`spec/format.md` A-01, S-07). A theme does not reorder tiers. A new tier goes on top. | ADOPTED (order is the user's, saved in the file); PROVISIONAL (new tier on top) |
 
 Initial channels (Y-03). The groups are for the editor; the list is expected to grow.
 
@@ -186,10 +191,10 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 
 | ID | Rule | Status |
 |---|---|---|
-| F-01 | There are three kinds of document: **documents**, **schemes** (style sheets) and **tier definitions** (reusable tiers with their sets, names and tags, but no spans). | PROVISIONAL |
+| F-01 | There are three kinds of document: **documents**, **themes** (style sheets) and **tier definitions** (reusable tiers with their sets, names and tags, but no spans). | PROVISIONAL |
 | F-02 | Every kind has a **text form**: plain text in UTF-8 that a person can read and edit in any text editor. Export writes it, import reads it. This is the share layer (P-09). | ADOPTED |
 | F-03 | A document holds the input text, the spans, the tiers with their sets (with origin), the styles and the view. | PROVISIONAL |
-| F-04 | Conformance is tested with fixtures. The text form has them in `spec/fixtures/` (47 cases and a reference checker); provider fixtures are in `spec/providers/fixtures/` with their own runner (`spec/providers/contract.md`); reset-by-hand and round-trip fixtures are not yet written. An implementation in any language can run them. | PROVISIONAL |
+| F-04 | Conformance is tested with fixtures. The text form has them in `spec/fixtures/` (52 cases and a reference checker); provider fixtures are in `spec/providers/fixtures/` with their own runner (`spec/providers/contract.md`); reset-by-hand and round-trip fixtures are not yet written. An implementation in any language can run them. | PROVISIONAL |
 | F-05 | Requirements on the text form: (a) a person can read it without a manual; (b) plain text with a stable order, one item per line where possible, so a diff or version-control history reads well; (c) comments are allowed; (d) it names its format and version; (e) import of an export gives back the same document, including origins, orphans and the view; (f) import reports errors with line numbers and never drops content silently. | PROVISIONAL |
 | F-06 | The grammar of the text form is `spec/format.md`: XML-based, sibling blocks, no CDATA (Q9 resolved). | PROVISIONAL |
 | F-07 | Opening a document never runs code. The text form holds data only. | PROVISIONAL |
@@ -201,7 +206,7 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 |---|---|---|
 | A-01 | The application exports the current view as an **artifact**: a fixed rendering that needs no application to read. | ADOPTED |
 | A-02 | Artifact formats: PDF and PNG are required. JPEG and SVG are optional. | PROVISIONAL |
-| A-03 | An artifact shows exactly the visible tiers in the active scheme, a legend of the styles in use, and the credit of any built-in scheme (Y-08). | PROVISIONAL |
+| A-03 | An artifact shows exactly the visible tiers in the active theme, a legend of the styles in use, and the credit of any built-in theme (Y-08). | PROVISIONAL |
 | A-04 | Exporting an artifact needs no extension. | PROVISIONAL |
 | A-05 | An artifact may carry the text form of its document inside, so the analysis can be traced back. | PROVISIONAL |
 
@@ -239,7 +244,7 @@ Initial channels (Y-03). The groups are for the editor; the list is expected to 
 | Q4 | Can a set list raw character ranges, not spans? | No: sets list span ids. A span is the thing with an identity (S-02) |
 | Q5 | Should reset ever be narrower than a whole tier? | No (E-03). A scope such as a line or a selection can come later |
 | Q6 | How many channels, and how are they grouped? | Open registry with the initial list in Y-03 |
-| Q7 | Where do scheme credits and licences live, and in what form? | In the scheme file (Y-08); form to be agreed with the scheme's author |
+| Q7 | Where do theme credits and licences live, and in what form? | In the theme file (Y-08); form to be agreed with the scheme's author |
 | Q8 | Should a document record several readers' annotation sets side by side? | Not in this version (ADR-0004 notes that two readers can disagree) |
 | Q9 | What is the grammar of the text form? | `spec/format.md`: XML-based, sibling blocks, spans with ids, sets in tiers, plain CSS (F-06) |
 | Q10 | Can the text form also serve as the working copy, edited in place? | No: the working copy is separate (O-04), so import and export are needed |

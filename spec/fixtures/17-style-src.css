@@ -1,5 +1,5 @@
 /* Plain CSS, kept in its own file: no escaping needed, so & and < are fine. */
-[data-tier~="t1"] {
-  background: #fdebd0;
-  &:hover { outline: 1px solid; }
+tier[role="word"] {
+  & > set { background: #fdebd0; }
+  & > set:nth-child(2) { background: #d6e9ff; }
 }
