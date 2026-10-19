@@ -39,8 +39,11 @@ export function utf16Index(text, cp) {           // code point offset -> UTF-16 
 const isDirected = (t) => t.attrs.kind === 'relation' && t.attrs.directed === 'true';
 
 export class Editor {
-  constructor(doc, { limit = 200 } = {}) {
+  // `providers` maps a provider reference ('text.line@1') to { provider } or null
+  // (src/providers/index.js providerFor). The core ships with none (spec/app.md E-07).
+  constructor(doc, { limit = 200, providers = () => null } = {}) {
     this.doc = doc;
+    this.providers = providers;
     this.limit = limit;
     this.past = [];
     this.future = [];
@@ -240,6 +243,62 @@ export class Editor {
     });
   }
   get themes() { return this.doc.styles.filter((st) => st.attrs.name !== undefined).map((st) => ({ name: st.attrs.name, active: st.attrs.disabled !== 'true' })); }
+
+  // ---- standard tiers (spec/app.md E-01 to E-08)
+  // Add a tier filled by a provider ('text.line@1'), with a set for each key it owns, and fill it.
+  addStandardTier(ref, { at } = {}) {
+    return this.change(() => {
+      const p = this.providerOf(ref);
+      const reads = p.reads.map((pid) => {
+        const t = this.doc.tiers.find((x) => (x.attrs.provider || '').startsWith(pid + '@'));
+        if (!t) throw new PxmlError('edit-needs-tier', pid);
+        return t.id;
+      });
+      const attrs = { name: p.name, role: p.role, provider: ref };
+      if (reads.length) attrs.reads = reads.join(' ');
+      const t = { id: this.newId('t'), attrs, sets: [] };
+      for (const key of p.keys) t.sets.push({ id: this.newId('s'), attrs: { name: p.setNames?.[key] ?? key, key }, members: [], confirmed: [] });
+      this.doc.tiers.splice(at ?? this.doc.tiers.length, 0, t);
+      this.fill(t, p);
+      return t.id;
+    });
+  }
+  // Reset (E-03): rerun the provider and replace what its keyed sets list. Sets without a key are
+  // the user's and stay (format.md A-03). Spans with the same pieces are reused (E-08), so other
+  // sets that list them are untouched. A confirmed member that the provider produces again stays
+  // confirmed; the rest of the confirmations go with the members they named.
+  reset(tierId) {
+    this.change(() => {
+      const t = this.tier(tierId);
+      if (!t.attrs.provider) throw new PxmlError('edit-not-standard', tierId);
+      this.fill(t, this.providerOf(t.attrs.provider));
+    });
+  }
+  // Unlink (E-05): the tier becomes an ordinary tier; reset is no longer offered.
+  unlink(tierId) {
+    this.change(() => { const t = this.tier(tierId); delete t.attrs.provider; delete t.attrs.reads; });
+  }
+  providerOf(ref) {
+    const found = this.providers(ref);
+    if (!found) throw new PxmlError('edit-unknown-provider', ref);
+    return found.provider;
+  }
+  fill(t, p) {
+    const inputs = {};
+    for (const rid of (t.attrs.reads || '').split(/[,\s]+/).filter(Boolean)) {
+      const r = this.tier(rid), pid = (r.attrs.provider || '').split('@')[0];
+      inputs[pid] = Object.fromEntries(r.sets.filter((x) => x.attrs.key).map((x) => [x.attrs.key, x.members.map((m) => this.span(m).pieces.map((q) => [q.start, q.end]))]));
+    }
+    const out = p.run(this.doc.text, inputs);
+    for (const key of p.keys) {
+      let set = t.sets.find((x) => x.attrs.key === key);
+      if (!set) { set = { id: this.newId('s'), attrs: { name: p.setNames?.[key] ?? key, key }, members: [], confirmed: [] }; t.sets.push(set); }
+      const members = [];
+      for (const pieces of out[key] || []) { const id = this.spanFor(pieces); if (!members.includes(id)) members.push(id); }
+      set.members = ordered(this.doc, t, members);
+      set.confirmed = set.confirmed.filter((m) => set.members.includes(m));
+    }
+  }
 
   // Drop spans that no set lists (A-12 does this on export anyway).
   prune() {
