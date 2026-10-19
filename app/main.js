@@ -3,6 +3,7 @@
 // sets, mark selected text into the selected set, undo and redo, save.
 import { load, save, spanText, Editor, PxmlError } from '../src/core/index.js';
 import { paint, offsetAt } from '../src/render/paint.js';
+import { providerFor } from '../src/providers/index.js';
 import sample from './sample.js';
 
 const $ = (id) => document.getElementById(id);
@@ -28,7 +29,7 @@ async function openUrl(url) {
 function open(source, name, readFile = null) {
   try {
     const { doc, warnings } = load(source, { readFile });
-    ed = new Editor(doc);
+    ed = new Editor(doc, { providers: providerFor });
     fileName = name;
     selTier = doc.tiers.at(-1)?.id ?? null;
     selSet = null;
@@ -109,7 +110,9 @@ function tierDetails(tier) {
     <label>Role <input name="role" value="${esc(a.role ?? '')}" size="10" title="What the tier is about; themes find tiers by role"></label>
     <label>Kind <select name="kind"><option value="label">label</option><option value="relation" ${a.kind === 'relation' ? 'selected' : ''}>relation</option></select></label>
     <label><input type="checkbox" name="directed" ${a.directed === 'true' ? 'checked' : ''} ${a.kind === 'relation' ? '' : 'disabled'}> directed</label>
-    ${a.provider ? `<span class="hint">filled by ${esc(a.provider)}</span>` : ''}
+    ${a.provider ? `<span class="hint">filled by ${esc(a.provider)}</span>
+    <button type="button" name="reset" ${providerFor(a.provider) ? '' : 'disabled title="This provider is not available here"'}>Reset</button>
+    <button type="button" name="unlink" title="Make it an ordinary tier">Unlink</button>` : ''}
     <button type="button" name="delete" class="danger">Delete tier</button>`;
   const el = f.elements;
   el.name.onchange = () => act(() => ed.setTier(tier.id, { name: el.name.value.trim() }));
@@ -117,6 +120,8 @@ function tierDetails(tier) {
   el.kind.onchange = () => act(() => ed.setTier(tier.id, { kind: el.kind.value, directed: el.kind.value === 'relation' ? a.directed : undefined }));
   el.directed.onchange = () => act(() => ed.setTier(tier.id, { directed: el.directed.checked ? 'true' : undefined }));
   el.delete.onclick = () => act(() => ed.removeTier(tier.id), `Deleted tier ${a.name ?? tier.id}. Undo brings it back.`);
+  if (el.reset) el.reset.onclick = () => act(() => ed.reset(tier.id), `Reset ${a.name ?? tier.id} from ${a.provider}.`);
+  if (el.unlink) el.unlink.onclick = () => act(() => ed.unlink(tier.id), `${a.name ?? tier.id} is now an ordinary tier.`);
   f.onsubmit = (ev) => ev.preventDefault();
   return f;
 }
@@ -188,6 +193,12 @@ $('save').onclick = () => {
 $('undo').onclick = () => { ed.undo(); render(); };
 $('redo').onclick = () => { ed.redo(); render(); };
 $('theme').onchange = (ev) => act(() => ed.useTheme(ev.target.value || null));
+$('new-standard').onsubmit = (ev) => {
+  ev.preventDefault();
+  const ref = ev.target.elements.ref.value;
+  const id = act(() => ed.addStandardTier(ref), `Added a standard tier from ${ref}.`);
+  if (id) { selTier = id; selSet = null; render(); }
+};
 $('new-tier').onsubmit = (ev) => {
   ev.preventDefault();
   const f = ev.target.elements;
