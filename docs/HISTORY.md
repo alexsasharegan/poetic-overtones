@@ -79,3 +79,9 @@ Alex widened the project to a web app for multi-dimensional poetic analysis of a
 
 * The project is renamed **poetic-overtones** ("Poetic Overtones"): overtones are the layers inside one sound,
   as tiers are the layers over one text. ADR-0013.
+
+## 8. Standard tiers (2026-10-19)
+
+* `src/providers/`: line, stanza and word providers in JavaScript, checked against the provider fixtures.
+* The `Editor` adds standard tiers, resets them (keeping the user's keyless sets and reusing spans) and unlinks
+  them (E-10). The app has "Add standard tier", Reset and Unlink. Note: `docs/reviews/2026-10-19.md`.

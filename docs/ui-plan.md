@@ -17,7 +17,7 @@ Step numbers are the board's `UI-n` tasks (`docs/ROADMAP.md`), where blockers an
 | UI-5 | **Relations.** Build a relation by selecting spans in turn; reorder members of a directed relation (A-05). Arcs wait for marks (MRK-4). | Ready |
 | UI-6 | **Theme editor (Y-07).** Pick a role, set or tag and edit its look with controls that write CSS; warn on collisions and poor contrast (Y-05, Y-06). | Blocked by RND-2 |
 | UI-7 | **Files.** Drag and drop; keep the working copy between visits (O-04); a clean print view and PDF export (A-02). | Ready |
-| UI-8 | **Standard tiers.** Line, stanza and word tiers made by providers with no lexicon (E-07); reset (E-03). | Blocked by PRV-1, CORE-2 |
+| UI-8 | **Standard tiers.** Line, stanza and word tiers made by providers with no lexicon (E-07); reset (E-03); unlink (E-05). | Done |
 | UI-9 | **Views.** Filter what is shown by tag (place, manner, sibilant), as the deck's grouped views do (T-06). | Ready |
 
 Built-in themes are their own epic on the board (CT).

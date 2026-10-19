@@ -2,7 +2,7 @@
 
 > The board for poetic-overtones: where the project stands, every queued task grouped into epics, and what
 > blocks what. Start here in a new session, then read the latest note in `docs/reviews/`.
-> Last updated 2026-10-15. History: `docs/HISTORY.md`.
+> Last updated 2026-10-19. History: `docs/HISTORY.md`.
 
 ## Where we are
 
@@ -23,7 +23,7 @@ Run it: `npm test` (all checks), `npm run serve` then <http://localhost:8000/app
 | 🟡 Next | **MRK-1** Marks design (spec) | Unblocks the meter strip, ties and relation arcs |
 | 🟡 Next | **UI-4** Selection helpers | Makes marking practical on real poems |
 | 🟡 Next | **QA-1** Browser tests in `npm test` | The renderer and app are only checked by hand today |
-| 🟡 Next | **PRV-1** Lexicon-free providers in JS (line, stanza, word) | Unblocks standard tiers and reset in the app |
+| ✅ Done | **PRV-1, CORE-2, UI-8** Lexicon-free providers, reset, standard tiers in the app | Done 2026-10-19 |
 
 ## Board
 
@@ -51,7 +51,7 @@ Task IDs are stable; add new ones at the end of an epic.
 |---|---|---|---|---|
 | CORE-0 | Loader, model, canonical export, editing with undo | ✅ | | ADR-0012; 53 fixtures, 23 round trips, 26 editor checks |
 | CORE-1 | Multi-piece marking: one span from several selections (M-05) | 🟡 | | `Editor.mark` already takes pieces; needs UI-4 |
-| CORE-2 | Reset (E-03) and span reuse for provider tiers (E-08) | ⛔ | PRV-1 | |
+| CORE-2 | Reset (E-03) and span reuse for provider tiers (E-08) | ✅ | | `Editor.addStandardTier`, `reset`, `unlink`; E-10; `tests/reset.mjs` |
 | CORE-3 | Ids across sessions | ⛔ | DEC-3 | |
 | CORE-4 | Keep `src` on export, if chosen | ⛔ | DEC-5 | |
 | CORE-5 | Working copy kept in the browser between visits (O-04) | 🟡 | | needs a storage choice for the POC |
@@ -86,7 +86,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | UI-5 | Relations: build by selecting spans in turn; reorder directed members | 🟡 | | arcs wait for MRK-4; shared styles work now |
 | UI-6 | Theme editor (Y-07): controls that write CSS for a role, set or tag | ⛔ | RND-2 | |
 | UI-7 | Files: drag and drop, working copy (CORE-5), print view and PDF export (A-02) | 🟡 | | |
-| UI-8 | Standard tiers from providers, with reset | ⛔ | PRV-1, CORE-2 | |
+| UI-8 | Standard tiers from providers, with reset | ✅ | | lines, stanzas, words; Reset and Unlink in tier details |
 | UI-9 | Views: filter by tag, place, manner (the deck's grouped views) | 🟡 | | T-06 |
 
 ### CT: community theme (`themes/`)
@@ -105,7 +105,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
 | PRV-0 | Contract, English spec, Python reference and runner | ✅ | | ADR-0010 |
-| PRV-1 | `text.line`, `text.stanza`, `english.word` in JS, run against the provider fixtures | 🟡 | | no lexicon needed |
+| PRV-1 | `text.line`, `text.stanza`, `english.word` in JS, run against the provider fixtures | ✅ | | `src/providers/`, `tests/providers.mjs` |
 | PRV-2 | Lexicon builder from ReadLex (syllabify the IPA) | ⚪ | | post-MVP; letter alignment unsolved |
 | PRV-3 | `english.syllable`, `english.stress` in JS | ⚪ | PRV-2 | |
 | PRV-4 | `english.sound` tier | ⚪ | PRV-2 | needs a grapheme-aligned lexicon |
@@ -117,7 +117,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | QA-0 | Fixtures, round trips, editor tests in `npm test` | ✅ | | |
 | QA-1 | Browser tests for the painter and the app in `npm test` | ⛔ | DEC-7 | today they are ad hoc scripts |
 | QA-2 | Retire `prototypes/layers/` and `scansion.html` once the app covers them | ⚪ | UI-4, MRK-3 | |
-| QA-3 | Reset-by-hand fixtures (E-03, E-08) | ⛔ | CORE-2 | `spec/app.md` F-04 |
+| QA-3 | Reset-by-hand fixtures (E-03, E-08) | 🟡 | | `tests/reset.mjs` covers the rules in code; file fixtures still to write |
 
 ### PLT: platform, Shavian and Tengwar
 
@@ -147,8 +147,8 @@ flowchart LR
 ```
 
 **Suggested order.** The DEC items first (an hour of Alex's time unblocks the most). Then, in parallel:
-MRK-1 (design), UI-4 with CORE-1 and RND-1 (marking on real poems), PRV-1 then CORE-2 and UI-8
-(standard tiers), and QA-1 (browser tests). An MVP is UI-1 to UI-8, CT-1, and MRK-3 if DEC-4 says the
+MRK-1 (design), UI-4 with CORE-1 and RND-1 (marking on real poems), and QA-1 (browser tests).
+PRV-1, CORE-2 and UI-8 (standard tiers) are done. An MVP is UI-1 to UI-8, CT-1, and MRK-3 if DEC-4 says the
 meter strip is in.
 
 ## ✅ Done
