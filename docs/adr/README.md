@@ -34,3 +34,4 @@ Number ADRs sequentially and never reuse a number. The pattern is the one in Ale
 | [ADR-0015](./0015-ids-unique-in-the-document.md) | Ids Are Unique in the Document, Not Never Reused | Active | 2026-10-24 |
 | [ADR-0016](./0016-playwright-as-a-dev-dependency.md) | Browser Tests May Use Playwright as a Dev-Only Dependency | Active | 2026-10-24 |
 | [ADR-0017](./0017-no-marks-in-the-mvp.md) | The MVP Has No Marks | Active | 2026-10-24 |
+| [ADR-0018](./0018-working-copy-in-local-storage.md) | The Proof of Concept Keeps One Working Copy in Local Storage | Active | 2026-10-25 |

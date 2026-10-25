@@ -96,3 +96,13 @@ Alex widened the project to a web app for multi-dimensional poetic analysis of a
 * Every rule that was PROVISIONAL became ADOPTED. New agent defaults are PROVISIONAL again.
 * The Reader theme draws unconfirmed members with a quiet dotted underline, not a dashed box.
 * Still open: the author's confirmation of the colours (CT-6), hosting, and the small items in part 4 of the note.
+
+## 10. A demo (2026-10-25)
+
+* Alex wanted something to show at the next class and share on a community Discord as a GIF or video.
+  `docs/projects/0003-demo-mvp/`, on the branch `demo-mvp`.
+* The app gained snap to words, several pieces as one span, click-to-find, a working copy in local storage,
+  drag and drop, a print view with the theme credit, and a menu to add built-in themes. A plain theme was added.
+* `demo/`: Sonnet 18 (public domain), marked through the `Editor` by a script, and a Playwright recorder that
+  makes an MP4 and a GIF. VHS records terminals, so it could not drive this app.
+* `npm run test:browser` runs 16 checks in Chromium (QA-1, ADR-0016).

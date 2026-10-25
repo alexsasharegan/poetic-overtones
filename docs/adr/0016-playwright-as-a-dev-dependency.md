@@ -24,3 +24,9 @@ hoc headless-browser scripts that are not part of `npm test`. They need a real b
 * `package.json` gains `devDependencies` when QA-1 is done. Until then it is unchanged.
 * AGENTS.md says "no runtime dependencies" instead of "no dependencies".
 * Anyone running the tests needs the browser that Playwright installs.
+
+## Addendum (2026-10-25)
+
+QA-1 installed Playwright (`devDependencies`) and settled item 3: the browser tests are a separate script,
+`npm run test:browser`, so `npm test` still needs no browser. The demo recorder (`npm run demo:record`) uses
+the same dependency and needs `ffmpeg` on the path.

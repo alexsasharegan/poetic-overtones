@@ -2,7 +2,7 @@
 
 > The board for poetic-overtones: where the project stands, every queued task grouped into epics, and what
 > blocks what. Start here in a new session, then read the latest note in `docs/reviews/`.
-> Last updated 2026-10-24. History: `docs/HISTORY.md`.
+> Last updated 2026-10-25. History: `docs/HISTORY.md`.
 
 ## Where we are
 
@@ -19,10 +19,11 @@ Run it: `npm test` (all checks), `npm run serve` then <http://localhost:8000/app
 
 | | Task | Why now |
 |---|---|---|
-| 🟡 Next | **UI-4** Selection helpers, with CORE-1 and RND-1 | Makes marking practical on real poems |
-| 🟡 Next | **QA-1** Browser tests in `npm test` (Playwright, dev-only, ADR-0016) | The renderer and app are only checked by hand today |
+| 🟡 Next | **DEMO-3, DEMO-4** Check the scansion; look at the recording | Needed before the share |
+| 🟡 Next | **UI-7** the rest: PNG, legend, real PDF | Print through the browser works |
 | 🟡 Next | **CT-6** Confirm the seven colours and bold-italic stress with the author | The only thing the community theme still waits for (Alex asks) |
 | ⚪ Later | **DOC-1** Refresh README, HISTORY and the project records | After the next build work |
+| ✅ Done | **2026-10-25:** demo MVP: UI-4, UI-5, RND-1, CORE-1, CORE-5, CT-5, QA-1, DEMO-1, DEMO-2, most of UI-7 | `docs/projects/0003-demo-mvp/` |
 | ✅ Done | **2026-10-24:** decisions DEC-1 to DEC-7 and DEC-11, all provisional rules adopted, credit added | `docs/reviews/2026-10-24.md`, ADR-0014 to ADR-0017 |
 | ✅ Done | **PRV-1, CORE-2, UI-8** Lexicon-free providers, reset, standard tiers in the app | Done 2026-10-19 |
 
@@ -52,11 +53,11 @@ Task IDs are stable; add new ones at the end of an epic.
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
 | CORE-0 | Loader, model, canonical export, editing with undo | ✅ | | ADR-0012; 53 fixtures, 23 round trips, 26 editor checks |
-| CORE-1 | Multi-piece marking: one span from several selections (M-05) | 🟡 | | `Editor.mark` already takes pieces; needs UI-4 |
+| CORE-1 | Multi-piece marking: one span from several selections (M-05) | ✅ | | "Add as piece" (P) then Mark; W-06; `tests/browser.mjs` |
 | CORE-2 | Reset (E-03) and span reuse for provider tiers (E-08) | ✅ | | `Editor.addStandardTier`, `reset`, `unlink`; E-10; `tests/reset.mjs` |
 | CORE-3 | Ids across sessions | ✅ | | closed by ADR-0015: S-04 softened, no code change |
 | CORE-4 | Keep `src` on export, if chosen | ✅ | | not chosen (Q19): export stays inline |
-| CORE-5 | Working copy kept in the browser between visits (O-04) | 🟡 | | needs a storage choice for the POC |
+| CORE-5 | Working copy kept in the browser between visits (O-04) | ✅ | | local storage, one slot (ADR-0018, O-05); IndexedDB later |
 | CORE-6 | Faster undo and repaint for long texts (W-04) | ⚪ | | snapshots and full repaint are fine for poems |
 
 ### RND: rendering (`src/render/`)
@@ -64,7 +65,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
 | RND-0 | Mirror, text and box painters, print-safe | ✅ | | ADR-0011; checked in Chromium, Safari, Firefox and PDF |
-| RND-1 | Click a painted member to select it in the panel | 🟡 | | helps UI-4 and UI-5 |
+| RND-1 | Click a painted member to select it in the panel | ✅ | | `view.at(offset)`; W-05 |
 | RND-2 | Collision and contrast warnings (Y-05, Y-06) | 🟡 | | needed by UI-6 |
 | RND-3 | Accessible painted text (Q20) | 🟡 | | added characters are hidden from screen readers today |
 
@@ -84,10 +85,10 @@ Task IDs are stable; add new ones at the end of an epic.
 | UI-1 | Shell: open, render, layers, themes, undo, save | ✅ | | |
 | UI-2 | Marking selected text into a set | ✅ | | key M |
 | UI-3 | Tier and set details; confirm inferred members | ✅ | | |
-| UI-4 | Selection helpers: snap to words or graphemes, several pieces, keyboard | 🟡 | | with CORE-1, RND-1 |
-| UI-5 | Relations: build by selecting spans in turn; reorder directed members | 🟡 | | arcs wait for MRK-4; shared styles work now |
+| UI-4 | Selection helpers: snap to words or graphemes, several pieces, keyboard | ✅ | | snap to words, pieces, M and P keys (W-06). Not done: snap to graphemes, selecting by keyboard alone |
+| UI-5 | Relations: build by selecting spans in turn; reorder directed members | ✅ | | marking into a relation set builds it; ← → reorder a directed one; arcs are post-MVP |
 | UI-6 | Theme editor (Y-07): controls that write CSS for a role, set or tag | ⛔ | RND-2 | |
-| UI-7 | Files: drag and drop, working copy (CORE-5), print view and PDF export (A-02) | 🟡 | | |
+| UI-7 | Files: drag and drop, working copy (CORE-5), print view and PDF export (A-02) | 🟡 | | done: drag and drop, working copy, print view with theme credit, PDF through the print dialog (A-06). Not done: PNG, the legend (A-03), a real PDF export |
 | UI-8 | Standard tiers from providers, with reset | ✅ | | lines, stanzas, words; Reset and Unlink in tier details |
 | UI-9 | Views: filter by tag, place, manner (the deck's grouped views) | 🟡 | | T-06 |
 | UI-10 | Reader theme: style `member[inferred]` quietly (DEC-11) | ✅ | | dotted underline in `app/sample.js`; checked by `npm test` only, not yet by eye in a browser |
@@ -101,7 +102,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | CT-2 | Rename sound tags if chosen | ✅ | | not needed: DEC-2 keeps the names |
 | CT-3 | Meter strip and ties | ⚪ | MRK-3 | post-MVP (ADR-0017); the deck never defines ties; ask the author |
 | CT-4 | Grouped views by place, manner, sibilant | ⛔ | UI-9 | |
-| CT-5 | A plain default theme besides the community theme | 🟡 | | ADR-0005: one scheme among several |
+| CT-5 | A plain default theme besides the community theme | ✅ | | `themes/plain.css`; "Add theme" in the app (Y-13) |
 | CT-6 | Confirm the seven settled colours (M11) and bold-italic secondary stress (M12) with the author, and apply the answers | 🟡 | | Alex asks; `themes/README.md` has the colour table |
 
 ### PRV: providers (`spec/providers/`)
@@ -119,7 +120,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
 | QA-0 | Fixtures, round trips, editor tests in `npm test` | ✅ | | |
-| QA-1 | Browser tests for the painter and the app in `npm test` | 🟡 | | Playwright as a dev-only dependency (ADR-0016); today they are ad hoc scripts |
+| QA-1 | Browser tests for the painter and the app in `npm test` | ✅ | | `npm run test:browser` (16 checks), separate from `npm test` (ADR-0016 addendum). The painter has no pixel checks yet |
 | QA-2 | Retire `prototypes/layers/` and `scansion.html` once the app covers them | ⚪ | UI-4, MRK-3 | |
 | QA-3 | Reset-by-hand fixtures (E-03, E-08) | 🟡 | | `tests/reset.mjs` covers the rules in code; file fixtures still to write |
 
@@ -132,11 +133,20 @@ Task IDs are stable; add new ones at the end of an epic.
 | PLT-3 | Tengwar view through shavian2tengwar | ⚪ | | `docs/synthesis/comparison.md` D1 to D6 |
 | PLT-4 | Extensions (X rules) | ⚪ | | Q13 |
 
+### DEMO: showing the project (a community Discord share; the next class is likely Tuesday 2026-10-27)
+
+| ID | Task | Status | Blocked by | Notes |
+|---|---|---|---|---|
+| DEMO-1 | A fully marked public-domain poem: Sonnet 18 | ✅ | | `demo/build.mjs` makes `demo/sonnet18.pxml`; `tests/demo.mjs` |
+| DEMO-2 | A script that records the walkthrough as MP4 and GIF | ✅ | | `npm run demo:record` writes `.tmp/demo/` (not committed); needs ffmpeg |
+| DEMO-3 | Alex checks the scansion of Sonnet 18 before it is shown as analysis | 🟡 | | an agent marked it as an example; lines 1 to 4 and 13 and 14 |
+| DEMO-4 | Look at the GIF and the app by eye; adjust pacing and scenes | 🟡 | | frames were checked from the video, not the finished GIF |
+
 ### DOC: documentation
 
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
-| DOC-1 | Refresh README (status table, repository map), HISTORY, ROADMAP summary and the project records after the next build work. Include a record for the 2026-10-19 work, which has no project folder | ⚪ | UI-4, QA-1 | do it once those are done; AGENTS.md was refreshed on 2026-10-24 |
+| DOC-1 | Refresh README (status table, repository map), HISTORY, ROADMAP summary and the project records after the next build work. Include a record for the 2026-10-19 work, which has no project folder | ⚪ | DEMO-4 | do it once those are done; AGENTS.md was refreshed on 2026-10-24 |
 | DOC-2 | Write the next review note: carry forward what is still open (this note's part 4) and add new decisions | ⚪ | | do with DOC-1 |
 
 ## Dependencies
@@ -150,15 +160,15 @@ flowchart LR
   PRV1[PRV-1 JS providers] --> CORE2[CORE-2 reset] --> UI8[UI-8 standard tiers]
   CORE2 --> QA3[QA-3 reset fixtures]
   RND2[RND-2 collisions] --> UI6[UI-6 theme editor]
-  UI4[UI-4 selection] --> DOC1[DOC-1 refresh docs]
-  QA1[QA-1 browser tests] --> DOC1
+  DEMO1[DEMO-1 to DEMO-4 demo] --> DOC1[DOC-1 refresh docs]
   DEC8[DEC-8 hosting] --> PLT1[PLT-1 host]
   PRV2[PRV-2 lexicon builder] --> PRV3[PRV-3 syllable, stress] --> PRV4[PRV-4 sound]
 ```
 
-**Suggested order.** In parallel: UI-4 with CORE-1 and RND-1 (marking on real poems), and QA-1 (browser
-tests). CT-6 waits for Alex to ask the author. DOC-1 comes after UI-4 and QA-1. PRV-1, CORE-2 and UI-8
-(standard tiers) are done. An MVP is UI-1 to UI-8 and CT-1, with no marks (ADR-0017); it also wants UI-4.
+**Suggested order.** Before the share: DEMO-3 and DEMO-4 (Alex checks the scansion; look at the recording).
+Then CT-6 (Alex asks the author), the rest of UI-7, and DOC-1. PRV-1, CORE-2 and UI-8 (standard tiers) are
+done. An MVP is UI-1 to UI-8 and CT-1, with no marks (ADR-0017); with UI-4, UI-5 and CORE-5 done, what is
+left is the polish in UI-7.
 
 ## ✅ Done
 
