@@ -3,6 +3,13 @@
 Built-in themes: plain CSS over the analysis mirror (`spec/format.md` S-03 to S-09). A document uses one
 with `<style name="..." src="theme.css"/>` next to it, or with the CSS inline.
 
+## Adding a theme, and its credit
+
+The app's "Add theme" menu writes a built-in theme into the document as a named style block (spec Y-13).
+A theme that needs a credit puts one line in its header comment, `Credit-line: <text>`. The app shows it under
+the poem and in the print view (A-03, A-06). `plain.css` is a quiet default that styles roles only and needs
+no credit.
+
 ## Community theme (`community.css`)
 
 Encodes *Phonetic Markup for Verse* v3.0 (ADR-0005), by Eric Kingsepp (Éadric Scúsmiþ) (ADR-0014). The

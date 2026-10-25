@@ -242,6 +242,23 @@ export class Editor {
       }
     });
   }
+  // Add a built-in theme to the document (spec/app.md Y-13): a named style block with its CSS inline,
+  // made the active theme. A block of the same name has its CSS replaced.
+  addTheme(name, css) {
+    this.change(() => {
+      if (typeof name !== 'string' || !name.trim()) throw new PxmlError('edit-bad-theme', 'a theme needs a name');
+      if (/url\s*\(|@import/i.test(css)) throw new PxmlError('style-url', name);          // Y-09
+      const have = this.doc.styles.find((st) => st.attrs.name === name);
+      if (have) have.css = css; else this.doc.styles.push({ attrs: { name }, css });
+      this.useThemeNow(name);
+    });
+  }
+  useThemeNow(name) {
+    for (const st of this.doc.styles) {
+      if (st.attrs.name === undefined) continue;
+      if (st.attrs.name === name) delete st.attrs.disabled; else st.attrs.disabled = 'true';
+    }
+  }
   get themes() { return this.doc.styles.filter((st) => st.attrs.name !== undefined).map((st) => ({ name: st.attrs.name, active: st.attrs.disabled !== 'true' })); }
 
   // ---- standard tiers (spec/app.md E-01 to E-08)

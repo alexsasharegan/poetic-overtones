@@ -89,6 +89,8 @@ visible tier as painted, in tier order. A tier holds **sets**; a set lists **spa
 | W-02 | The workbench is a function of its input. Inside the workbench the text cannot be edited. To change the text, the user goes back to the input editor, which gives the workbench a new input. | ADOPTED |
 | W-03 | When the input text changes, the workbench starts fresh: standard tiers are re-derived, and hand edits and the contents of custom tiers are discarded after a warning. Tier definitions and themes are kept. | ADOPTED |
 | W-04 | The application limits the size of the **input text** (not the size of the files it writes). The limit is stable and counted in Unicode code points, with 1,000,000 as a first guess. Size is not a concern for the first version. The limit is an application rule, not a rule of the text form. | ADOPTED |
+| W-05 | Clicking painted text selects, in the tier panel, the topmost visible member that covers the point: its tier, its set and the member. A click on text no member covers selects nothing. | PROVISIONAL |
+| W-06 | **Marking helpers.** The user may turn on *snap to words*: a selection is widened to whole words before it is marked (S-03 stays a helper, not a rule). The user may collect several selections as **pieces** and mark them together as one span (`spec/format.md` M-05); a piece that overlaps another is refused. Once text is selected, marking and collecting pieces work from the keyboard; selecting text by keyboard alone is not in the proof of concept. | PROVISIONAL |
 
 W-03 is the simplest rule that fits W-02. A friendlier one, re-anchoring annotations after a text change,
 is a later option (Q1).
@@ -175,6 +177,7 @@ Relations are first-class (P-05). They are the sets of a tier of kind `relation`
 | Y-10 | **Roles.** The built-in roles are `line`, `stanza`, `word`, `syllable`, `stress`, `foot`, `meter`, `rhyme`, `rhyme-scheme`, `repetition`, `alliteration`, `assonance`, `consonance`, `consonant` and `vowel` (the last two are what the community theme styles, `themes/README.md`). Any other word is allowed. A theme without a part for a tier's role styles it with its fallback. One role per tier; for a second meaning, make a second tier (`spec/format.md` A-13). | ADOPTED |
 | Y-11 | **Layer order is the user's.** Dragging a tier in the tier list restacks it, and the new order is saved as the order of tiers in the file (`spec/format.md` A-01, S-07). A theme does not reorder tiers. A new tier goes on top. | ADOPTED |
 | Y-12 | **Size within reason.** A theme may scale text between 0.75 and 1.5 times the base size; a larger or smaller value is clamped and the editor says so. | ADOPTED |
+| Y-13 | **Adding a built-in theme.** The user may add a built-in theme to a document. It becomes a named style block with the theme's CSS written inline, and it becomes the active theme (S-05). Adding one that the document already has, by name, replaces that block's CSS. | PROVISIONAL |
 
 Initial channels (Y-03). Each is a CSS property a theme sets on a `set` (or on its `tier`, `spec/format.md` S-08). The list is expected to grow.
 
@@ -196,6 +199,7 @@ Initial channels (Y-03). Each is a CSS property a theme sets on a `set` (or on i
 | O-02 | The working copy of every document is kept in persistent local storage on the user's file system. The storage technology is not specified (a local database is one example). | ADOPTED |
 | O-03 | Changes are saved as the user works. Quitting or crashing loses nothing that was visible. | ADOPTED |
 | O-04 | The working copy is not required to be the text form. So the application has an **export engine** and an **import engine** for the text form. | ADOPTED |
+| O-05 | **Working copy in the proof of concept.** After every change the application writes the document's text form into the browser's local storage, with its file name. On start it reopens that copy if there is one; opening a file or a sample replaces it. If storage is full or unavailable the application says so and goes on working. | PROVISIONAL |
 
 | ID | Rule | Status |
 |---|---|---|
@@ -217,6 +221,7 @@ Initial channels (Y-03). Each is a CSS property a theme sets on a `set` (or on i
 | A-03 | An artifact shows exactly the visible tiers in the active theme, a legend of the styles in use, and the credit of any built-in theme (Y-08). | ADOPTED |
 | A-04 | Exporting an artifact needs no extension. | ADOPTED |
 | A-05 | An artifact may carry the text form of its document inside, so the analysis can be traced back. | ADOPTED |
+| A-06 | **Print view.** Printing shows the title, the painted text in the active theme with the visible tiers, and the credit of a built-in theme (A-03); it hides the tier panel and the controls. In the proof of concept, PDF is the browser's "Save as PDF" from the print dialog. The legend of A-03 is not drawn yet. | PROVISIONAL |
 
 ## 11. Extensions and platform
 
