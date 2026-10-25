@@ -65,3 +65,4 @@ body.dragging main { outline: 3px dashed var(--accent); outline-offset: -6px; }
   #poem { border: 0; padding: 0; background: #fff; }
   #credit { color: #444; }
 }
+#add-theme { max-width: 150px; }

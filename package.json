@@ -6,7 +6,9 @@
   "scripts": {
     "serve": "python3 -m http.server 8000",
     "test": "node tests/run.mjs && node tests/edits.mjs && node tests/editor.mjs && node tests/providers.mjs && node tests/reset.mjs && node tests/themes.mjs && node tests/select.mjs && node tests/demo.mjs && python3 -I spec/fixtures/check.py && python3 -I spec/providers/run.py",
-    "test:browser": "node tests/browser.mjs"
+    "test:browser": "node tests/browser.mjs",
+    "demo:build": "node demo/build.mjs",
+    "demo:record": "node demo/record.mjs"
   },
   "devDependencies": {
     "playwright": "^1.64.1"

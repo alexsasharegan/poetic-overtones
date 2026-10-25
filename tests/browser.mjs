@@ -1,26 +1,11 @@
 // Browser tests for the painter and the app (board QA-1, ADR-0016). They need Playwright and its
 // browser (npm install; npx playwright install chromium), so they are a separate step from
 // `npm test`. Usage: npm run test:browser
-import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { extname, join, normalize } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { serve } from './serve.mjs';
 
-const root = fileURLToPath(new URL('..', import.meta.url));
-const types = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.pxml': 'application/xml' };
-const server = createServer(async (req, res) => {
-  try {
-    const pathname = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-    if (pathname === '/favicon.ico') return void res.writeHead(204).end();
-    const path = normalize(join(root, pathname.endsWith('/') ? pathname + 'index.html' : pathname));
-    if (!path.startsWith(root)) throw new Error('outside');
-    const body = await readFile(path);
-    res.writeHead(200, { 'content-type': types[extname(path)] ?? 'text/plain' }).end(body);
-  } catch { res.writeHead(404).end('not found'); }
-});
-await new Promise((ok) => server.listen(0, ok));
-const url = `http://localhost:${server.address().port}/app/`;
+const site = await serve();
+const url = `${site.url}app/`;
 
 let failed = 0;
 const check = (name, ok, detail = '') => {
@@ -125,6 +110,6 @@ await page.emulateMedia({ media: 'screen' });
 check('no errors in the page', errors.length === 0, errors.join('\n'));
 
 await browser.close();
-server.close();
+site.close();
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);
