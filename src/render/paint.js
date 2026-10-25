@@ -209,7 +209,17 @@ export function paint(host, doc) {
     }
   }
 
+  // The visible members that cover the character at a code point offset, topmost layer first (W-05).
+  const at = (offset) => {
+    const found = [];
+    for (const e of entries) e.members.forEach((m, mi) => {
+      if (m.some(([p, q]) => p <= offset && offset < q)) found.push({ tier: e.tier.id, set: e.set.id, member: e.set.members[mi], layer: e.layer });
+    });
+    return found.sort((a, b) => b.layer - a.layer);
+  };
+
   return {
+    at,
     textElement: textEl,
     report: entries.map((e) => ({ tier: e.tier.id, set: e.set.id, layer: e.layer, members: e.set.members.map((id, mi) => ({ id, ...e.ws[mi] })) })),
   };

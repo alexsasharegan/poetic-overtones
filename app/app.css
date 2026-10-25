@@ -42,3 +42,26 @@ form.details h3 { flex-basis: 100%; margin: 4px 0 0; }
 form.details label { display: flex; gap: 4px; align-items: center; font-size: 13px; }
 form.details input[name="name"], form.details input[name="tags"] { width: 150px; }
 button.danger { color: #b3261e; }
+
+#doc-title { font: 600 18px/1.3 Georgia, serif; text-transform: none; letter-spacing: 0; color: var(--fg); margin: 0 0 8px; }
+#doc-title small { font-weight: 400; color: var(--muted); font-size: 14px; }
+#doc-title:empty { display: none; }
+#credit { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
+#credit:empty { display: none; }
+.set li.focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+#poem .pp-text { cursor: text; }
+body.dragging main { outline: 3px dashed var(--accent); outline-offset: -6px; }
+.pieces { margin: 6px 0; font-size: 13px; }
+.pieces ul { list-style: none; margin: 4px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+.pieces li { border: 1px solid var(--accent); border-radius: 999px; padding: 0 8px; }
+.mark-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
+.mark-row label { display: flex; gap: 4px; align-items: center; font-size: 13px; }
+
+/* Print view (spec/app.md A-06): the title, the painted text and the theme credit; no controls. */
+@media print {
+  body { background: #fff; color: #000; }
+  header, aside, #status { display: none !important; }
+  main { display: block; padding: 0; max-width: none; }
+  #poem { border: 0; padding: 0; background: #fff; }
+  #credit { color: #444; }
+}

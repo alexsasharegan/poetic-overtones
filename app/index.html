@@ -13,17 +13,26 @@
     <label>Sample <select id="samples">
       <option value="">Twinkle (layers)</option>
       <option value="../themes/community-demo.pxml">Community theme demo</option>
+      <option value="../demo/sonnet18.pxml">Sonnet 18 (full demo)</option>
     </select></label>
     <label class="button">Open<input id="open" type="file" accept=".pxml,.xml,text/xml" hidden></label>
     <button id="save">Save</button>
+    <button id="print" title="Print, or save as PDF from the print dialog">Print / PDF</button>
     <button id="undo" title="Undo (Ctrl+Z)">Undo</button>
     <button id="redo" title="Redo (Ctrl+Shift+Z)">Redo</button>
     <label>Theme <select id="theme"></select></label>
+    <label><select id="add-theme" aria-label="Add a built-in theme">
+      <option value="">Add theme…</option>
+      <option value="Community">Community (Phonetic Markup for Verse)</option>
+      <option value="Plain">Plain</option>
+    </select></label>
   </div>
 </header>
 <main>
   <section class="page">
+    <h2 id="doc-title"></h2>
     <div id="poem"></div>
+    <p id="credit"></p>
     <p id="status" role="status"></p>
   </section>
   <aside>

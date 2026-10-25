@@ -1,8 +1,11 @@
 // The app shell (docs/ui-plan.md, step 1 and the first part of step 2): open a .pxml file,
 // render it with the layer painter, restack and toggle tiers, switch themes, add tiers and
-// sets, mark selected text into the selected set, undo and redo, save.
-import { load, save, spanText, Editor, PxmlError } from '../src/core/index.js';
+// sets, mark selected text into the selected set (one or several pieces, optionally snapped to
+// words), click painted text to find its member, undo and redo, save, keep a working copy in the
+// browser, print.
+import { load, save, Editor, PxmlError } from '../src/core/index.js';
 import { paint, offsetAt } from '../src/render/paint.js';
+import { snapToWords, overlaps } from '../src/render/select.js';
 import { providerFor } from '../src/providers/index.js';
 import sample from './sample.js';
 
@@ -10,8 +13,28 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 let ed, view, fileName = 'twinkle.pxml';
 let selTier = null, selSet = null;
+let pieces = [], snap = false, focusMember = null;          // W-06: pieces collected for one span
+const KEY = 'poetic-overtones:working-copy';                  // O-05
+const THEMES = { Community: 'community.css', Plain: 'plain.css' };
+
+// A span's text for display: its pieces in order, joined with an ellipsis when there are several (M-05).
+const label = (doc, id) => doc.spans.get(id).pieces.map((p) => Array.from(doc.text).slice(p.start, p.end).join('')).join(' … ');
 
 function status(msg, error = false) { const s = $('status'); s.textContent = msg; s.className = error ? 'error' : ''; }
+
+// O-05: the working copy lives in local storage; a failure is reported once, and the app carries on.
+let warnedStorage = false;
+function persist() {
+  try { localStorage.setItem(KEY, JSON.stringify({ name: fileName, source: save(ed.doc) })); warnedStorage = false; }
+  catch (e) { if (!warnedStorage) { warnedStorage = true; status('Your work could not be kept in this browser, so save it to a file.', true); } }
+}
+function restore() {
+  try {
+    const kept = JSON.parse(localStorage.getItem(KEY) ?? 'null');
+    if (kept?.source) { open(kept.source, kept.name); status(`Reopened your working copy of ${kept.name}.`); return true; }
+  } catch { /* unreadable or unavailable: start from the sample */ }
+  return false;
+}
 
 // Open a document served next to the app, fetching the files its <text src> and <style src> name.
 async function openUrl(url) {
@@ -32,7 +55,7 @@ function open(source, name, readFile = null) {
     ed = new Editor(doc, { providers: providerFor });
     fileName = name;
     selTier = doc.tiers.at(-1)?.id ?? null;
-    selSet = null;
+    selSet = null; pieces = []; focusMember = null;
     render();
     status(warnings.length ? `Opened ${name}, with warnings: ${[...new Set(warnings.map((w) => w.code))].join(', ')}` : `Opened ${name}.`);
   } catch (e) {
@@ -50,6 +73,12 @@ function act(fn, done) {
 function render() {
   const doc = ed.doc;
   view = paint($('poem'), doc);
+  const meta = doc.meta?.attrs ?? {};
+  $('doc-title').innerHTML = meta.title ? `${esc(meta.title)}${meta.author ? ` <small>${esc(meta.author)}${meta.year ? ', ' + esc(meta.year) : ''}</small>` : ''}` : '';
+  const live = doc.styles.filter((st) => st.attrs.disabled !== 'true' && st.attrs.name !== undefined);
+  const credits = live.map((st) => `${st.attrs.name} theme: ${(st.css.match(/^\s*\*?\s*Credit-line:\s*(.+)$/m) || [])[1] ?? ''}`.replace(/: $/, '')).filter((c) => c.includes(':'));
+  $('credit').textContent = credits.join(' · ');
+  persist();
   $('undo').disabled = !ed.canUndo;
   $('redo').disabled = !ed.canRedo;
 
@@ -90,14 +119,35 @@ function render() {
     if (id) { selSet = id; render(); }
   };
   box.append(form);
-  const mark = document.createElement('button');
-  mark.textContent = 'Mark selection';
-  mark.disabled = !selSet;
-  mark.onclick = markSelection;
+  box.append(markPanel());
+}
+
+// Marking (W-06): the selection, or the pieces collected so far plus the selection, becomes one span.
+function markPanel() {
+  const wrap = document.createElement('div');
+  const row = document.createElement('div');
+  row.className = 'mark-row';
+  row.innerHTML = `<button name="mark" ${selSet ? '' : 'disabled'} title="Mark the selection (M)">Mark selection</button>
+    <button name="piece" ${selSet ? '' : 'disabled'} title="Keep this selection as one piece of a span (P)">Add as piece</button>
+    <label title="Widen a selection to whole words"><input type="checkbox" name="snap" ${snap ? 'checked' : ''}> snap to words</label>`;
+  row.querySelector('[name=mark]').onclick = markSelection;
+  row.querySelector('[name=piece]').onclick = addPiece;
+  row.querySelector('[name=snap]').onchange = (ev) => { snap = ev.target.checked; };
+  wrap.append(row);
+  if (pieces.length) {
+    const p = document.createElement('div');
+    p.className = 'pieces';
+    p.innerHTML = `<div>${pieces.length} piece${pieces.length === 1 ? '' : 's'} so far; select more, or press Mark to make one span.</div>
+      <ul>${pieces.map(([a, b]) => `<li>${esc(Array.from(ed.doc.text).slice(a, b).join(''))}</li>`).join('')}</ul>
+      <button type="button" name="clear">Clear pieces (Esc)</button>`;
+    p.querySelector('[name=clear]').onclick = clearPieces;
+    wrap.append(p);
+  }
   const hint = document.createElement('p');
   hint.className = 'hint';
-  hint.textContent = selSet ? 'Select text in the poem and press M (or Mark) to add it to the selected set.' : 'Select a set, then select text and press M to mark it.';
-  box.append(mark, hint);
+  hint.textContent = selSet ? 'Select text in the poem, then press M to mark it, or P to keep it as a piece. Click painted text to find where it is marked.' : 'Select a set, then select text and press M to mark it.';
+  wrap.append(hint);
+  return wrap;
 }
 
 // Tier details (ui-plan step 3): name, role, kind, direction, delete. Changes apply on change.
@@ -156,26 +206,70 @@ function setCard(tier, s, k) {
     const li = document.createElement('li');
     const inferred = tier.attrs.provider && !s.confirmed.includes(m);
     if (inferred) li.className = 'inferred';
-    li.innerHTML = `<span>${esc(spanText(doc, m))}</span>${inferred ? '<button name="ok" title="Confirm (a person accepted it)">✓</button>' : ''}<button name="rm" title="Remove from set">×</button>`;
+    if (m === focusMember) li.className = (li.className + ' focus').trim();
+    li.dataset.member = m;
+    const directed = tier.attrs.kind === 'relation' && tier.attrs.directed === 'true';
+    const at = s.members.indexOf(m);
+    li.innerHTML = `${directed ? `<button name="left" title="Earlier in the relation" ${at === 0 ? 'disabled' : ''}>←</button>` : ''}<span>${esc(label(doc, m))}</span>${directed ? `<button name="right" title="Later in the relation" ${at === s.members.length - 1 ? 'disabled' : ''}>→</button>` : ''}${inferred ? '<button name="ok" title="Confirm (a person accepted it)">✓</button>' : ''}<button name="rm" title="Remove from set">×</button>`;
     li.querySelector('[name=rm]').onclick = () => act(() => ed.removeMember(s.id, m));
+    const left = li.querySelector('[name=left]'), right = li.querySelector('[name=right]');
+    if (left) left.onclick = () => act(() => ed.moveMember(s.id, m, at - 1));
+    if (right) right.onclick = () => act(() => ed.moveMember(s.id, m, at + 1));
     const ok = li.querySelector('[name=ok]');
-    if (ok) ok.onclick = () => act(() => ed.confirm(s.id, m), `Confirmed “${spanText(doc, m)}”.`);
+    if (ok) ok.onclick = () => act(() => ed.confirm(s.id, m), `Confirmed “${label(doc, m)}”.`);
     ul.append(li);
   }
   div.append(ul);
   return div;
 }
 
-function markSelection() {
-  if (!selSet) return status('Select a set first.', true);
+// The selection in the poem as a [start, end) code point range, snapped to words if asked; or null.
+function selectedRange() {
   const sel = getSelection();
-  if (!sel.rangeCount || sel.isCollapsed) return status('Select some text in the poem first.', true);
+  if (!sel.rangeCount || sel.isCollapsed) return null;
   const r = sel.getRangeAt(0);
   const a = offsetAt(view, r.startContainer, r.startOffset), b = offsetAt(view, r.endContainer, r.endOffset);
-  if (a === null || b === null || b <= a) return status('The selection must be inside the poem.', true);
-  const id = act(() => ed.mark(selSet, [[a, b]]));
-  if (id) { sel.removeAllRanges(); status(`Marked “${spanText(ed.doc, id)}”.`); }
+  if (a === null || b === null || b <= a) return null;
+  return snap ? snapToWords(ed.doc.text, a, b) : [a, b];
 }
+
+function addPiece() {
+  if (!selSet) return status('Select a set first.', true);
+  const range = selectedRange();
+  if (!range) return status('Select some text in the poem first.', true);
+  if (overlaps(pieces, range)) return status('That overlaps a piece you already collected.', true);
+  pieces.push(range);
+  getSelection().removeAllRanges();
+  render();
+  status(`Kept “${Array.from(ed.doc.text).slice(...range).join('')}” as piece ${pieces.length}. Select the next piece, then press M.`);
+}
+
+function clearPieces() { pieces = []; render(); status('Cleared the pieces.'); }
+
+function markSelection() {
+  if (!selSet) return status('Select a set first.', true);
+  const range = selectedRange();
+  if (range && overlaps(pieces, range)) return status('That overlaps a piece you already collected.', true);
+  const all = range ? [...pieces, range] : pieces;
+  if (!all.length) return status('Select some text in the poem first.', true);
+  const id = act(() => ed.mark(selSet, all));
+  if (id) { pieces = []; focusMember = id; getSelection().removeAllRanges(); render(); status(`Marked “${label(ed.doc, id)}”.`); }
+}
+
+// W-05: a click on painted text finds the topmost member under it and shows it in the panel.
+$('poem').addEventListener('click', () => {
+  const sel = getSelection();
+  if (!sel.isCollapsed || !sel.anchorNode) return;
+  const at = offsetAt(view, sel.anchorNode, sel.anchorOffset);
+  if (at === null) return;
+  const hit = view.at(at)[0];
+  if (!hit) { focusMember = null; render(); return status('Nothing is marked there.'); }
+  selTier = hit.tier; selSet = hit.set; focusMember = hit.member;
+  render();
+  $('sets').querySelector('li.focus')?.scrollIntoView({ block: 'nearest' });
+  const tier = ed.doc.tiers.find((t) => t.id === hit.tier), set = tier.sets.find((x) => x.id === hit.set);
+  status(`“${label(ed.doc, hit.member)}” is in ${set.attrs.name ?? set.id}, in ${tier.attrs.name ?? tier.id}.`);
+});
 
 $('open').onchange = async (ev) => {
   const f = ev.target.files[0];
@@ -193,6 +287,25 @@ $('save').onclick = () => {
 $('undo').onclick = () => { ed.undo(); render(); };
 $('redo').onclick = () => { ed.redo(); render(); };
 $('theme').onchange = (ev) => act(() => ed.useTheme(ev.target.value || null));
+$('add-theme').onchange = async (ev) => {
+  const name = ev.target.value;
+  ev.target.value = '';
+  if (!THEMES[name]) return;
+  const res = await fetch(new URL(`../themes/${THEMES[name]}`, import.meta.url));
+  if (!res.ok) return status(`Could not fetch the ${name} theme.`, true);
+  const css = await res.text();
+  act(() => ed.addTheme(name, css), `Added the ${name} theme.`);
+};
+$('print').onclick = () => print();
+// Drag a .pxml file onto the page to open it.
+addEventListener('dragover', (ev) => { ev.preventDefault(); document.body.classList.add('dragging'); });
+addEventListener('dragleave', (ev) => { if (!ev.relatedTarget) document.body.classList.remove('dragging'); });
+addEventListener('drop', async (ev) => {
+  ev.preventDefault();
+  document.body.classList.remove('dragging');
+  const f = ev.dataTransfer?.files?.[0];
+  if (f) open(await f.text(), f.name);
+});
 $('new-standard').onsubmit = (ev) => {
   ev.preventDefault();
   const ref = ev.target.elements.ref.value;
@@ -210,6 +323,8 @@ addEventListener('keydown', (ev) => {
   const mod = ev.metaKey || ev.ctrlKey;
   if (mod && ev.key.toLowerCase() === 'z') { ev.preventDefault(); ev.shiftKey ? ed.redo() : ed.undo(); render(); }
   else if (!mod && ev.key.toLowerCase() === 'm') { ev.preventDefault(); markSelection(); }
+  else if (!mod && ev.key.toLowerCase() === 'p') { ev.preventDefault(); addPiece(); }
+  else if (ev.key === 'Escape' && pieces.length) clearPieces();
 });
 
-open(sample, 'twinkle.pxml');
+if (!restore()) open(sample, 'twinkle.pxml');
