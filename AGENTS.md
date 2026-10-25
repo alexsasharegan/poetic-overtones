@@ -37,7 +37,7 @@ Load Alex's user-level `project-docs` skill before starting any task. It sets ou
   - The proof of concept is client-side JavaScript only, with no hosted compute. The stack beyond that and the name are deferred (ADR-0006).
   - The community scheme from *Phonetic Markup for Verse* is a first-class, credited built-in theme (`themes/community.css`, ADR-0005). Themes are configurable.
 - **Sibling repo:** [`shavian2tengwar`](https://github.com/alexsasharegan/shavian2tengwar) is the Shavian-to-Tengwar engine. Use it for any Tengwar view rather than re-implementing the mode. Its `spec/mode.md` is the authority on how Shavian maps to Tengwar.
-- **Status (2026-10-15):** the text form and app spec are written, a dependency-free core library and a first app exist, and the community theme is encoded. See `docs/ROADMAP.md`.
+- **Status (2026-10-24):** the text form and app spec are written and every rule in them is ADOPTED (except the open items in `spec/app.md` section 13). The core library has no runtime dependencies. The app opens, marks, edits, adds standard tiers (lines, stanzas, words) with reset, and saves. The community theme is encoded and credited. The MVP has no marks (ADR-0017). The open decisions are in the latest note in `docs/reviews/`; the tasks are on `docs/ROADMAP.md`. README.md and HISTORY.md are refreshed after the next build work (board: DOC-1).
 
 ---
 
@@ -52,6 +52,7 @@ Load Alex's user-level `project-docs` skill before starting any task. It sets ou
 │   └── providers/           #   provider contract, English providers, fixtures, runner
 ├── src/
 │   ├── core/                # model, XML parser, loader, export, Editor (ADR-0012)
+│   ├── providers/           # line, stanza and word providers in JavaScript
 │   └── render/              # the painter: themes over the analysis mirror (ADR-0011)
 ├── app/                     # the app (npm run serve, then /app/)
 ├── themes/                  # built-in themes; community.css and its README
@@ -68,7 +69,7 @@ Load Alex's user-level `project-docs` skill before starting any task. It sets ou
 ├── scansion.html            # the first prototype: Shavian scansion score (kept for reference)
 ├── syllabifier.py, design-doc.md, decisions.md, diagram.md, out.json   # the earliest attempt (superseded)
 ├── sources/community/       # the community PDF: GITIGNORED, never committed (ADR-0005)
-├── package.json             # scripts only (test, serve); no dependencies
+├── package.json             # scripts only (test, serve); no runtime dependencies
 ├── README.md
 ├── AGENTS.md                # this file (CLAUDE.md imports it)
 └── .gitignore
@@ -82,7 +83,7 @@ Load Alex's user-level `project-docs` skill before starting any task. It sets ou
 
 - `spec/app.md` defines what the application is. **When the spec and the code disagree, the code is wrong.** The spec names no language or stack.
 - To change behaviour: spec first, then code, then record why in an ADR (ADR-0007).
-- Statuses are `ADOPTED` (Alex decided), `PROVISIONAL` (an agent's default) and `OPEN`. Never promote one on your own judgment.
+- Statuses are `ADOPTED` (Alex decided), `PROVISIONAL` (an agent's default) and `OPEN`. Never promote one on your own judgment. On 2026-10-24 Alex adopted all rules that were PROVISIONAL; a rule you add is PROVISIONAL until he decides it.
 - Rule IDs look like `W-02`, `E-03`, `Y-05`. Decisions are `ADR-NNNN`.
 
 ### Annotation model
@@ -114,7 +115,7 @@ Where poetic-overtones and shavian2tengwar both describe a sound (IPA for a lett
 ### Community theme
 
 - *Phonetic Markup for Verse* v3.0 is adopted as a built-in theme, `themes/community.css` (ADR-0005). How a document must be marked for it, and every colour settled where the deck contradicts itself, are in `themes/README.md`. The owner shared it for community adoption.
-- Credit the author wherever the scheme appears. Alex will ask them how they want to be credited; until then name no one in committed files and refer to *Phonetic Markup for Verse*.
+- Credit the author wherever the scheme appears, as **Eric Kingsepp (Éadric Scúsmiþ)** (ADR-0014). Say nothing in committed files about how Alex knows them. The author has not yet confirmed the seven settled colours or bold-italic secondary stress; do not say that they have (board: CT-6).
 - The deck's hex values contradict its own swatches in places. Follow the rules in ADR-0005 and record any choice.
 - The PDF stays gitignored in `sources/community/`. Summarise and cite it ("see *Phonetic Markup for Verse* v3.0, slide N"); do not commit it unless Alex says so.
 
@@ -129,7 +130,7 @@ Poems that aren't in the public domain (Tolkien, for example, including the deck
 - **Prose:** plain, short sentences. Cite ADRs as `ADR-NNNN`.
 - **Commits:** one logical change per commit, message in the imperative.
 - **Branches:** `main` is the release branch. Once the repo has a remote, work happens on branches and is squash-merged after Alex reviews it. Never merge a PR yourself.
-- **JavaScript:** plain ES modules, no build step, no runtime dependencies (ADR-0012). Positions in the model are code points.
+- **JavaScript:** plain ES modules, no build step, no runtime dependencies (ADR-0012). Browser tests may use Playwright as a dev-only dependency (ADR-0016). Positions in the model are code points.
 - **Python** (reference checkers only): stdlib, run with `python3 -I`; 3.14 and `ruff format` as in shavian2tengwar. The stack beyond the POC is not chosen yet (DEC-8).
 - **Planning:** tasks live on the board in `docs/ROADMAP.md` with stable IDs (`UI-4`, `MRK-1`). A larger piece of work also gets `docs/projects/NNNN-title/`. Write a review note in `docs/reviews/` at the end of a long session.
 

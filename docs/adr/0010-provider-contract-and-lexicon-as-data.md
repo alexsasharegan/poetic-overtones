@@ -27,3 +27,8 @@ given that the candidate dictionaries have different licences (ReadLex MIT, CMUd
 * Share-alike data (Wiktionary-derived) would carry its licence into whatever it is merged into, so it stays a separate, optional data file. ReadLex and CMUdict are permissive.
 * A hand-edited tier can feed a later provider (`x-as`), so people's corrections are respected.
 * The provider id form is still open (format.md FQ8).
+
+## Addendum (2026-10-24)
+
+Alex adopted every rule marked PROVISIONAL in the spec files (`docs/reviews/2026-10-24.md`, part 3). The
+statements about PROVISIONAL rules above describe the state when this ADR was written.

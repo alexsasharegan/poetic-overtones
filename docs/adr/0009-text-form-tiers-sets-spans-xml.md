@@ -61,3 +61,8 @@ Alex settled the questions the first draft left open:
   gives up a shared indent on a text whose every line is indented.
 - Orphans are not stored. Spans belong to no tier; a reset replaces what the sets of a provider tier list;
   providers reuse spans with the same pieces; spans that no set lists are dropped on export.
+
+## Addendum (2026-10-24)
+
+Alex adopted every rule marked PROVISIONAL in the spec files (`docs/reviews/2026-10-24.md`, part 3). The
+statements about PROVISIONAL rules above describe the state when this ADR was written.

@@ -85,3 +85,14 @@ Alex widened the project to a web app for multi-dimensional poetic analysis of a
 * `src/providers/`: line, stanza and word providers in JavaScript, checked against the provider fixtures.
 * The `Editor` adds standard tiers, resets them (keeping the user's keyless sets and reusing spans) and unlinks
   them (E-10). The app has "Add standard tier", Reset and Unlink. Note: `docs/reviews/2026-10-19.md`.
+
+## 9. A decision round (2026-10-24)
+
+* Alex found the two review notes hard to work through, so `docs/reviews/2026-10-24.md` replaced them as the
+  one list of open decisions, with options and a recommendation for each.
+* Settled: the MVP has no marks (ADR-0017); ids are unique in the document, not "never reused" (ADR-0015);
+  Playwright is allowed as a dev-only dependency (ADR-0016); the community scheme's author is credited by
+  name (ADR-0014); sound tags keep their ARPAbet-like names for now; export keeps styles inline.
+* Every rule that was PROVISIONAL became ADOPTED. New agent defaults are PROVISIONAL again.
+* The Reader theme draws unconfirmed members with a quiet dotted underline, not a dashed box.
+* Still open: the author's confirmation of the colours (CT-6), hosting, and the small items in part 4 of the note.

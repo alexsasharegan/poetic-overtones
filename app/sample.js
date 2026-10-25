@@ -55,7 +55,7 @@ Like a diamond in the sky.
   tier[role="assonance"] > set { outline: 1.5px dashed #1f8a5b; border-radius: 8px; padding: 0 3px; }
   tier[role="rhyme"] > set:nth-child(1) { color: #b3261e; font-weight: 700; }
   tier[role="rhyme"] > set:nth-child(2) { color: #1b5fa8; font-weight: 700; font-style: italic; }
-  member[inferred] { outline: 1px dashed #b07a2a; border-radius: 3px; }
+  member[inferred] { text-decoration: underline dotted rgb(176 122 42 / .55) 1px; text-underline-offset: 3px; }
 </style>
 
 <style name="Ink" disabled="true">

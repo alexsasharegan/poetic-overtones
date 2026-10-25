@@ -1,6 +1,6 @@
 /* Community theme, from "Phonetic Markup for Verse" v3.0.
- * Credit: the scheme's author (credit wording to be agreed; ADR-0005). The source deck is kept
- * private in sources/community/ and is not part of this repository.
+ * Credit: Eric Kingsepp (Éadric Scúsmiþ), author of the scheme (ADR-0005, ADR-0014). The source
+ * deck is kept private in sources/community/ and is not part of this repository.
  *
  * Plain CSS over the analysis mirror (spec/format.md S-03, S-04). It styles three roles:
  *   consonant - a label tier whose sets are sounds, tagged sound:<name> place:<..> manner:<..> voiced:<..>

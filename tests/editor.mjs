@@ -1,5 +1,5 @@
 // Editing operations (src/core/edit.js): every change saves to a valid file that loads back
-// the same, undo and redo restore exactly, ids are never reused, and bad edits change nothing.
+// the same, undo and redo restore exactly, ids are not reused within a session, and bad edits change nothing.
 // Usage: node tests/editor.mjs
 import { readFileSync } from 'node:fs';
 import { load, save, spanText, Editor, cpIndex, utf16Index, PxmlError } from '../src/core/index.js';
@@ -69,7 +69,7 @@ check('out-of-range span rejected', throwsCode(() => ed.addSpan([[0, 10_000]]), 
 check('self-overlapping pieces rejected', throwsCode(() => ed.addSpan([[0, 5], [3, 8]]), 'span-self-overlap'));
 check('failed edits changed nothing', save(doc) === before);
 
-// ids are never reused (S-04)
+// ids are not reused within a session (S-04, ADR-0015)
 const gone = ed.addTier({ name: 'temporary' });
 ed.removeTier(gone);
 const fresh = ed.addTier({ name: 'next' });

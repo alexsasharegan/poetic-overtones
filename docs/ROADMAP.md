@@ -2,7 +2,7 @@
 
 > The board for poetic-overtones: where the project stands, every queued task grouped into epics, and what
 > blocks what. Start here in a new session, then read the latest note in `docs/reviews/`.
-> Last updated 2026-10-19. History: `docs/HISTORY.md`.
+> Last updated 2026-10-24. History: `docs/HISTORY.md`.
 
 ## Where we are
 
@@ -10,8 +10,8 @@ The **text form** (`.pxml`) is specified with 53 fixtures. The **rendering model
 plain CSS over a mirror of the analysis, tiers are layers, and text styles and box styles are painted
 as ordinary CSS that prints. A dependency-free **core library** loads, edits (with undo) and saves
 documents. A small **app** opens, renders, edits and saves them. The **community theme** is encoded.
-What remains for an MVP is mostly UI, a few decisions only Alex can make, and the design of **marks**
-(text above or below a span, line strips, arcs).
+Alex settled the open decisions on 2026-10-24 (`docs/reviews/2026-10-24.md`): the MVP has **no marks**
+(ADR-0017). What remains for an MVP is UI work and a check of the community theme's colours with its author.
 
 Run it: `npm test` (all checks), `npm run serve` then <http://localhost:8000/app/>.
 
@@ -19,10 +19,11 @@ Run it: `npm test` (all checks), `npm run serve` then <http://localhost:8000/app
 
 | | Task | Why now |
 |---|---|---|
-| 🟢 Now | **DEC-1 to DEC-4**: Alex's decisions (credit, sound tags, ids, marks scope) | They unblock the community theme and the marks design |
-| 🟡 Next | **MRK-1** Marks design (spec) | Unblocks the meter strip, ties and relation arcs |
-| 🟡 Next | **UI-4** Selection helpers | Makes marking practical on real poems |
-| 🟡 Next | **QA-1** Browser tests in `npm test` | The renderer and app are only checked by hand today |
+| 🟡 Next | **UI-4** Selection helpers, with CORE-1 and RND-1 | Makes marking practical on real poems |
+| 🟡 Next | **QA-1** Browser tests in `npm test` (Playwright, dev-only, ADR-0016) | The renderer and app are only checked by hand today |
+| 🟡 Next | **CT-6** Confirm the seven colours and bold-italic stress with the author | The only thing the community theme still waits for (Alex asks) |
+| ⚪ Later | **DOC-1** Refresh README, HISTORY and the project records | After the next build work |
+| ✅ Done | **2026-10-24:** decisions DEC-1 to DEC-7 and DEC-11, all provisional rules adopted, credit added | `docs/reviews/2026-10-24.md`, ADR-0014 to ADR-0017 |
 | ✅ Done | **PRV-1, CORE-2, UI-8** Lexicon-free providers, reset, standard tiers in the app | Done 2026-10-19 |
 
 ## Board
@@ -34,16 +35,17 @@ Task IDs are stable; add new ones at the end of an epic.
 
 | ID | Task | Status | Blocks | Notes |
 |---|---|---|---|---|
-| DEC-1 | Credit wording for the community scheme; confirm the 7 settled colours and bold-italic secondary stress with its author | 🟡 | CT-1 | `themes/README.md`, ADR-0005, review A1 |
-| DEC-2 | Sound tag names: ARPAbet-like (now), Shavian letter names, or other | 🟡 | CT-2 | `spec/app.md` Q16 |
-| DEC-3 | Ids across sessions: soften S-04 or record retired ids | 🟡 | CORE-3 | Q17 |
-| DEC-4 | Scope of marks for the MVP (meter strip? arcs? badges?) | 🟡 | MRK-1 | Q18 |
-| DEC-5 | Export of `<style src>`: inline (now) or keep the reference | 🟡 | CORE-4 | Q19 |
-| DEC-6 | Skim the PROVISIONAL rules (23 in format.md, 41 in app.md, 8 in contract.md) and adopt or change | 🟡 | | review A5 |
-| DEC-7 | Browser tests may use Playwright as a dev-only dependency | 🟡 | QA-1 | ADR-0012 forbids runtime dependencies only |
+| DEC-1 | Credit wording: "Eric Kingsepp (Éadric Scúsmiþ)". Confirming the 7 settled colours and bold-italic secondary stress with the author is CT-6 | ✅ | | ADR-0014, 2026-10-24 |
+| DEC-2 | Sound tag names: keep ARPAbet-like, for now | ✅ | | Q16, 2026-10-24; revisit if Shavian needs its own names |
+| DEC-3 | Ids: soften S-04 to "unique in the document" | ✅ | | ADR-0015, Q17, 2026-10-24 |
+| DEC-4 | Scope of marks for the MVP: none (option A) | ✅ | | ADR-0017, Q18, 2026-10-24 |
+| DEC-5 | Export of `<style src>`: inline | ✅ | | Q19, 2026-10-24 |
+| DEC-6 | The PROVISIONAL rules: all adopted | ✅ | | `docs/reviews/2026-10-24.md` part 3 |
+| DEC-7 | Browser tests may use Playwright as a dev-only dependency | ✅ | | ADR-0016, 2026-10-24 |
 | DEC-8 | Hosting and the stack beyond the POC (the name is decided: poetic-overtones, ADR-0013) | ⚪ | PLT-1 | `docs/synthesis/stack-and-name-options.md` |
 | DEC-9 | FQ8 (provider id form), FQ9 (shared indent), C-08 | ⚪ | | not blocking the MVP |
 | DEC-10 | Timestamp for the Tengwar-mode remark in the README | ⚪ | | README TODO |
+| DEC-11 | Busy display of unconfirmed members: themes style `member[inferred]` more quietly | ✅ | | 2026-10-24; Reader theme done (UI-10) |
 
 ### CORE: model, loader, editing (`src/core/`)
 
@@ -52,8 +54,8 @@ Task IDs are stable; add new ones at the end of an epic.
 | CORE-0 | Loader, model, canonical export, editing with undo | ✅ | | ADR-0012; 53 fixtures, 23 round trips, 26 editor checks |
 | CORE-1 | Multi-piece marking: one span from several selections (M-05) | 🟡 | | `Editor.mark` already takes pieces; needs UI-4 |
 | CORE-2 | Reset (E-03) and span reuse for provider tiers (E-08) | ✅ | | `Editor.addStandardTier`, `reset`, `unlink`; E-10; `tests/reset.mjs` |
-| CORE-3 | Ids across sessions | ⛔ | DEC-3 | |
-| CORE-4 | Keep `src` on export, if chosen | ⛔ | DEC-5 | |
+| CORE-3 | Ids across sessions | ✅ | | closed by ADR-0015: S-04 softened, no code change |
+| CORE-4 | Keep `src` on export, if chosen | ✅ | | not chosen (Q19): export stays inline |
 | CORE-5 | Working copy kept in the browser between visits (O-04) | 🟡 | | needs a storage choice for the POC |
 | CORE-6 | Faster undo and repaint for long texts (W-04) | ⚪ | | snapshots and full repaint are fine for poems |
 
@@ -66,14 +68,14 @@ Task IDs are stable; add new ones at the end of an epic.
 | RND-2 | Collision and contrast warnings (Y-05, Y-06) | 🟡 | | needed by UI-6 |
 | RND-3 | Accessible painted text (Q20) | 🟡 | | added characters are hidden from screen readers today |
 
-### MRK: marks (text above or below, line strips, arcs)
+### MRK: marks (text above or below, line strips, arcs). Post-MVP (ADR-0017)
 
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
-| MRK-1 | Spec: how a theme asks for a mark, and how marks layer | ⛔ | DEC-4 | `spec/app.md` Y-03 "Box (later)", Q18 |
-| MRK-2 | Prototype marks in `prototypes/` and check print | ⛔ | MRK-1 | |
-| MRK-3 | Marks in `src/render/` | ⛔ | MRK-2 | |
-| MRK-4 | Relation arcs (R-05) | ⛔ | MRK-3 | |
+| MRK-1 | Spec: how a theme asks for a mark, and how marks layer | ⚪ | | `spec/app.md` Y-03 "Box (later)", Q18; start after the MVP |
+| MRK-2 | Prototype marks in `prototypes/` and check print | ⚪ | MRK-1 | |
+| MRK-3 | Marks in `src/render/` | ⚪ | MRK-2 | |
+| MRK-4 | Relation arcs (R-05) | ⚪ | MRK-3 | |
 
 ### UI: the app (`app/`, `docs/ui-plan.md`)
 
@@ -88,17 +90,19 @@ Task IDs are stable; add new ones at the end of an epic.
 | UI-7 | Files: drag and drop, working copy (CORE-5), print view and PDF export (A-02) | 🟡 | | |
 | UI-8 | Standard tiers from providers, with reset | ✅ | | lines, stanzas, words; Reset and Unlink in tier details |
 | UI-9 | Views: filter by tag, place, manner (the deck's grouped views) | 🟡 | | T-06 |
+| UI-10 | Reader theme: style `member[inferred]` quietly (DEC-11) | ✅ | | dotted underline in `app/sample.js`; checked by `npm test` only, not yet by eye in a browser |
 
 ### CT: community theme (`themes/`)
 
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
 | CT-0 | Encode the deck: consonants, vowels, diphthongs, stress | ✅ | | `themes/community.css` |
-| CT-1 | Apply the author's answers; add the credit | ⛔ | DEC-1 | |
-| CT-2 | Rename sound tags if chosen | ⛔ | DEC-2 | |
-| CT-3 | Meter strip and ties | ⛔ | MRK-3 | the deck never defines ties; ask the author |
+| CT-1 | Add the credit | ✅ | | ADR-0014: `themes/community.css`, `themes/README.md`, README, AGENTS.md |
+| CT-2 | Rename sound tags if chosen | ✅ | | not needed: DEC-2 keeps the names |
+| CT-3 | Meter strip and ties | ⚪ | MRK-3 | post-MVP (ADR-0017); the deck never defines ties; ask the author |
 | CT-4 | Grouped views by place, manner, sibilant | ⛔ | UI-9 | |
 | CT-5 | A plain default theme besides the community theme | 🟡 | | ADR-0005: one scheme among several |
+| CT-6 | Confirm the seven settled colours (M11) and bold-italic secondary stress (M12) with the author, and apply the answers | 🟡 | | Alex asks; `themes/README.md` has the colour table |
 
 ### PRV: providers (`spec/providers/`)
 
@@ -115,7 +119,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
 | QA-0 | Fixtures, round trips, editor tests in `npm test` | ✅ | | |
-| QA-1 | Browser tests for the painter and the app in `npm test` | ⛔ | DEC-7 | today they are ad hoc scripts |
+| QA-1 | Browser tests for the painter and the app in `npm test` | 🟡 | | Playwright as a dev-only dependency (ADR-0016); today they are ad hoc scripts |
 | QA-2 | Retire `prototypes/layers/` and `scansion.html` once the app covers them | ⚪ | UI-4, MRK-3 | |
 | QA-3 | Reset-by-hand fixtures (E-03, E-08) | 🟡 | | `tests/reset.mjs` covers the rules in code; file fixtures still to write |
 
@@ -128,32 +132,40 @@ Task IDs are stable; add new ones at the end of an epic.
 | PLT-3 | Tengwar view through shavian2tengwar | ⚪ | | `docs/synthesis/comparison.md` D1 to D6 |
 | PLT-4 | Extensions (X rules) | ⚪ | | Q13 |
 
+### DOC: documentation
+
+| ID | Task | Status | Blocked by | Notes |
+|---|---|---|---|---|
+| DOC-1 | Refresh README (status table, repository map), HISTORY, ROADMAP summary and the project records after the next build work. Include a record for the 2026-10-19 work, which has no project folder | ⚪ | UI-4, QA-1 | do it once those are done; AGENTS.md was refreshed on 2026-10-24 |
+| DOC-2 | Write the next review note: carry forward what is still open (this note's part 4) and add new decisions | ⚪ | | do with DOC-1 |
+
 ## Dependencies
 
 ```mermaid
 flowchart LR
-  DEC1[DEC-1 credit and colours] --> CT1[CT-1 apply answers]
-  DEC2[DEC-2 sound tag names] --> CT2[CT-2 rename tags]
-  DEC4[DEC-4 marks scope] --> MRK1[MRK-1 marks spec] --> MRK2[MRK-2 prototype] --> MRK3[MRK-3 renderer]
+  MRK1[MRK-1 marks spec, post-MVP] --> MRK2[MRK-2 prototype] --> MRK3[MRK-3 renderer]
   MRK3 --> MRK4[MRK-4 arcs]
   MRK3 --> CT3[CT-3 meter strip, ties]
   UI9[UI-9 views] --> CT4[CT-4 grouped views]
   PRV1[PRV-1 JS providers] --> CORE2[CORE-2 reset] --> UI8[UI-8 standard tiers]
   CORE2 --> QA3[QA-3 reset fixtures]
   RND2[RND-2 collisions] --> UI6[UI-6 theme editor]
-  DEC7[DEC-7 dev dependency] --> QA1[QA-1 browser tests]
+  UI4[UI-4 selection] --> DOC1[DOC-1 refresh docs]
+  QA1[QA-1 browser tests] --> DOC1
   DEC8[DEC-8 hosting] --> PLT1[PLT-1 host]
   PRV2[PRV-2 lexicon builder] --> PRV3[PRV-3 syllable, stress] --> PRV4[PRV-4 sound]
 ```
 
-**Suggested order.** The DEC items first (an hour of Alex's time unblocks the most). Then, in parallel:
-MRK-1 (design), UI-4 with CORE-1 and RND-1 (marking on real poems), and QA-1 (browser tests).
-PRV-1, CORE-2 and UI-8 (standard tiers) are done. An MVP is UI-1 to UI-8, CT-1, and MRK-3 if DEC-4 says the
-meter strip is in.
+**Suggested order.** In parallel: UI-4 with CORE-1 and RND-1 (marking on real poems), and QA-1 (browser
+tests). CT-6 waits for Alex to ask the author. DOC-1 comes after UI-4 and QA-1. PRV-1, CORE-2 and UI-8
+(standard tiers) are done. An MVP is UI-1 to UI-8 and CT-1, with no marks (ADR-0017); it also wants UI-4.
 
 ## ✅ Done
 
 * **Foundation, 2026-10-14 and 15** (`docs/projects/0001-foundation/`): the text form and its fixtures,
   the rendering model, the core library and editing, the app shell, the community theme. Decisions in
   ADR-0009 to ADR-0012; review in `docs/reviews/2026-10-15.md`.
+* **Decision round, 2026-10-24** (`docs/projects/0002-decision-round/`): DEC-1 to DEC-7 and DEC-11 settled, all
+  provisional rules adopted, the author credited, the busy inferred style quietened. ADR-0014 to ADR-0017;
+  `docs/reviews/2026-10-24.md`.
 * **Scansion score:** `scansion.html`, the Shavian-only prototype that started the project.

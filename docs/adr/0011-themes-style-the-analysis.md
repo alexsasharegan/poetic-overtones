@@ -55,3 +55,8 @@ Alex accepted the recommendations: the two families of channels, the size clamp 
 under the letters, and mirroring members. The mirror is `tier` > `set` > `member`; a member carries `inferred`
 when a provider filled it in and no person has confirmed it, so a theme can style `member[inferred]`. Rules reach
 down from tier to set to member (S-08). FQ7 is settled.
+
+## Addendum (2026-10-24)
+
+Alex adopted every rule marked PROVISIONAL in the spec files (`docs/reviews/2026-10-24.md`, part 3). The
+statements about PROVISIONAL rules above describe the state when this ADR was written.

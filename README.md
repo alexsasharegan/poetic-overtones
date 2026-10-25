@@ -4,7 +4,7 @@
 assonance, alliteration, feet, and anything else a reader wants to mark. It works on any Unicode text.
 English is the baseline; Shavian and Tengwar shape the design. Marks live in **tiers** that overlap
 freely, and **themes** (plain CSS) decide how they look. The community scheme from *Phonetic Markup for
-Verse* is a built-in theme (credit to its author, wording to be agreed).
+Verse* by Eric Kingsepp (Éadric Scúsmiþ) is a built-in theme.
 
 ## Status (2026-10-15)
 

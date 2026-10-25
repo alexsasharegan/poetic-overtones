@@ -5,8 +5,9 @@ with `<style name="..." src="theme.css"/>` next to it, or with the CSS inline.
 
 ## Community theme (`community.css`)
 
-Encodes *Phonetic Markup for Verse* v3.0 (ADR-0005). Credit goes to the scheme's author; the wording is to
-be agreed, so no name is written here yet. The deck stays private in `sources/community/`.
+Encodes *Phonetic Markup for Verse* v3.0 (ADR-0005), by Eric Kingsepp (Éadric Scúsmiþ) (ADR-0014). The
+author has not yet confirmed the seven settled colours or bold-italic secondary stress (board: CT-6). The
+deck stays private in `sources/community/`.
 `community-demo.pxml` shows it on two lines of a public-domain poem; open it in the app (Sample menu).
 
 ### How a document has to be marked
@@ -22,7 +23,9 @@ but filters and other themes can use them.
 
 ### Sound names
 
-Tags allow only ASCII, so sounds have short names, mostly ARPAbet in lower case.
+Tags allow only ASCII, so sounds have short names, mostly ARPAbet in lower case. Alex accepted these names
+for now (2026-10-24, DEC-2). Another naming, such as Shavian letter names, would be added beside them rather
+than renaming them.
 
 | Name | IPA | Deck example | Name | IPA | Deck example |
 |---|---|---|---|---|---|

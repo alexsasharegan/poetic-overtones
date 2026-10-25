@@ -22,7 +22,7 @@ ed.undo(); ed.redo();
 |---|---|
 | `xml.js` | A small XML 1.0 parser for exactly what the format allows. Rejects CDATA (B-05) and DOCTYPE (B-03). Line numbers on every node. |
 | `load.js` | The loader: a port of `spec/fixtures/check.py`, rule for rule and error code for error code, that keeps everything a document holds. |
-| `edit.js` | `Editor`: add, remove, move and rename tiers and sets; mark text as a member (making or reusing a span, E-08); confirm; undo and redo (E-09). A failed edit throws and changes nothing. Ids are never reused (S-04). |
+| `edit.js` | `Editor`: add, remove, move and rename tiers and sets; mark text as a member (making or reusing a span, E-08); confirm; undo and redo (E-09). A failed edit throws and changes nothing. Ids are not reused within a session (S-04, ADR-0015). |
 | `save.js` | Canonical export. Writes spans that cross as heads and continuations (M-05), drops spans no set lists (A-12), writes styles inline. |
 | `index.js` | The public entry point. |
 

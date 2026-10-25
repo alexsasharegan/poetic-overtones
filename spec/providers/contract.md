@@ -1,6 +1,6 @@
 # Provider contract
 
-Status: PROVISIONAL (everything here is new; none of it is ADOPTED until Alex says so).
+Status: ADOPTED on 2026-10-24, except C-08 (OPEN). A rule added since is PROVISIONAL until Alex says so.
 Authority: `spec/app.md` E-01..E-09, `spec/format.md` section on tiers, sets and spans.
 Fixtures: `spec/providers/fixtures/`. Reference code: `reference.py`. Runner: `run.py`.
 
@@ -11,15 +11,15 @@ get filled in, and it follows the same contract as a provider written by a user 
 
 | ID | Rule | Status |
 |----|------|--------|
-| C-01 | A provider is a **pure function**: the input text, the contents of the tiers it reads, and a lexicon go in; the members of each set it owns come out. Same input, same output. No clock, no randomness, no network. | PROVISIONAL |
-| C-02 | A provider **owns sets**, named by `key` (format.md). A tier with `provider="name@int"` lists the sets it owns with a `key` each. Sets without a `key` belong to the user and a reset never touches them. | PROVISIONAL |
-| C-03 | A **member** is a list of pieces; a piece is a `(start, end)` pair of code point offsets in the input text (end exclusive). Pieces of one member do not overlap and are in text order. Members of a set are in text order (by first piece) unless the set is a directed relation. | PROVISIONAL |
-| C-04 | `reads` on the tier names the tiers whose contents the provider needs. A provider never looks at any tier it does not read. A missing input tier is an error in the application, not something the provider works around. | PROVISIONAL |
-| C-05 | **Reset** recomputes every keyed set and replaces its member list (app.md E-03). A set the provider owns but finds empty stays in the tier with `members=""`. Reuse of existing span ids follows app.md E-08: a member with the same pieces as an existing span keeps that span's id. | PROVISIONAL |
-| C-06 | **Don't guess.** When the provider lacks the data to decide, it says so in a set (see english.md `unknown`, `check`, `unmarked`) instead of inventing an answer. A wrong silent guess is worse than a visible gap. | PROVISIONAL |
-| C-07 | The **lexicon** is data, not code. The provider contract fixes the lexicon format (section 3); which dictionary fills it is a packaging decision, kept out of the spec so tests do not depend on any licensed word list. | PROVISIONAL |
+| C-01 | A provider is a **pure function**: the input text, the contents of the tiers it reads, and a lexicon go in; the members of each set it owns come out. Same input, same output. No clock, no randomness, no network. | ADOPTED |
+| C-02 | A provider **owns sets**, named by `key` (format.md). A tier with `provider="name@int"` lists the sets it owns with a `key` each. Sets without a `key` belong to the user and a reset never touches them. | ADOPTED |
+| C-03 | A **member** is a list of pieces; a piece is a `(start, end)` pair of code point offsets in the input text (end exclusive). Pieces of one member do not overlap and are in text order. Members of a set are in text order (by first piece) unless the set is a directed relation. | ADOPTED |
+| C-04 | `reads` on the tier names the tiers whose contents the provider needs. A provider never looks at any tier it does not read. A missing input tier is an error in the application, not something the provider works around. | ADOPTED |
+| C-05 | **Reset** recomputes every keyed set and replaces its member list (app.md E-03). A set the provider owns but finds empty stays in the tier with `members=""`. Reuse of existing span ids follows app.md E-08: a member with the same pieces as an existing span keeps that span's id. | ADOPTED |
+| C-06 | **Don't guess.** When the provider lacks the data to decide, it says so in a set (see english.md `unknown`, `check`, `unmarked`) instead of inventing an answer. A wrong silent guess is worse than a visible gap. | ADOPTED |
+| C-07 | The **lexicon** is data, not code. The provider contract fixes the lexicon format (section 3); which dictionary fills it is a packaging decision, kept out of the spec so tests do not depend on any licensed word list. | ADOPTED |
 | C-08 | A provider has an id and an integer version, written `name@int`. Output may change between versions; the version in the file says which one produced it. The exact form of the id is open (format.md FQ8). | OPEN |
-| C-09 | A provider gives the tier it fills a **role** (format.md A-13), so themes find the tier without knowing its id. The runner checks it. | PROVISIONAL |
+| C-09 | A provider gives the tier it fills a **role** (format.md A-13), so themes find the tier without knowing its id. The runner checks it. | ADOPTED |
 
 ## 2. Conformance: reset equality
 

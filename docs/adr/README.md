@@ -30,3 +30,7 @@ Number ADRs sequentially and never reuse a number. The pattern is the one in Ale
 | [ADR-0011](./0011-themes-style-the-analysis.md) | Themes Style the Analysis; Tiers Have a Role; Tier Order Is Layer Order | Active | 2026-10-14 |
 | [ADR-0012](./0012-core-library-plain-modules.md) | The Core Library Is Plain ES Modules With Its Own XML Parser | Active | 2026-10-14 |
 | [ADR-0013](./0013-name-poetic-overtones.md) | The Project Is Named poetic-overtones | Active | 2026-10-15 |
+| [ADR-0014](./0014-credit-the-community-scheme-author.md) | The Community Scheme's Author Is Credited by Name | Active | 2026-10-24 |
+| [ADR-0015](./0015-ids-unique-in-the-document.md) | Ids Are Unique in the Document, Not Never Reused | Active | 2026-10-24 |
+| [ADR-0016](./0016-playwright-as-a-dev-dependency.md) | Browser Tests May Use Playwright as a Dev-Only Dependency | Active | 2026-10-24 |
+| [ADR-0017](./0017-no-marks-in-the-mvp.md) | The MVP Has No Marks | Active | 2026-10-24 |

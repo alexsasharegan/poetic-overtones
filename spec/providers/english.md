@@ -1,6 +1,6 @@
 # English standard providers
 
-Status: PROVISIONAL. English is the baseline reference language (app.md); these are the first providers and
+Status: ADOPTED on 2026-10-24, apart from the open items named below. English is the baseline reference language (app.md); these are the first providers and
 the first test of the span-reuse rule (app.md E-08). The general contract is in `contract.md`.
 
 Provider ids (form still open, format.md FQ8): `text.line`, `text.stanza`, `english.word`, `english.syllable`,
@@ -51,7 +51,7 @@ Each provider gives the tier it fills a role (format.md A-13), so themes find it
 
 Sets carry tags so a theme can style them by meaning: stress sets use `stress:primary`, `stress:secondary`,
 `stress:unstressed`; gap sets use `status:unknown`, `status:check`, `status:unmarked`. A theme can equally select
-by `key` (`tier[role="stress"] > set[key="primary"]`). Tags are PROVISIONAL. The runner does not compare tags or names.
+by `key` (`tier[role="stress"] > set[key="primary"]`). Tags are ADOPTED. The runner does not compare tags or names.
 
 ## 6. Deferred: `english.sound`
 

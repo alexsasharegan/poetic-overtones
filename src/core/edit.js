@@ -7,8 +7,8 @@
 //   ed.undo(); ed.redo();
 //
 // Every operation either applies completely or throws a PxmlError and changes nothing. Ids
-// are made by the editor, unique in the document and never reused, even after a delete
-// (S-04). Positions are code points (S-01); cpIndex() converts a UTF-16 index from the UI.
+// are made by the editor, unique in the document and not reused within a session, even after
+// a delete (S-04, ADR-0015). Positions are code points (S-01); cpIndex() converts a UTF-16 index from the UI.
 
 import { PxmlError } from './xml.js';
 
