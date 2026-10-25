@@ -1,0 +1,188 @@
+<meta title="Sonnet 18" author="William Shakespeare" year="1609" language="en"/>
+
+<text xml:space="preserve">
+Shall I compare thee to a summer's day?
+Thou art more lovely and more temperate:
+Rough winds do shake the darling buds of May,
+And summer's lease hath all too short a date;
+
+Sometime too hot the eye of heaven shines,
+And often is his gold complexion dimm'd;
+And every fair from fair sometime declines,
+By chance or nature's changing course untrimm'd;
+
+But thy eternal summer shall not fade,
+Nor lose possession of that fair thou ow'st;
+Nor shall death brag thou wander'st in his shade,
+When in eternal lines to time thou grow'st:
+
+So long as men can breathe or eyes can see,
+So long lives this, and this gives life to thee.
+</text>
+
+<markup xml:space="preserve">
+<span id="nj"><span id="n3"><span id="np">Shall</span> <span id="nq">I</span> <span id="nr"><span id="n47">com</span><span id="n48">pare</span></span> <span id="ns">thee</span> <span id="nt">to</span> <span id="nu">a</span> <span id="nv"><span id="n49">sum</span><span id="n4a">mer's</span></span> <span id="nw">day</span>?</span>
+<span id="n4"><span id="nx">Thou</span> <span id="ny">art</span> <span id="nz">more</span> <span id="n10"><span id="n4b">love</span><span id="n4c">ly</span></span> <span id="n11">and</span> <span id="n12">more</span> <span id="n13"><span id="n4d">tem</span><span id="n4e">per</span><span id="n4f">ate</span></span>:</span>
+<span id="n5"><span id="n14">Rough</span> <span id="n15">winds</span> <span id="n16">do</span> <span id="n17">shake</span> <span id="n18">the</span> <span id="n19"><span id="n4g">dar</span><span id="n4h">ling</span></span> <span id="n1a">buds</span> <span id="n1b">of</span> <span id="n1c">May</span>,</span>
+<span id="n6"><span id="n1d">And</span> <span id="n1e"><span id="n4i">sum</span><span id="n4j">mer's</span></span> <span id="n1f">lease</span> <span id="n1g">hath</span> <span id="n1h">all</span> <span id="n1i">too</span> <span id="n1j">short</span> <span id="n1k">a</span> <span id="n1l">date</span>;</span></span>
+
+<span id="nk"><span id="n7"><span id="n1m">Sometime</span> <span id="n1n">too</span> <span id="n1o">hot</span> <span id="n1p">the</span> <span id="n1q">eye</span> <span id="n1r">of</span> <span id="n1s">heaven</span> <span id="n1t">shines</span>,</span>
+<span id="n8"><span id="n1u">And</span> <span id="n1v">often</span> <span id="n1w">is</span> <span id="n1x">his</span> <span id="n1y">gold</span> <span id="n1z">complexion</span> <span id="n20">dimm'd</span>;</span>
+<span id="n9"><span id="n21">And</span> <span id="n22">every</span> <span id="n23">fair</span> <span id="n24">from</span> <span id="n25">fair</span> <span id="n26">sometime</span> <span id="n27">declines</span>,</span>
+<span id="na"><span id="n28">By</span> <span id="n29">chance</span> <span id="n2a">or</span> <span id="n2b">nature's</span> <span id="n2c">changing</span> <span id="n2d">course</span> <span id="n2e">untrimm'd</span>;</span></span>
+
+<span id="nl"><span id="nb"><span id="n2f">But</span> <span id="n2g">thy</span> <span id="n2h">eternal</span> <span id="n2i">summer</span> <span id="n2j">shall</span> <span id="n2k">not</span> <span id="n2l">fade</span>,</span>
+<span id="nc"><span id="n2m">Nor</span> <span id="n2n">lose</span> <span id="n2o">possession</span> <span id="n2p">of</span> <span id="n2q">that</span> <span id="n2r">fair</span> <span id="n2s">thou</span> <span id="n2t">ow'st</span>;</span>
+<span id="nd"><span id="n2u">Nor</span> <span id="n2v">shall</span> <span id="n2w">death</span> <span id="n2x">brag</span> <span id="n2y">thou</span> <span id="n2z">wander'st</span> <span id="n30">in</span> <span id="n31">his</span> <span id="n32">shade</span>,</span>
+<span id="ne"><span id="n33">When</span> <span id="n34">in</span> <span id="n35">eternal</span> <span id="n36">lines</span> <span id="n37">to</span> <span id="n38">time</span> <span id="n39">thou</span> <span id="n3a">grow'st</span>:</span></span>
+
+<span id="nm"><span id="nf"><span id="n3b">So</span> <span id="n3c">long</span> <span id="n3d">as</span> <span id="n3e">men</span> <span id="n3f">can</span> <span id="n3g">breathe</span> <span id="n3h">or</span> <span id="n3i">eyes</span> <span id="n3j">can</span> <span id="n3k">see</span>,</span>
+<span id="ng"><span id="n3l">So</span> <span id="n3m">long</span> <span id="n3n">lives</span> <span id="n3o">this</span>, <span id="n3p">and</span> <span id="n3q">this</span> <span id="n3r">gives</span> <span id="n3s">life</span> <span id="n3t">to</span> <span id="n3u">thee</span>.</span></span>
+</markup>
+
+<analysis>
+  <tier id="t1" name="Lines" role="line" provider="text.line@1">
+    <set id="s2" name="Line" key="line" members="n3,n4,n5,n6,n7,n8,n9,na,nb,nc,nd,ne,nf,ng"/>
+  </tier>
+  <tier id="th" name="Stanzas" role="stanza" provider="text.stanza@1">
+    <set id="si" name="Stanza" key="stanza" members="nj,nk,nl,nm"/>
+  </tier>
+  <tier id="tn" name="Words" role="word" provider="english.word@1" disabled="true">
+    <set id="so" name="Word" key="word" members="np,nq,nr,ns,nt,nu,nv,nw,nx,ny,nz,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19,n1a,n1b,n1c,n1d,n1e,n1f,n1g,n1h,n1i,n1j,n1k,n1l,n1m,n1n,n1o,n1p,n1q,n1r,n1s,n1t,n1u,n1v,n1w,n1x,n1y,n1z,n20,n21,n22,n23,n24,n25,n26,n27,n28,n29,n2a,n2b,n2c,n2d,n2e,n2f,n2g,n2h,n2i,n2j,n2k,n2l,n2m,n2n,n2o,n2p,n2q,n2r,n2s,n2t,n2u,n2v,n2w,n2x,n2y,n2z,n30,n31,n32,n33,n34,n35,n36,n37,n38,n39,n3a,n3b,n3c,n3d,n3e,n3f,n3g,n3h,n3i,n3j,n3k,n3l,n3m,n3n,n3o,n3p,n3q,n3r,n3s,n3t,n3u"/>
+  </tier>
+  <tier id="t3v" name="Rhyme scheme" role="rhyme-scheme" kind="relation">
+    <set id="s3w" name="A" members="n3,n5"/>
+    <set id="s3x" name="B" members="n4,n6"/>
+    <set id="s3y" name="C" members="n7,n9"/>
+    <set id="s3z" name="D" members="n8,na"/>
+    <set id="s40" name="E" members="nb,nd"/>
+    <set id="s41" name="F" members="nc,ne"/>
+    <set id="s42" name="G" members="nf,ng"/>
+  </tier>
+  <tier id="t43" name="Stress" role="stress">
+    <set id="s44" name="primary" key="primary" members="nq,n48,nt,n49,nw,ny,n4b,n11,n4d,n14,n15,n17,n4g,n1a,n1c,n4i,n1f,n1h,n1j,n1l,n3c,n3e,n3g,n3i,n3k,n3m,n3o,n3q,n3s,n3u"/>
+    <set id="s45" name="secondary" key="secondary" members="n4f"/>
+    <set id="s46" name="unstressed" key="unstressed" members="np,n47,ns,nu,n4a,nx,nz,n4c,n12,n4e,n16,n18,n4h,n1b,n1d,n4j,n1g,n1i,n1k,n3b,n3d,n3f,n3h,n3j,n3l,n3n,n3p,n3r,n3t"/>
+  </tier>
+  <tier id="t4k" name="End rhyme" role="rhyme" kind="relation">
+    <set id="s4l" name="A" members="nw,n1c"/>
+    <set id="s4m" name="B" members="n13,n1l"/>
+    <set id="s4n" name="C" members="n1t,n27"/>
+    <set id="s4o" name="D" members="n20,n2e"/>
+    <set id="s4p" name="E" members="n2l,n32"/>
+    <set id="s4q" name="F" members="n2t,n3a"/>
+    <set id="s4r" name="G" members="n3k,n3u"/>
+  </tier>
+</analysis>
+
+<style name="Community" disabled="true">/* Community theme, from "Phonetic Markup for Verse" v3.0.
+ * Credit-line: Phonetic Markup for Verse (v3.0), by Eric Kingsepp (Éadric Scúsmiþ)
+ * Credit: Eric Kingsepp (Éadric Scúsmiþ), author of the scheme (ADR-0005, ADR-0014). The source
+ * deck is kept private in sources/community/ and is not part of this repository.
+ *
+ * Plain CSS over the analysis mirror (spec/format.md S-03, S-04). It styles three roles:
+ *   consonant - a label tier whose sets are sounds, tagged sound:&lt;name&gt; place:&lt;..&gt; manner:&lt;..&gt; voiced:&lt;..&gt;
+ *   vowel     - a label tier whose sets are vowels and diphthongs, tagged sound:&lt;name&gt;
+ *   stress    - a label tier with sets keyed primary, secondary, unstressed (as english.stress)
+ * Sound names are in themes/README.md. Where the deck's hex labels contradict its swatches or
+ * its own place logic, this file follows the swatches and place logic; each choice is listed
+ * in themes/README.md and marked "settled" below.
+ */
+
+/* ---- consonants: boxes that frame the sound; border style by manner (deck slide 1) ---- */
+tier[role="consonant"] &gt; set { border: 1pt solid currentColor; }
+tier[role="consonant"] &gt; set[tags~="manner:plosive"]     { border: 4pt solid;     border-radius: 0; }   /* deck: rough brush, drawn solid */
+tier[role="consonant"] &gt; set[tags~="manner:affricate"]   { border: 2.25pt dashed; border-radius: 0; }
+tier[role="consonant"] &gt; set[tags~="manner:fricative"]   { border: 2pt dotted;    border-radius: 0; }
+tier[role="consonant"] &gt; set[tags~="manner:nasal"]       { border: 5pt solid;     border-radius: 4pt; } /* deck: rounded brush, drawn solid */
+tier[role="consonant"] &gt; set[tags~="manner:approximant"] { border: 1pt solid;     border-radius: 0; }
+
+/* colour by place (hue) and voicing (about half brightness), sound by sound (deck slide 4) */
+tier[role="consonant"] &gt; set[tags~="sound:p"]  { border-color: #FF0008; }
+tier[role="consonant"] &gt; set[tags~="sound:b"]  { border-color: #810002; }
+tier[role="consonant"] &gt; set[tags~="sound:t"]  { border-color: #FFB200; }
+tier[role="consonant"] &gt; set[tags~="sound:d"]  { border-color: #815A00; }
+tier[role="consonant"] &gt; set[tags~="sound:k"]  { border-color: #A600FF; }
+tier[role="consonant"] &gt; set[tags~="sound:g"]  { border-color: #540081; }
+tier[role="consonant"] &gt; set[tags~="sound:ch"] { border-color: #005EFF; }
+tier[role="consonant"] &gt; set[tags~="sound:jh"] { border-color: #003082; }
+tier[role="consonant"] &gt; set[tags~="sound:f"]  { border-color: #FF0910; }
+tier[role="consonant"] &gt; set[tags~="sound:v"]  { border-color: #820002; }
+tier[role="consonant"] &gt; set[tags~="sound:th"] { border-color: #FFB100; }
+tier[role="consonant"] &gt; set[tags~="sound:dh"] { border-color: #7F5500; }
+tier[role="consonant"] &gt; set[tags~="sound:s"]  { border-color: #00D80F; }
+tier[role="consonant"] &gt; set[tags~="sound:z"]  { border-color: #006507; }
+tier[role="consonant"] &gt; set[tags~="sound:sh"] { border-color: #005EFF; }
+tier[role="consonant"] &gt; set[tags~="sound:zh"] { border-color: #002F7F; }
+tier[role="consonant"] &gt; set[tags~="sound:m"]  { border-color: #7F0002; }
+tier[role="consonant"] &gt; set[tags~="sound:n"]  { border-color: #7F5500; }
+tier[role="consonant"] &gt; set[tags~="sound:ng"] { border-color: #540081; }  /* settled: label #005EFF, swatch and place say velar purple */
+tier[role="consonant"] &gt; set[tags~="sound:hw"] { border-color: #FF0910; }  /* settled: label #003082, swatch and place say labial red */
+tier[role="consonant"] &gt; set[tags~="sound:w"]  { border-color: #820002; }  /* settled: label #FF0910, swatch and voicing say dark red */
+tier[role="consonant"] &gt; set[tags~="sound:l"]  { border-color: #7F5500; }  /* settled: label #820002, swatch and place say dental */
+tier[role="consonant"] &gt; set[tags~="sound:r"]  { border-color: #006507; }  /* settled: label #FFB100, swatch and place say alveolar green */
+tier[role="consonant"] &gt; set[tags~="sound:y"]  { border-color: #002F7F; }  /* settled: label #FFB100, swatch and place say postalveolar blue */
+tier[role="consonant"] &gt; set[tags~="sound:h"]  { border-color: #A600FF; }  /* settled: label #FFB100, swatch and place say velar row */
+
+/* ---- vowels: highlights that fill the space between consonants (deck slides 2 and 4) ---- */
+tier[role="vowel"] &gt; set { opacity: .6; border-radius: 3pt; }
+tier[role="vowel"] &gt; set[tags~="sound:iy"]  { background: #349EFF; }   /* deep */
+tier[role="vowel"] &gt; set[tags~="sound:ih"]  { background: #9CD0FF; }   /* hilt */
+tier[role="vowel"] &gt; set[tags~="sound:ey"]  { background: #445DFA; }   /* grey */
+tier[role="vowel"] &gt; set[tags~="sound:eir"] { background: #44D1FA; }   /* fair */
+tier[role="vowel"] &gt; set[tags~="sound:eh"]  { background: #96AAFF; }   /* elf */
+tier[role="vowel"] &gt; set[tags~="sound:ae"]  { background: #873FFF; }   /* axe */
+tier[role="vowel"] &gt; set[tags~="sound:er"]  { background: #00C138; }   /* bird */
+tier[role="vowel"] &gt; set[tags~="sound:ah"]  { background: #B0FFC7; }   /* struck */
+tier[role="vowel"] &gt; set[tags~="sound:uw"]  { background: #C10003; }   /* dûm */
+tier[role="vowel"] &gt; set[tags~="sound:uh"]  { background: #FF9FA1; }   /* book */
+tier[role="vowel"] &gt; set[tags~="sound:ow"]  { background: #F88900; }   /* stone */
+tier[role="vowel"] &gt; set[tags~="sound:ao"]  { background: #E9BF6E; }   /* saw */
+tier[role="vowel"] &gt; set[tags~="sound:oh"]  { background: #F618FF; }   /* beyond */
+tier[role="vowel"] &gt; set[tags~="sound:aa"]  { background: #FA89FF; }   /* father */
+
+/* diphthongs: fill is the first vowel, a drop shadow (1pt blur, 5pt offset, 0 degrees) the second */
+tier[role="vowel"] &gt; set[tags~="sound:ay"]  { background: #FA89FF; box-shadow: 5pt 0 1pt #349EFF; }   /* ride */
+tier[role="vowel"] &gt; set[tags~="sound:ay2"] { background: #B0FFC7; box-shadow: 5pt 0 1pt #349EFF; }   /* write */
+tier[role="vowel"] &gt; set[tags~="sound:oy"]  { background: #E9BF6E; box-shadow: 5pt 0 1pt #349EFF; }   /* voice */
+tier[role="vowel"] &gt; set[tags~="sound:aw"]  { background: #FA89FF; box-shadow: 5pt 0 1pt #DA0200; }   /* crown */
+
+/* ---- stress (deck slide 3): bold primary, bold italic secondary ---- */
+tier[role="stress"] &gt; set[key="primary"]   { font-weight: 700; }
+tier[role="stress"] &gt; set[key="secondary"] { font-weight: 700; font-style: italic; }   /* settled: slide 3 says bold/italic, slide 4 italic */
+</style>
+
+<style name="Plain">/* Plain theme: a quiet, readable default that works with any document (ADR-0005: one scheme among
+ * several). It styles roles only, in plain CSS over the analysis mirror (spec/format.md S-03, S-04),
+ * and uses text styles, so it prints in black and white as well as in colour.
+ *
+ *   stress      bold for primary, bold italic for secondary; unstressed is left alone
+ *   rhyme       a colour for each set in turn, bold
+ *   rhyme-scheme  a soft tint for each set in turn
+ *   foot        square brackets round each foot
+ *   repetition, alliteration, assonance, consonance   a different underline for each
+ *   line, stanza, word, syllable   no styling, so a standard tier costs nothing to switch on
+ */
+
+tier[role="stress"] &gt; set[key="primary"] { font-weight: 700; }
+tier[role="stress"] &gt; set[key="secondary"] { font-weight: 700; font-style: italic; }
+tier[role="stress"] &gt; set[key="unstressed"] { font-weight: 400; font-style: normal; }
+
+tier[role="rhyme"] &gt; set:nth-child(4n+1) { color: #b3261e; font-weight: 700; }
+tier[role="rhyme"] &gt; set:nth-child(4n+2) { color: #1b5fa8; font-weight: 700; }
+tier[role="rhyme"] &gt; set:nth-child(4n+3) { color: #1f7a4d; font-weight: 700; }
+tier[role="rhyme"] &gt; set:nth-child(4n+4) { color: #8a5a00; font-weight: 700; }
+
+tier[role="rhyme-scheme"] &gt; set:nth-child(4n+1) { background-color: rgb(240 160 60 / .18); border-radius: 4px; }
+tier[role="rhyme-scheme"] &gt; set:nth-child(4n+2) { background-color: rgb(60 130 230 / .16); border-radius: 4px; }
+tier[role="rhyme-scheme"] &gt; set:nth-child(4n+3) { background-color: rgb(50 160 110 / .16); border-radius: 4px; }
+tier[role="rhyme-scheme"] &gt; set:nth-child(4n+4) { background-color: rgb(160 110 20 / .16); border-radius: 4px; }
+
+tier[role="foot"] &gt; set::before { content: "["; color: #6b665d; }
+tier[role="foot"] &gt; set::after { content: "]"; color: #6b665d; }
+
+tier[role="repetition"] &gt; set { text-decoration: underline wavy #7a4fb3 1.5px; }
+tier[role="alliteration"] &gt; set { text-decoration: underline dashed #1f7a4d 1.5px; }
+tier[role="assonance"] &gt; set { text-decoration: underline dotted #b3261e 2px; }
+tier[role="consonance"] &gt; set { text-decoration: underline double #1b5fa8 1px; }
+</style>
