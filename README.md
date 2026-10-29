@@ -6,24 +6,43 @@ English is the baseline; Shavian and Tengwar shape the design. Marks live in **t
 freely, and **themes** (plain CSS) decide how they look. The community scheme from *Phonetic Markup for
 Verse* by Eric Kingsepp (Éadric Scúsmiþ) is a built-in theme.
 
-## Status (2026-10-15)
+## Status (2026-10-28)
 
 | Part | State |
 |---|---|
-| Text form `.pxml` (`spec/format.md`) | Specified; 53 fixtures; FQ1 to FQ7 settled |
-| Application spec (`spec/app.md`) | Reconciled with the model; many rules still PROVISIONAL |
-| Core library (`src/core/`) | Loads, edits with undo, and saves documents; no dependencies |
-| Renderer (`src/render/`) | Themes painted as text styles and box styles; prints |
-| App (`app/`) | Open, mark, edit tiers and sets, switch themes, save |
-| Community theme (`themes/`) | Encoded; awaiting the author's confirmation |
-| Providers (`spec/providers/`) | Specified; lexicon work parked until after the MVP |
+| Text form `.pxml` (`spec/format.md`) | Specified; 53 fixtures; every rule adopted |
+| Application spec (`spec/app.md`) | Adopted, apart from the open questions in section 13 and five newer rules (W-05, W-06, Y-13, O-05, A-06) that wait for review |
+| Core library (`src/core/`) | Loads, edits with undo, adds standard tiers and themes, saves; no runtime dependencies |
+| Renderer (`src/render/`) | Themes painted as text styles and box styles; prints; snap-to-words helper |
+| App (`app/`) | Open (button or drag and drop), mark text (snap to words, several pieces as one span), click painted text to find its mark, edit tiers and sets, standard tiers for lines, stanzas and words with reset, add and switch themes, keep a working copy in the browser, print or save as PDF, save |
+| Themes (`themes/`) | Community (credited; its colours await the author's confirmation) and Plain |
+| Providers (`spec/providers/`, `src/providers/`) | Lines, stanzas and words in JavaScript. Syllables and stress are marked by hand; lexicon-based providers come after the MVP |
+| Demo (`demo/`) | Sonnet 18 (public domain), marked; a script that records the app as an MP4 and a GIF |
+| Not yet | Marks (text above or below a span, a meter strip, arcs; ADR-0017), Shavian and Tengwar views, hosting |
 
 **Start here:** `docs/ROADMAP.md` (the board), then the latest note in `docs/reviews/`, then
 `docs/HISTORY.md`. Agents: `AGENTS.md`.
 
+## Try it
+
+You need Node and Python 3. The app has no install step; it needs a local server because browsers will not
+load modules from `file://` pages everywhere (ADR-0012).
+
 ```sh
-npm test          # fixtures through the JS core and the Python checkers, round trips, editing
-npm run serve     # then open http://localhost:8000/app/
+npm run serve     # then open http://localhost:8000/app/ and pick "Sonnet 18 (full demo)" in the Sample menu
+npm test          # fixtures through the JS core and the Python checkers, round trips, editing, themes, demo
+```
+
+Marking: select a set in the panel, select text in the poem, press **M**. Press **P** to keep a selection as one
+piece of a span, then select the next piece and press **M**. Tick "snap to words" to widen selections to whole
+words. Click painted text to see which set it is in.
+
+Browser tests and the demo recording need Playwright and `ffmpeg`:
+
+```sh
+npm install && npx playwright install chromium
+npm run test:browser    # 16 checks in Chromium
+npm run demo:record     # writes .tmp/demo/demo.mp4 and demo.gif
 ```
 
 ## Repository map
@@ -34,11 +53,13 @@ npm run serve     # then open http://localhost:8000/app/
 | `spec/format.md`, `spec/fixtures/` | The `.pxml` text form and the fixtures that pin it; `check.py` is the reference checker |
 | `spec/providers/` | Provider contract and English providers, with fixtures and a runner |
 | `src/core/` | Model, XML parser, loader, export, `Editor` (ADR-0012) |
-| `src/render/` | The painter: themes over the analysis mirror (ADR-0011) |
+| `src/providers/` | Line, stanza and word providers in JavaScript |
+| `src/render/` | The painter: themes over the analysis mirror (ADR-0011); selection helpers |
 | `app/` | The app; `docs/ui-plan.md` orders its steps |
-| `themes/` | Built-in themes; `community.css` and how documents must be marked for it |
+| `themes/` | Built-in themes; `community.css`, `plain.css` and how documents must be marked for them |
+| `demo/` | The Sonnet 18 demo document, its build script and the recorder |
 | `prototypes/layers/` | The layering prototype the renderer came from (standalone page) |
-| `tests/` | Node tests run by `npm test` |
+| `tests/` | Node tests run by `npm test`; browser tests run by `npm run test:browser` |
 | `docs/ROADMAP.md` | The board: epics, tasks, dependencies |
 | `docs/HISTORY.md`, `docs/projects/` | How the project got here; per-project logs |
 | `docs/adr/` | Decision records |
@@ -46,6 +67,16 @@ npm run serve     # then open http://localhost:8000/app/
 | `docs/synthesis/` | Background studies (the deck against Tengwar; stack and name options) |
 | `scansion.html` and the files listed under "Earlier prototype" | The first Shavian prototypes, kept for reference |
 | `sources/community/` | The community PDF; gitignored, never committed |
+
+## Licence
+
+The code and documents are under the [MIT licence](LICENSE). Two things are not covered by it:
+
+* The **community theme** (`themes/community.css`) encodes the scheme *Phonetic Markup for Verse* by Eric
+  Kingsepp (Éadric Scúsmiþ), which is theirs. The CSS is included with credit; its licence terms are not yet agreed
+  with the author (board: CT-6, `spec/app.md` Q7).
+* The **poems** in the demos are in the public domain (Sonnet 18; *Twinkle, Twinkle, Little Star*). Poems that are
+  not stay out of the repository (`AGENTS.md`).
 
 ## Origin
 

@@ -2,7 +2,7 @@
   "name": "poetic-overtones",
   "private": true,
   "type": "module",
-  "description": "Multi-dimensional poetic analysis of any text. Core library: plain ES modules, no dependencies.",
+  "description": "Multi-dimensional poetic analysis of any text. Core library: plain ES modules, no runtime dependencies.",
   "scripts": {
     "serve": "python3 -m http.server 8000",
     "test": "node tests/run.mjs && node tests/edits.mjs && node tests/editor.mjs && node tests/providers.mjs && node tests/reset.mjs && node tests/themes.mjs && node tests/select.mjs && node tests/demo.mjs && python3 -I spec/fixtures/check.py && python3 -I spec/providers/run.py",
@@ -12,5 +12,6 @@
   },
   "devDependencies": {
     "playwright": "^1.64.1"
-  }
+  },
+  "license": "MIT"
 }

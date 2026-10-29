@@ -128,6 +128,7 @@ Poems that aren't in the public domain (Tolkien, for example, including the deck
 ## Conventions
 
 - **Prose:** plain, short sentences. Cite ADRs as `ADR-NNNN`.
+- **Licence:** MIT (`LICENSE`). The community theme's CSS encodes someone else's scheme; its licence terms are not agreed (board: CT-6).
 - **Commits:** one logical change per commit, message in the imperative.
 - **Branches:** `main` is the release branch. Once the repo has a remote, work happens on branches and is squash-merged after Alex reviews it. Never merge a PR yourself.
 - **JavaScript:** plain ES modules, no build step, no runtime dependencies (ADR-0012). Browser tests may use Playwright as a dev-only dependency (ADR-0016). Positions in the model are code points.

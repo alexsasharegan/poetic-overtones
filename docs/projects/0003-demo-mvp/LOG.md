@@ -62,3 +62,34 @@ browser tests; then these docs, the recorder and the shared test server. Three e
 - **Context state for next thread:** branch `demo-mvp`, 5 commits ahead of `main`. Alex
   to do DEMO-3, DEMO-4, review the PROVISIONAL rules, and add a remote so a PR can be opened. Then CT-6, the rest
   of UI-7 and DOC-1.
+
+## 2026-10-28: Merge, licence, README, author email
+
+### Context & Decisions
+
+- Alex asked to: rewrite the commit author email, add an MIT licence, refresh the README, and merge `demo-mvp`
+  into `main` "unless there's any reason not to yet".
+- **Merge.** Reasons against were weighed and none blocking: the repo has no remote, so there is no PR to
+  wait for; `main` had not moved, so a fast-forward keeps the five commits as written. DEMO-3 and DEMO-4 (Alex
+  checking the scansion and the recording) are still open, but they do not change the code, and the demo README
+  already says the scansion is an example. ADR-0018's Review line was changed from "accepted by merging the PR" to
+  Alex's instruction, since there is no PR.
+- **Email.** The six commits authored as `Alex Regan` carried a work-style address; they get the GitHub noreply
+  address `<id>+alexsasharegan@users.noreply.github.com`. The 48 commits authored as Claude are untouched. The
+  repository-local `user.email` is set to the same address so later commits match; the global git config is
+  Alex's and was not changed.
+- **Licence.** MIT, "Copyright (c) 2026 Alex Regan", `license` in `package.json`. The README says the community
+  theme's CSS and the scheme are Eric Kingsepp's and that their licence terms are not agreed (CT-6).
+- **README** refreshed: status table, "Try it", repository map, licence. It still carries the origin story and its
+  unverified TODO (DEC-10) for Alex.
+
+### Commands & Operations Executed
+
+See the end of this entry for the commands once they have run.
+
+### Not verified
+
+- The podcast claim in the README's Origin section (DEC-10) and the "Session 385" label against the link ending
+  `/386`. Alex's call.
+- That GitHub attributes the rewritten commits to Alex's account: the noreply address is the one GitHub documents
+  for this, but it was not checked by pushing.

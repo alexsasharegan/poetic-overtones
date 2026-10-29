@@ -1,7 +1,7 @@
 # 0003: Demo MVP
 
-**Status:** done (2026-10-25), pending Alex's review. **Owner:** Alex. **Worked on by:** Claude, unattended overnight.
-**Branch:** `demo-mvp`. The repository has no remote, so there is no PR yet; `.wip/pr-demo-mvp.md` holds the text for one.
+**Status:** Complete. Merged into `main` on 2026-10-28 on Alex's instruction (no PR: the repository had no remote). **Owner:** Alex. **Worked on by:** Claude, unattended overnight.
+**Branch:** `demo-mvp`, merged by fast-forward. `.wip/pr-demo-mvp.md` holds PR text that was not needed.
 
 Get to something that can be shown around the next class (likely Tuesday 2026-10-27) and shared on a
 community Discord as a GIF or video: a poem marked well enough to look like the pitch, marking that is practical on

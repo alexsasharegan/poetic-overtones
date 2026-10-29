@@ -2,7 +2,7 @@
 
 > The board for poetic-overtones: where the project stands, every queued task grouped into epics, and what
 > blocks what. Start here in a new session, then read the latest note in `docs/reviews/`.
-> Last updated 2026-10-25. History: `docs/HISTORY.md`.
+> Last updated 2026-10-28. History: `docs/HISTORY.md`.
 
 ## Where we are
 
@@ -23,6 +23,7 @@ Run it: `npm test` (all checks), `npm run serve` then <http://localhost:8000/app
 | 🟡 Next | **UI-7** the rest: PNG, legend, real PDF | Print through the browser works |
 | 🟡 Next | **CT-6** Confirm the seven colours and bold-italic stress with the author | The only thing the community theme still waits for (Alex asks) |
 | ⚪ Later | **DOC-1** Refresh README, HISTORY and the project records | After the next build work |
+| ✅ Done | **2026-10-28:** MIT licence, README refreshed, `demo-mvp` merged into `main`, author email changed to the GitHub noreply address | this note's LOG entry in `docs/projects/0003-demo-mvp/LOG.md` |
 | ✅ Done | **2026-10-25:** demo MVP: UI-4, UI-5, RND-1, CORE-1, CORE-5, CT-5, QA-1, DEMO-1, DEMO-2, most of UI-7 | `docs/projects/0003-demo-mvp/` |
 | ✅ Done | **2026-10-24:** decisions DEC-1 to DEC-7 and DEC-11, all provisional rules adopted, credit added | `docs/reviews/2026-10-24.md`, ADR-0014 to ADR-0017 |
 | ✅ Done | **PRV-1, CORE-2, UI-8** Lexicon-free providers, reset, standard tiers in the app | Done 2026-10-19 |
@@ -103,7 +104,7 @@ Task IDs are stable; add new ones at the end of an epic.
 | CT-3 | Meter strip and ties | ⚪ | MRK-3 | post-MVP (ADR-0017); the deck never defines ties; ask the author |
 | CT-4 | Grouped views by place, manner, sibilant | ⛔ | UI-9 | |
 | CT-5 | A plain default theme besides the community theme | ✅ | | `themes/plain.css`; "Add theme" in the app (Y-13) |
-| CT-6 | Confirm the seven settled colours (M11) and bold-italic secondary stress (M12) with the author, and apply the answers | 🟡 | | Alex asks; `themes/README.md` has the colour table |
+| CT-6 | Confirm the seven settled colours (M11) and bold-italic secondary stress (M12) with the author, apply the answers, and agree the licence terms of the scheme's CSS | 🟡 | | Alex asks; `themes/README.md` has the colour table; the README says the licence is not yet agreed |
 
 ### PRV: providers (`spec/providers/`)
 
@@ -146,7 +147,7 @@ Task IDs are stable; add new ones at the end of an epic.
 
 | ID | Task | Status | Blocked by | Notes |
 |---|---|---|---|---|
-| DOC-1 | Refresh README (status table, repository map), HISTORY, ROADMAP summary and the project records after the next build work. Include a record for the 2026-10-19 work, which has no project folder | ⚪ | DEMO-4 | do it once those are done; AGENTS.md was refreshed on 2026-10-24 |
+| DOC-1 | Refresh HISTORY, the ROADMAP summary and the project records after the next build work. Include a record for the 2026-10-19 work, which has no project folder. (README was refreshed on 2026-10-28.) | ⚪ | DEMO-4 | do it once those are done; AGENTS.md was refreshed on 2026-10-24 |
 | DOC-2 | Write the next review note: carry forward what is still open (this note's part 4) and add new decisions | ⚪ | | do with DOC-1 |
 
 ## Dependencies

@@ -106,3 +106,9 @@ Alex widened the project to a web app for multi-dimensional poetic analysis of a
 * `demo/`: Sonnet 18 (public domain), marked through the `Editor` by a script, and a Playwright recorder that
   makes an MP4 and a GIF. VHS records terminals, so it could not drive this app.
 * `npm run test:browser` runs 16 checks in Chromium (QA-1, ADR-0016).
+
+## 11. Ready to publish (2026-10-28)
+
+* MIT licence added; the README refreshed (status, how to try it, repository map, licence caveats).
+* `demo-mvp` merged into `main` by fast-forward, on Alex's instruction, since the repository had no remote and
+  so no PR. The author email on Alex's commits was rewritten to the GitHub noreply address before the first push.

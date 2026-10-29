@@ -4,7 +4,7 @@
 **Date:** 2026-10-25
 **Affected:** app/main.js, spec/app.md (O-05), docs/ROADMAP.md (CORE-5)
 **Origin:** Agent's choice, as the board asked for ("needs a storage choice for the POC"); Alex reviews it in the PR
-**Review:** Accepted by merging the pull request that adds it
+**Review:** Accepted by Alex's instruction to merge `demo-mvp` into `main`, 2026-10-28 (the repository had no remote, so there was no PR)
 **Revert:** Remove `persist()` and `restore()` in `app/main.js`; nothing else reads the key
 
 ## Context
