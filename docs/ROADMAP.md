@@ -23,7 +23,7 @@ Run it: `npm test` (all checks), `npm run serve` then <http://localhost:8000/app
 | 🟡 Next | **UI-7** the rest: PNG, legend, real PDF | Print through the browser works |
 | 🟡 Next | **CT-6** Confirm the seven colours and bold-italic stress with the author | The only thing the community theme still waits for (Alex asks) |
 | ⚪ Later | **DOC-1** Refresh README, HISTORY and the project records | After the next build work |
-| ✅ Done | **2026-10-28:** MIT licence, README refreshed, `demo-mvp` merged into `main`, author email changed to the GitHub noreply address | this note's LOG entry in `docs/projects/0003-demo-mvp/LOG.md` |
+| ✅ Done | **2026-10-28:** MIT licence, README refreshed, `demo-mvp` merged into `main`, author email changed to the GitHub noreply address | the 2026-10-28 entry in `docs/projects/0003-demo-mvp/LOG.md` |
 | ✅ Done | **2026-10-25:** demo MVP: UI-4, UI-5, RND-1, CORE-1, CORE-5, CT-5, QA-1, DEMO-1, DEMO-2, most of UI-7 | `docs/projects/0003-demo-mvp/` |
 | ✅ Done | **2026-10-24:** decisions DEC-1 to DEC-7 and DEC-11, all provisional rules adopted, credit added | `docs/reviews/2026-10-24.md`, ADR-0014 to ADR-0017 |
 | ✅ Done | **PRV-1, CORE-2, UI-8** Lexicon-free providers, reset, standard tiers in the app | Done 2026-10-19 |

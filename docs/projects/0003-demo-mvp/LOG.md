@@ -93,3 +93,34 @@ See the end of this entry for the commands once they have run.
   `/386`. Alex's call.
 - That GitHub attributes the rewritten commits to Alex's account: the noreply address is the one GitHub documents
   for this, but it was not checked by pushing.
+
+## 2026-10-28: Commands run for the merge and the email rewrite
+
+The earlier entry for this day said the commands would follow; this is that record.
+
+```bash
+git checkout main && git merge --ff-only demo-mvp     # fast-forward; main had not moved
+git branch -d demo-mvp
+git branch backup-pre-rewrite main                    # a safety net, deleted below
+FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --env-filter '...' -- main
+#   author and committer email alex.regan@<old domain> -> 16269252+alexsasharegan@users.noreply.github.com
+#   (git-filter-repo was not installed); 7 of 55 commits changed identity
+git branch -D backup-pre-rewrite; rm -rf .git/refs/original
+git reflog expire --expire=now --all && git gc --prune=now
+git config user.email 16269252+alexsasharegan@users.noreply.github.com    # this repository only
+npm test                                              # exit 0, before and after
+```
+
+### Checks
+
+- Every commit's tree hash was identical before and after the rewrite (compared as one list), so no file
+  content changed, and the commit count stayed at 55.
+- Author and committer on the rewritten commits are the noreply address; the 48 commits by Claude are unchanged.
+- The old address is in no commit header or message in `main`, and in no object left in the repository.
+- Every commit hash changed, which is why this was done before the first push.
+
+### Not verified
+
+- That GitHub links the noreply address to Alex's account (it is the address GitHub documents for this).
+- Alex's global git config still holds the old address. Only this repository's config was changed, so
+  commits in other repositories will keep using the old address until Alex changes it.
